@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/account/account_drawer.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
+import 'package:lichess_mobile/src/view/bluetooth/bluetooth_screen.dart';
 import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
 import 'package:lichess_mobile/src/view/clock/clock_tool_screen.dart';
 import 'package:lichess_mobile/src/view/explorer/opening_explorer_screen.dart';
@@ -134,6 +135,17 @@ class _Body extends ConsumerWidget {
                     rootNavigator: true,
                   ).push(ClockToolScreen.buildRoute(context));
                 },
+              ),
+              ListTile(
+                leading: const Icon(Icons.bluetooth_outlined),
+                trailing: Theme.of(context).platform == TargetPlatform.iOS
+                    ? const CupertinoListTileChevron()
+                    : null,
+                title: Text(context.l10n.boardEditor),
+                onTap: () => Navigator.of(
+                  context,
+                  rootNavigator: true,
+                ).push(BluetoothScreen.buildRoute(context)),
               ),
             ],
           ),

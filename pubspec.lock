@@ -73,6 +73,47 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.0"
+  ble_backend:
+    dependency: transitive
+    description:
+      name: ble_backend
+      sha256: "220870a59bd32a3c455e33d72f2b40b1493c4d39e13785732f7bd32b595f6921"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.4.0"
+  ble_backend_factory:
+    dependency: "direct main"
+    description:
+      name: ble_backend_factory
+      sha256: "5582d431531699c1039f7edf2a61e3b8bc5ffcbef3301eb330f24570f6ab95f6"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.4.3"
+  ble_chess_peripheral_driver:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: HEAD
+      resolved-ref: "5593ed4229dae9f663f11437092df52eb7127723"
+      url: "https://github.com/dkwach/chess_peripheral_driver.git"
+    source: git
+    version: "0.0.10"
+  bluez:
+    dependency: transitive
+    description:
+      name: bluez
+      sha256: "61a7204381925896a374301498f2f5399e59827c6498ae1e924aaa598751b545"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.8.3"
+  bluez_backend:
+    dependency: transitive
+    description:
+      name: bluez_backend
+      sha256: "025708865432af0b9432e83186a7d78093fe3a0baa0bf43cb50ee471c2ee9392"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.5.0"
   boolean_selector:
     dependency: transitive
     description:
@@ -603,6 +644,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.33"
+  flutter_reactive_ble:
+    dependency: transitive
+    description:
+      name: flutter_reactive_ble
+      sha256: "3ca8430bc7a6cabe5529aab4afaa2e3cb285941f7f7ab7472604074e347c1302"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.4.0"
+  flutter_reactive_ble_backend:
+    dependency: transitive
+    description:
+      name: flutter_reactive_ble_backend
+      sha256: "4bb7444c4e2eaeb21d2c4dd599ca7395a6b4596725856c3969365fae6801f375"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.4.0"
   flutter_riverpod:
     dependency: "direct main"
     description:
@@ -681,6 +738,22 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_web_bluetooth:
+    dependency: transitive
+    description:
+      name: flutter_web_bluetooth
+      sha256: ad26a1b3fef95b86ea5f63793b9a0cdc1a33490f35d754e4e711046cae3ebbf8
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0"
+  flutter_web_bluetooth_backend:
+    dependency: transitive
+    description:
+      name: flutter_web_bluetooth_backend
+      sha256: b497f0e6b782b309f912de6a73b791a6979f7cab5b66090c9a80b8f564508c01
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.4.1"
   flutter_web_plugins:
     dependency: transitive
     description: flutter
@@ -710,6 +783,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.0"
+  functional_data:
+    dependency: transitive
+    description:
+      name: functional_data
+      sha256: "76d17dc707c40e552014f5a49c0afcc3f1e3f05e800cd6b7872940bfe41a5039"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.0"
   glob:
     dependency: transitive
     description:
@@ -1199,6 +1280,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.0.3"
+  protobuf:
+    dependency: transitive
+    description:
+      name: protobuf
+      sha256: "01dd9bd0fa02548bf2ceee13545d4a0ec6046459d847b6b061d8a27237108a08"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.0"
   pub_semver:
     dependency: "direct main"
     description:
@@ -1255,6 +1344,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.2.2"
+  reactive_ble_mobile:
+    dependency: transitive
+    description:
+      name: reactive_ble_mobile
+      sha256: "78af92cfb184770a277a8bdaa76b396a28dbada8931f3d8d0ff552414681f5db"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.4.0"
+  reactive_ble_platform_interface:
+    dependency: transitive
+    description:
+      name: reactive_ble_platform_interface
+      sha256: d0e6f86c7ee3865b74d8a7b6deb1fb8320b24176dfd9a3e475f84b7117eb42c7
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.4.0"
   result_extensions:
     dependency: "direct main"
     description:
@@ -1588,6 +1693,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.4.0"
+  universal_ble:
+    dependency: transitive
+    description:
+      name: universal_ble
+      sha256: c7cba5aa7fcb64af769be90740382e391293943eef48aa0356c320c8ae3c609c
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0"
+  universal_ble_backend:
+    dependency: transitive
+    description:
+      name: universal_ble_backend
+      sha256: d07a28d29a27d3d17082c4c15421825cccd05132fdae1eed82dbf8ca2427d1d6
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   universal_io:
     dependency: transitive
     description:
