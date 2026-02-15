@@ -1,7 +1,9 @@
+import 'package:ble_chess_peripheral_driver/chess_peripheral_driver.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/src/model/bluetooth/bluetooth_service.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/chess960.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
@@ -30,14 +32,17 @@ class OverTheBoardGameController extends Notifier<OverTheBoardGameState> {
 
   void startNewGame(Variant variant, TimeIncrement timeIncrement) {
     state = OverTheBoardGameState.fromVariant(variant, Speed.fromTimeIncrement(timeIncrement));
+    _beginBluetooth();
   }
 
   void loadOngoingGame(OverTheBoardGame game) {
     state = OverTheBoardGameState(game: game, stepCursor: game.steps.length - 1);
+    _beginBluetooth();
   }
 
   void rematch() {
     state = OverTheBoardGameState.fromVariant(state.game.meta.variant, state.game.meta.speed);
+    _beginBluetooth();
   }
 
   void resign() {
@@ -91,7 +96,16 @@ class OverTheBoardGameController extends Notifier<OverTheBoardGameState> {
       state = state.copyWith(game: state.game.copyWith(status: GameStatus.stalemate));
     }
 
+    _moveBluetooth(move);
     _moveFeedback(sanMove);
+  }
+
+  void makeBluetoothMove(NormalMove move) {
+    if (state.currentPosition.isLegal(move)) {
+      makeMove(move);
+    } else {
+      ref.read(bluetoothServiceProvider).handleReject();
+    }
   }
 
   void onPromotionSelection(Role? role) {
@@ -122,6 +136,31 @@ class OverTheBoardGameController extends Notifier<OverTheBoardGameState> {
   void goBack() {
     if (state.canGoBack) {
       state = state.copyWith(stepCursor: state.stepCursor - 1, promotionMove: null);
+    }
+  }
+
+  void _beginBluetooth() {
+    final service = ref.read(bluetoothServiceProvider);
+    service.handleBegin(
+      position: state.currentPosition,
+      variant: state.game.meta.variant,
+      lastMove: state.lastMove,
+    );
+  }
+
+  void _moveBluetooth(NormalMove move) {
+    final service = ref.read(bluetoothServiceProvider);
+    service.handleMove(position: state.currentPosition, move: move);
+    if (state.game.finished) {
+      if (state.currentPosition.isCheckmate) {
+        service.handleEnd(reason: EndReasons.checkmate);
+      } else if (state.currentPosition.isStalemate) {
+        service.handleEnd(reason: EndReasons.draw);
+      } else {
+        service.handleEnd(reason: EndReasons.undefined);
+      }
+    } else if (state.game.aborted) {
+      service.handleEnd(reason: EndReasons.abort);
     }
   }
 

@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
+import 'package:lichess_mobile/src/model/bluetooth/bluetooth_service.dart';
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_clock.dart';
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_game_controller.dart';
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_game_storage.dart';
@@ -62,6 +63,8 @@ class _Body extends ConsumerStatefulWidget {
 
 class _BodyState extends ConsumerState<_Body> {
   final _boardKey = GlobalKey(debugLabel: 'boardOnOverTheBoardScreen');
+  StreamSubscription<NormalMove>? _moveSubscription;
+  StreamSubscription<void>? _roundUpdateSubscription;
 
   Side orientation = Side.white;
 
@@ -85,7 +88,27 @@ class _BodyState extends ConsumerState<_Body> {
         if (!mounted) return;
         showConfigureGameSheet(context, isDismissible: true);
       }
+
+      // TODO: Implement for all rounds types (AI, Online, Analysis ...)
+      final service = ref.read(bluetoothServiceProvider);
+      _moveSubscription = service.moveStream.listen(_handlePeripheralMove);
+      _roundUpdateSubscription = service.roundUpdateStream.listen(_handlePeripheralRoundUpdate);
     });
+  }
+
+  @override
+  void dispose() {
+    _moveSubscription?.cancel();
+    _roundUpdateSubscription?.cancel();
+    super.dispose();
+  }
+
+  void _handlePeripheralMove(NormalMove move) {
+    ref.read(overTheBoardGameControllerProvider.notifier).makeBluetoothMove(move);
+  }
+
+  void _handlePeripheralRoundUpdate(_) {
+    setState(() {});
   }
 
   void _saveGameState() {

@@ -1,3 +1,4 @@
+import 'package:ble_backend_factory/ble_central.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -141,11 +142,11 @@ class _Body extends ConsumerWidget {
                 trailing: Theme.of(context).platform == TargetPlatform.iOS
                     ? const CupertinoListTileChevron()
                     : null,
-                title: Text(context.l10n.boardEditor),
+                title: const Text('Bluetooth'), // TODO: TRANSLATE: context.l10n.bluetooth
                 onTap: () => Navigator.of(
                   context,
                   rootNavigator: true,
-                ).push(BluetoothScreen.buildRoute(context)),
+                ).push(BluetoothScreen.buildRoute(context, bleCentral)),
               ),
             ],
           ),

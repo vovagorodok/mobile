@@ -5,6 +5,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/bluetooth/bluetooth_service.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -168,6 +169,8 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
               )
             : null;
 
+        final squareHighlights = _createSquareHighlights(fen);
+
         if (orientation == Orientation.landscape) {
           final defaultBoardSize =
               constraints.biggest.shortestSide - (kTabletBoardTableSidePadding * 2);
@@ -186,6 +189,7 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
                   orientation: widget.orientation,
                   gameData: gameData,
                   lastMove: widget.lastMove,
+                  squareHighlights: squareHighlights,
                   shapes: shapes,
                   settings: settings,
                   boardKey: widget.boardKey,
@@ -272,6 +276,7 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
                   orientation: widget.orientation,
                   gameData: gameData,
                   lastMove: widget.lastMove,
+                  squareHighlights: squareHighlights,
                   shapes: shapes,
                   settings: settings,
                   boardKey: widget.boardKey,
@@ -316,6 +321,65 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
     setState(() {
       userShapes = ISet();
     });
+  }
+
+  IMap<Square, SquareHighlight> _createSquareHighlights(String fen) {
+    const Color rejectedMoveColor = Color.fromRGBO(199, 0, 109, 0.41);
+    const Color pieceRemoveColor = Color.fromRGBO(255, 60, 60, 0.50);
+    const Color pieceAddColor = Color.fromRGBO(60, 255, 60, 0.50);
+    const Color pieceReplaceColor = Color.fromRGBO(60, 60, 255, 0.50);
+    const Color pieceChangeColor = Color.fromRGBO(20, 85, 30, 0.376);
+    final peripheral = ref.read(bluetoothServiceProvider).peripheral;
+    final isSynchronized = peripheral.round.isStateSynchronized;
+    final isSubmoveSup = peripheral.isFeatureSupported.submoveState;
+    IMap<Square, SquareHighlight> highlights = IMap();
+
+    if (peripheral.round.pieces != null && (isSubmoveSup || !isSynchronized)) {
+      final remColor = isSynchronized ? pieceChangeColor : pieceRemoveColor;
+      final addColor = isSynchronized ? pieceChangeColor : pieceAddColor;
+      final rplColor = isSynchronized ? pieceChangeColor : pieceReplaceColor;
+      final peripheralPieces = peripheral.round.pieces!;
+      final centralPieces = readFen(fen); // TODO: Find pieces instead parse fen each time
+      for (final entry in centralPieces.entries) {
+        final square = entry.key;
+        final centralPiece = entry.value;
+        final peripheralPiece = peripheralPieces[square];
+        if (peripheralPiece == null) {
+          highlights = highlights.add(
+            square,
+            SquareHighlight(details: HighlightDetails(solidColor: addColor)),
+          );
+        } else if ((peripheralPiece.role != null && peripheralPiece.role != centralPiece.role) ||
+            (peripheralPiece.color != null && peripheralPiece.color != centralPiece.color)) {
+          highlights = highlights.add(
+            square,
+            SquareHighlight(details: HighlightDetails(solidColor: rplColor)),
+          );
+        }
+      }
+      for (final entry in peripheralPieces.entries) {
+        final square = entry.key;
+        final centralPiece = centralPieces[square];
+        if (centralPiece == null) {
+          highlights = highlights.add(
+            square,
+            SquareHighlight(details: HighlightDetails(solidColor: remColor)),
+          );
+        }
+      }
+    }
+    if (peripheral.round.rejectedMove != null) {
+      final rejectedMove = peripheral.round.rejectedMove!;
+      highlights = highlights.add(
+        rejectedMove.from,
+        SquareHighlight(details: HighlightDetails(solidColor: rejectedMoveColor)),
+      );
+      highlights = highlights.add(
+        rejectedMove.to,
+        SquareHighlight(details: HighlightDetails(solidColor: rejectedMoveColor)),
+      );
+    }
+    return highlights;
   }
 }
 
