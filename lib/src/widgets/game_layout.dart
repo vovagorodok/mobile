@@ -170,6 +170,9 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
             : null;
 
         final squareHighlights = _createSquareHighlights(fen);
+        final onTouchedSquare = widget.interactiveBoardParams != null
+            ? _createOnTouchedSquare(widget.interactiveBoardParams!.position)
+            : null;
 
         if (orientation == Orientation.landscape) {
           final defaultBoardSize =
@@ -190,6 +193,7 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
                   gameData: gameData,
                   lastMove: widget.lastMove,
                   squareHighlights: squareHighlights,
+                  onTouchedSquare: onTouchedSquare,
                   shapes: shapes,
                   settings: settings,
                   boardKey: widget.boardKey,
@@ -277,6 +281,7 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
                   gameData: gameData,
                   lastMove: widget.lastMove,
                   squareHighlights: squareHighlights,
+                  onTouchedSquare: onTouchedSquare,
                   shapes: shapes,
                   settings: settings,
                   boardKey: widget.boardKey,
@@ -380,6 +385,17 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
       );
     }
     return highlights;
+  }
+
+  void Function(Square) _createOnTouchedSquare(Position position) {
+    return (Square square) {
+      final peripheral = ref.read(bluetoothServiceProvider).peripheral;
+      if (peripheral.isFeatureSupported.submoveState && position.board.pieceAt(square) != null) {
+        peripheral.handleState(
+          position: position.copyWith(board: position.board.removePieceAt(square)),
+        );
+      }
+    };
   }
 }
 

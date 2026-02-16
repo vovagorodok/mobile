@@ -238,23 +238,23 @@ class CppPeripheral implements Peripheral {
   }
 
   @override
-  Future<void> handleUndo({
-    required String fen,
-    String? lastMove,
-    String? check,
-    String? time,
-  }) async {
-    await _peripheral.handleUndo(fen: fen, lastMove: lastMove, check: check, time: time);
+  Future<void> handleUndo({required Position position, NormalMove? lastMove, Time? time}) async {
+    await _peripheral.handleUndo(
+      fen: position.fen,
+      lastMove: lastMove?.uci,
+      check: _getCheck(position),
+      time: _getTime(time),
+    );
   }
 
   @override
-  Future<void> handleRedo({
-    required String fen,
-    String? lastMove,
-    String? check,
-    String? time,
-  }) async {
-    await _peripheral.handleRedo(fen: fen, lastMove: lastMove, check: check, time: time);
+  Future<void> handleRedo({required Position position, NormalMove? lastMove, Time? time}) async {
+    await _peripheral.handleRedo(
+      fen: position.fen,
+      lastMove: lastMove?.uci,
+      check: _getCheck(position),
+      time: _getTime(time),
+    );
   }
 
   @override
@@ -278,8 +278,8 @@ class CppPeripheral implements Peripheral {
   }
 
   @override
-  Future<void> handleState({required String fen}) async {
-    await _peripheral.handleState(fen: fen);
+  Future<void> handleState({required Position position}) async {
+    await _peripheral.handleState(fen: position.fen);
   }
 
   @override

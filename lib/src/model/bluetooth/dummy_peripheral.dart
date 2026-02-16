@@ -151,19 +151,9 @@ class DummyPeripheral implements Peripheral {
   @override
   Future<void> handleMsg({required String msg}) async {}
   @override
-  Future<void> handleUndo({
-    required String fen,
-    String? lastMove,
-    String? check,
-    String? time,
-  }) async {}
+  Future<void> handleUndo({required Position position, NormalMove? lastMove, Time? time}) async {}
   @override
-  Future<void> handleRedo({
-    required String fen,
-    String? lastMove,
-    String? check,
-    String? time,
-  }) async {}
+  Future<void> handleRedo({required Position position, NormalMove? lastMove, Time? time}) async {}
   @override
   Future<void> handleUndoOffer() async {}
   @override
@@ -173,7 +163,7 @@ class DummyPeripheral implements Peripheral {
   @override
   Future<void> handleSetState() async {}
   @override
-  Future<void> handleState({required String fen}) async {}
+  Future<void> handleState({required Position position}) async {}
   @override
   Future<void> handleOptionsBegin() async {}
   @override

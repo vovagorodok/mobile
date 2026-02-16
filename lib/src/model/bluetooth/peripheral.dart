@@ -95,8 +95,8 @@ abstract class Peripheral {
   // msg feature
   Future<void> handleMsg({required String msg});
   // undo_redo feature
-  Future<void> handleUndo({required String fen, String? lastMove, String? check, String? time});
-  Future<void> handleRedo({required String fen, String? lastMove, String? check, String? time});
+  Future<void> handleUndo({required Position position, NormalMove? lastMove, Time? time});
+  Future<void> handleRedo({required Position position, NormalMove? lastMove, Time? time});
   // undo_offer feature
   Future<void> handleUndoOffer();
   // draw_offer feature
@@ -106,7 +106,7 @@ abstract class Peripheral {
   // set_state feature
   Future<void> handleSetState();
   // submove_state feature
-  Future<void> handleState({required String fen});
+  Future<void> handleState({required Position position});
   // option feature
   Future<void> handleOptionsBegin();
   Future<void> handleOptionsReset();
