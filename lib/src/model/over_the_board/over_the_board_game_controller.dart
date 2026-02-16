@@ -1,4 +1,3 @@
-import 'package:ble_chess_peripheral_driver/chess_peripheral_driver.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

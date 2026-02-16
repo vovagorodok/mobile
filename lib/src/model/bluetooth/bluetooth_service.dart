@@ -9,6 +9,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lichess_mobile/src/model/bluetooth/cpp_peripheral.dart';
 import 'package:lichess_mobile/src/model/bluetooth/dummy_peripheral.dart';
 import 'package:lichess_mobile/src/model/bluetooth/peripheral.dart';
+import 'package:lichess_mobile/src/model/bluetooth/time.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 
@@ -57,17 +58,23 @@ class BluetoothService {
     required Variant variant,
     NormalMove? lastMove,
     Side? side,
+    Time? time,
   }) async {
     await _peripheral.handleBegin(
       position: position,
       variant: variant,
       lastMove: lastMove,
       side: side,
+      time: time,
     );
   }
 
-  Future<void> handleMove({required Position position, required NormalMove move}) async {
-    await _peripheral.handleMove(position: position, move: move);
+  Future<void> handleMove({
+    required Position position,
+    required NormalMove move,
+    Time? time,
+  }) async {
+    await _peripheral.handleMove(position: position, move: move, time: time);
   }
 
   Future<void> handleEnd({GameStatus? status, Variant? variant, String? score}) async {

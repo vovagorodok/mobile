@@ -1,6 +1,7 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:lichess_mobile/src/model/bluetooth/option.dart';
 import 'package:lichess_mobile/src/model/bluetooth/peripheral_piece.dart';
+import 'package:lichess_mobile/src/model/bluetooth/time.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 
@@ -84,9 +85,9 @@ abstract class Peripheral {
     required Variant variant,
     NormalMove? lastMove,
     Side? side,
-    String? time,
+    Time? time,
   });
-  Future<void> handleMove({required Position position, required NormalMove move, String? time});
+  Future<void> handleMove({required Position position, required NormalMove move, Time? time});
   Future<void> handleReject();
   Future<void> handleEnd({GameStatus? status, Variant? variant, String? score});
   Future<void> handleErr({required String err});

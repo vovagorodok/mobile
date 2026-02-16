@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/model/bluetooth/cpp_peripheral_fen.dart';
 import 'package:lichess_mobile/src/model/bluetooth/option.dart';
 import 'package:lichess_mobile/src/model/bluetooth/peripheral.dart';
 import 'package:lichess_mobile/src/model/bluetooth/peripheral_piece.dart';
+import 'package:lichess_mobile/src/model/bluetooth/time.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 
@@ -109,8 +110,8 @@ class CppPeripheral implements Peripheral {
           // Features.undoRedo,
           // Features.undoOffer,
           // Features.drawOffer,
-          // Features.side,
-          // Features.time,
+          Features.side,
+          Features.time,
           // Features.score,
           Features.drawReason,
           Features.variantReason,
@@ -189,7 +190,7 @@ class CppPeripheral implements Peripheral {
     required Variant variant,
     NormalMove? lastMove,
     Side? side,
-    String? time,
+    Time? time,
   }) async {
     await _peripheral.handleBegin(
       fen: position.fen,
@@ -197,6 +198,7 @@ class CppPeripheral implements Peripheral {
       side: _getSide(side),
       lastMove: lastMove?.uci,
       check: _getCheck(position),
+      time: _getTime(time),
     );
   }
 
@@ -204,9 +206,9 @@ class CppPeripheral implements Peripheral {
   Future<void> handleMove({
     required Position position,
     required NormalMove move,
-    String? time,
+    Time? time,
   }) async {
-    await _peripheral.handleMove(move: move.uci, check: _getCheck(position));
+    await _peripheral.handleMove(move: move.uci, check: _getCheck(position), time: _getTime(time));
   }
 
   @override
@@ -320,6 +322,13 @@ class CppPeripheral implements Peripheral {
   String? _getCheck(Position position) {
     final king = position.board.kingOf(position.turn);
     return king != null && position.checkers.isNotEmpty ? king.name : null;
+  }
+
+  String? _getTime(Time? time) {
+    if (time == null) return null;
+    final white = time.white.inMilliseconds;
+    final black = time.black.inMilliseconds;
+    return '$white $black';
   }
 }
 
