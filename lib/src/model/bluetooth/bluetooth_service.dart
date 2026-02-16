@@ -87,6 +87,26 @@ class BluetoothService {
     _showMessage('Rejected');
   }
 
+  Future<void> handleUndo({required Position position, NormalMove? lastMove, Time? time}) async {
+    if (!_peripheral.isFeatureSupported.undoRedo) {
+      _peripheral.handleEnd(
+        status: GameStatus.aborted,
+      ); // TODO: Fix when moves when undo/redo unsupported, just comment Features.undoRedo,
+      _showMessage('Undo unsupported');
+      return;
+    }
+    await _peripheral.handleUndo(position: position, lastMove: lastMove, time: time);
+  }
+
+  Future<void> handleRedo({required Position position, NormalMove? lastMove, Time? time}) async {
+    if (!_peripheral.isFeatureSupported.undoRedo) {
+      _peripheral.handleEnd(status: GameStatus.aborted);
+      _showMessage('Redo unsupported');
+      return;
+    }
+    await _peripheral.handleRedo(position: position, lastMove: lastMove, time: time);
+  }
+
   void _onConnectionStateChanged(BleConnectorStatus status) {
     if (status == BleConnectorStatus.disconnected) {
       _peripheral = DummyPeripheral();

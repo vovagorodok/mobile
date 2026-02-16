@@ -108,7 +108,7 @@ class CppPeripheral implements Peripheral {
           Features.check,
           Features.msg,
           // Features.resign,
-          // Features.undoRedo,
+          Features.undoRedo,
           // Features.undoOffer,
           // Features.drawOffer,
           Features.side,

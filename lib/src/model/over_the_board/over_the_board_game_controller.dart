@@ -129,12 +129,14 @@ class OverTheBoardGameController extends Notifier<OverTheBoardGameState> {
   void goForward() {
     if (state.canGoForward) {
       state = state.copyWith(stepCursor: state.stepCursor + 1, promotionMove: null);
+      _redoBluetooth();
     }
   }
 
   void goBack() {
     if (state.canGoBack) {
       state = state.copyWith(stepCursor: state.stepCursor - 1, promotionMove: null);
+      _undoBluetooth();
     }
   }
 
@@ -153,6 +155,16 @@ class OverTheBoardGameController extends Notifier<OverTheBoardGameState> {
     if (state.game.finished) {
       service.handleEnd(status: state.game.status, variant: state.game.meta.variant);
     }
+  }
+
+  void _undoBluetooth() {
+    final service = ref.read(bluetoothServiceProvider);
+    service.handleUndo(position: state.currentPosition, lastMove: state.lastMove);
+  }
+
+  void _redoBluetooth() {
+    final service = ref.read(bluetoothServiceProvider);
+    service.handleRedo(position: state.currentPosition, lastMove: state.lastMove);
   }
 
   void _moveFeedback(SanMove sanMove) {
