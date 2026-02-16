@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/model/bluetooth/cpp_peripheral_fen.dart';
 import 'package:lichess_mobile/src/model/bluetooth/option.dart';
 import 'package:lichess_mobile/src/model/bluetooth/peripheral.dart';
 import 'package:lichess_mobile/src/model/bluetooth/peripheral_piece.dart';
+import 'package:lichess_mobile/src/model/bluetooth/score.dart';
 import 'package:lichess_mobile/src/model/bluetooth/time.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
@@ -112,7 +113,7 @@ class CppPeripheral implements Peripheral {
           // Features.drawOffer,
           Features.side,
           Features.time,
-          // Features.score,
+          Features.score,
           Features.drawReason,
           Features.variantReason,
           Features.option,
@@ -217,12 +218,12 @@ class CppPeripheral implements Peripheral {
   }
 
   @override
-  Future<void> handleEnd({GameStatus? status, Variant? variant, String? score}) async {
+  Future<void> handleEnd({GameStatus? status, Variant? variant, Score? score}) async {
     await _peripheral.handleEnd(
       reason: _getEndReason(status),
       drawReason: _getDrawReason(status),
       variantReason: _getVariantReason(status, variant),
-      score: score,
+      score: _getScore(score),
     );
   }
 
@@ -329,6 +330,11 @@ class CppPeripheral implements Peripheral {
     final white = time.white.inMilliseconds;
     final black = time.black.inMilliseconds;
     return '$white $black';
+  }
+
+  String? _getScore(Score? score) {
+    if (score == null) return null;
+    return '${score.white} ${score.black}';
   }
 }
 

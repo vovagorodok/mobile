@@ -2,6 +2,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:lichess_mobile/src/model/bluetooth/option.dart';
 import 'package:lichess_mobile/src/model/bluetooth/peripheral.dart';
 import 'package:lichess_mobile/src/model/bluetooth/peripheral_piece.dart';
+import 'package:lichess_mobile/src/model/bluetooth/score.dart';
 import 'package:lichess_mobile/src/model/bluetooth/time.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
@@ -144,7 +145,7 @@ class DummyPeripheral implements Peripheral {
   @override
   Future<void> handleReject() async {}
   @override
-  Future<void> handleEnd({GameStatus? status, Variant? variant, String? score}) async {}
+  Future<void> handleEnd({GameStatus? status, Variant? variant, Score? score}) async {}
   @override
   Future<void> handleErr({required String err}) async {}
   @override
