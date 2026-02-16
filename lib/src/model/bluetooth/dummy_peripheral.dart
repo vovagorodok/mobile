@@ -131,7 +131,7 @@ class DummyPeripheral implements Peripheral {
   @override
   Future<void> handleBegin({
     required Position position,
-    required Variant variant,
+    Variant? variant,
     NormalMove? lastMove,
     Side? side,
     Time? time,

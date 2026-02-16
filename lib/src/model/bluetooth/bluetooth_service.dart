@@ -56,7 +56,7 @@ class BluetoothService {
 
   Future<void> handleBegin({
     required Position position,
-    required Variant variant,
+    Variant? variant,
     NormalMove? lastMove,
     Side? side,
     Time? time,
@@ -89,10 +89,7 @@ class BluetoothService {
 
   Future<void> handleUndo({required Position position, NormalMove? lastMove, Time? time}) async {
     if (!_peripheral.isFeatureSupported.undoRedo) {
-      _peripheral.handleEnd(
-        status: GameStatus.aborted,
-      ); // TODO: Fix when moves when undo/redo unsupported, just comment Features.undoRedo,
-      _showMessage('Undo unsupported');
+      await _peripheral.handleBegin(position: position, lastMove: lastMove, time: time);
       return;
     }
     await _peripheral.handleUndo(position: position, lastMove: lastMove, time: time);
@@ -100,8 +97,7 @@ class BluetoothService {
 
   Future<void> handleRedo({required Position position, NormalMove? lastMove, Time? time}) async {
     if (!_peripheral.isFeatureSupported.undoRedo) {
-      _peripheral.handleEnd(status: GameStatus.aborted);
-      _showMessage('Redo unsupported');
+      await _peripheral.handleBegin(position: position, lastMove: lastMove, time: time);
       return;
     }
     await _peripheral.handleRedo(position: position, lastMove: lastMove, time: time);

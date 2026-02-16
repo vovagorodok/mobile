@@ -188,7 +188,7 @@ class CppPeripheral implements Peripheral {
   @override
   Future<void> handleBegin({
     required Position position,
-    required Variant variant,
+    Variant? variant,
     NormalMove? lastMove,
     Side? side,
     Time? time,
@@ -296,8 +296,8 @@ class CppPeripheral implements Peripheral {
     _moveController.add(NormalMove.fromUci(uci));
   }
 
-  String? _getVariant(Variant variant) {
-    return _variantsMap[variant];
+  String? _getVariant(Variant? variant) {
+    return variant != null ? _variantsMap[variant] : null;
   }
 
   String? _getEndReason(GameStatus? status) {
@@ -309,7 +309,7 @@ class CppPeripheral implements Peripheral {
   }
 
   String? _getVariantReason(GameStatus? status, Variant? variant) {
-    return status == GameStatus.variantEnd ? _variantReasonsMap[variant] : null;
+    return status == GameStatus.variantEnd && variant != null ? _variantReasonsMap[variant] : null;
   }
 
   String? _getSide(Side? side) {
