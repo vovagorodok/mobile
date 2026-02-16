@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/model/bluetooth/cpp_peripheral.dart';
 import 'package:lichess_mobile/src/model/bluetooth/dummy_peripheral.dart';
 import 'package:lichess_mobile/src/model/bluetooth/peripheral.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/game/game_status.dart';
 
 /// A provider instance of the [BluetoothService].
 final bluetoothServiceProvider = Provider<BluetoothService>((Ref ref) {
@@ -69,8 +70,8 @@ class BluetoothService {
     await _peripheral.handleMove(position: position, move: move);
   }
 
-  Future<void> handleEnd({String? reason}) async {
-    await _peripheral.handleEnd(reason: reason);
+  Future<void> handleEnd({GameStatus? status, Variant? variant, String? score}) async {
+    await _peripheral.handleEnd(status: status, variant: variant, score: score);
   }
 
   Future<void> handleReject() async {

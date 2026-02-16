@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:ble_chess_peripheral_driver/chess_peripheral_driver.dart'
-    show Features, Sides, StringSerial, Variants;
+    show DrawReasons, EndReasons, Features, Sides, StringSerial, VariantReasons, Variants;
 import 'package:ble_chess_peripheral_driver/chess_peripheral_driver.dart' as driver;
 import 'package:dartchess/dartchess.dart';
 import 'package:lichess_mobile/src/model/bluetooth/cpp_peripheral_fen.dart';
@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/model/bluetooth/option.dart';
 import 'package:lichess_mobile/src/model/bluetooth/peripheral.dart';
 import 'package:lichess_mobile/src/model/bluetooth/peripheral_piece.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/game/game_status.dart';
 
 class CppFeatureSupport implements FeatureSupport {
   CppFeatureSupport(this._peripheral);
@@ -98,21 +99,34 @@ class CppPeripheral implements Peripheral {
     : _peripheral = driver.CppPeripheral(
         stringSerial: stringSerial,
         features: [
-          Features.msg,
+          // Features.getState,
+          // Features.setState,
+          Features.submoveState,
           Features.lastMove,
           Features.check,
-          // Features.side,
+          Features.msg,
           // Features.resign,
           // Features.undoRedo,
           // Features.undoOffer,
           // Features.drawOffer,
-          // Features.getState,
-          // Features.setState,
-          Features.submoveState,
-          // Features.drawReason,
+          // Features.side,
+          // Features.time,
+          // Features.score,
+          Features.drawReason,
+          Features.variantReason,
           Features.option,
         ],
-        variants: [Variants.standard],
+        variants: [
+          Variants.standard,
+          Variants.chess960,
+          Variants.threeCheck,
+          Variants.atomic,
+          Variants.kingOfTheHill,
+          Variants.antiChess,
+          Variants.horde,
+          Variants.racingKings,
+          Variants.crazyHouse,
+        ],
       ) {
     _features = CppFeatureSupport(_peripheral);
     _variants = CppVariantSupport(_peripheral);
@@ -201,16 +215,11 @@ class CppPeripheral implements Peripheral {
   }
 
   @override
-  Future<void> handleEnd({
-    String? reason,
-    String? drawReason,
-    String? variantReason,
-    String? score,
-  }) async {
+  Future<void> handleEnd({GameStatus? status, Variant? variant, String? score}) async {
     await _peripheral.handleEnd(
-      reason: reason,
-      drawReason: drawReason,
-      variantReason: variantReason,
+      reason: _getEndReason(status),
+      drawReason: _getDrawReason(status),
+      variantReason: _getVariantReason(status, variant),
       score: score,
     );
   }
@@ -285,7 +294,19 @@ class CppPeripheral implements Peripheral {
   }
 
   String? _getVariant(Variant variant) {
-    return variant.label.toLowerCase(); // TODO: Use map
+    return _variantsMap[variant];
+  }
+
+  String? _getEndReason(GameStatus? status) {
+    return status != null ? _endReasonsMap[status] ?? EndReasons.undefined : null;
+  }
+
+  String? _getDrawReason(GameStatus? status) {
+    return status != null ? _drawReasonsMap[status] : null;
+  }
+
+  String? _getVariantReason(GameStatus? status, Variant? variant) {
+    return status == GameStatus.variantEnd ? _variantReasonsMap[variant] : null;
   }
 
   String? _getSide(Side? side) {
@@ -301,3 +322,35 @@ class CppPeripheral implements Peripheral {
     return king != null && position.checkers.isNotEmpty ? king.name : null;
   }
 }
+
+const _variantsMap = {
+  Variant.standard: Variants.standard,
+  Variant.chess960: Variants.chess960,
+  Variant.threeCheck: Variants.threeCheck,
+  Variant.atomic: Variants.atomic,
+  Variant.kingOfTheHill: Variants.kingOfTheHill,
+  Variant.antichess: Variants.antiChess,
+  Variant.horde: Variants.horde,
+  Variant.racingKings: Variants.racingKings,
+  Variant.crazyhouse: Variants.crazyHouse,
+};
+
+const _endReasonsMap = {
+  GameStatus.mate: EndReasons.checkmate,
+  GameStatus.stalemate: EndReasons.draw,
+  GameStatus.draw: EndReasons.draw,
+  GameStatus.insufficientMaterialClaim: EndReasons.draw,
+  GameStatus.outoftime: EndReasons.timeout,
+  GameStatus.resign: EndReasons.resign,
+  GameStatus.aborted: EndReasons.abort,
+};
+
+const _drawReasonsMap = {
+  GameStatus.stalemate: DrawReasons.stalemate,
+  GameStatus.insufficientMaterialClaim: DrawReasons.insufficientMaterial,
+};
+
+const _variantReasonsMap = {
+  Variant.kingOfTheHill: VariantReasons.kingOfTheHill,
+  Variant.threeCheck: VariantReasons.threeCheck,
+};

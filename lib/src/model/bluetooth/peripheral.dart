@@ -2,6 +2,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:lichess_mobile/src/model/bluetooth/option.dart';
 import 'package:lichess_mobile/src/model/bluetooth/peripheral_piece.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/game/game_status.dart';
 
 abstract class FeatureSupport {
   bool get getState;
@@ -87,13 +88,7 @@ abstract class Peripheral {
   });
   Future<void> handleMove({required Position position, required NormalMove move, String? time});
   Future<void> handleReject();
-  Future<void> handleEnd({
-    // TODO: use Position
-    String? reason,
-    String? drawReason,
-    String? variantReason,
-    String? score,
-  });
+  Future<void> handleEnd({GameStatus? status, Variant? variant, String? score});
   Future<void> handleErr({required String err});
   // msg feature
   Future<void> handleMsg({required String msg});

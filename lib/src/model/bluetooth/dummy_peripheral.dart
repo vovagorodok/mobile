@@ -3,6 +3,7 @@ import 'package:lichess_mobile/src/model/bluetooth/option.dart';
 import 'package:lichess_mobile/src/model/bluetooth/peripheral.dart';
 import 'package:lichess_mobile/src/model/bluetooth/peripheral_piece.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/game/game_status.dart';
 
 class DummyFeatureSupport implements FeatureSupport {
   @override
@@ -142,12 +143,7 @@ class DummyPeripheral implements Peripheral {
   @override
   Future<void> handleReject() async {}
   @override
-  Future<void> handleEnd({
-    String? reason,
-    String? drawReason,
-    String? variantReason,
-    String? score,
-  }) async {}
+  Future<void> handleEnd({GameStatus? status, Variant? variant, String? score}) async {}
   @override
   Future<void> handleErr({required String err}) async {}
   @override

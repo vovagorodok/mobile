@@ -152,15 +152,7 @@ class OverTheBoardGameController extends Notifier<OverTheBoardGameState> {
     final service = ref.read(bluetoothServiceProvider);
     service.handleMove(position: state.currentPosition, move: move);
     if (state.game.finished) {
-      if (state.currentPosition.isCheckmate) {
-        service.handleEnd(reason: EndReasons.checkmate);
-      } else if (state.currentPosition.isStalemate) {
-        service.handleEnd(reason: EndReasons.draw);
-      } else {
-        service.handleEnd(reason: EndReasons.undefined);
-      }
-    } else if (state.game.aborted) {
-      service.handleEnd(reason: EndReasons.abort);
+      service.handleEnd(status: state.game.status, variant: state.game.meta.variant);
     }
   }
 
