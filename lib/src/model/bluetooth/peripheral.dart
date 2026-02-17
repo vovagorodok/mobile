@@ -46,6 +46,7 @@ abstract class Round {
   // set_state feature
   bool get isStateSettable;
 
+  String? get fen;
   PeripheralPieces? get pieces;
   NormalMove? get rejectedMove;
 }

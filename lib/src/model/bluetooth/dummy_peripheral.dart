@@ -75,6 +75,8 @@ class DummyRound implements Round {
   @override
   bool get isStateSettable => false;
   @override
+  String? get fen => null;
+  @override
   PeripheralPieces? get pieces => null;
   @override
   NormalMove? get rejectedMove => null;

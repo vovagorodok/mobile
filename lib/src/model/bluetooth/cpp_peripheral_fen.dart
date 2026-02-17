@@ -29,7 +29,7 @@ PeripheralPieces readPeripheralFen(String fen) {
           final roleLetter = c.toLowerCase();
           final square = Square.fromCoords(File(file), Rank(rank));
           pieces[square] = PeripheralPiece(
-            role: 'u?'.contains(roleLetter) ? null : _rolesMap[roleLetter]!,
+            role: 'u?'.contains(roleLetter) ? null : _rolesMap[roleLetter],
             color: roleLetter == '?'
                 ? null
                 : c == roleLetter
@@ -44,7 +44,7 @@ PeripheralPieces readPeripheralFen(String fen) {
 }
 
 bool isPeripheralFenGettable(String? fen) {
-  return fen != null && !fen.contains(RegExp(r'[uU?]'));
+  return fen != null && !fen.contains(RegExp(r'[umdUMD?]'));
 }
 
 const _rolesMap = {
@@ -54,6 +54,4 @@ const _rolesMap = {
   'b': Role.bishop,
   'q': Role.queen,
   'k': Role.king,
-  'm': Role.pawn,
-  'd': Role.queen,
 };

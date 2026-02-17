@@ -90,6 +90,8 @@ class CppRound implements Round {
   @override
   bool get isStateSettable => _round.isStateSettable;
   @override
+  String? get fen => _round.fen;
+  @override
   PeripheralPieces? get pieces => _round.fen != null ? readPeripheralFen(_round.fen!) : null;
   @override
   NormalMove? get rejectedMove =>
