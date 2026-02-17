@@ -104,7 +104,7 @@ class CppPeripheral implements Peripheral {
         stringSerial: stringSerial,
         features: [
           Features.getState,
-          // Features.setState,
+          Features.setState,
           Features.submoveState,
           Features.lastMove,
           Features.check,

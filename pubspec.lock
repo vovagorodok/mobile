@@ -94,7 +94,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "5593ed4229dae9f663f11437092df52eb7127723"
+      resolved-ref: "7cd13c2fe132527340415088187d46ac9edb24ca"
       url: "https://github.com/dkwach/chess_peripheral_driver.git"
     source: git
     version: "0.0.10"

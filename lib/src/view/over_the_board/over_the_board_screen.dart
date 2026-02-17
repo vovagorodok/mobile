@@ -302,6 +302,7 @@ class _BottomBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final bluetoothService = ref.read(bluetoothServiceProvider);
     final gameState = ref.watch(overTheBoardGameControllerProvider);
     final clock = ref.watch(overTheBoardClockProvider);
 
@@ -370,6 +371,14 @@ class _BottomBar extends ConsumerWidget {
               : null,
           icon: Icons.undo,
         ),
+        if (bluetoothService.peripheral.isFeatureSupported.setState)
+          BottomBarButton(
+            label: 'Autocomplete',
+            onTap: bluetoothService.peripheral.round.isStateSettable
+                ? bluetoothService.handleSetState
+                : null,
+            icon: Icons.auto_awesome,
+          ),
       ],
     );
   }
