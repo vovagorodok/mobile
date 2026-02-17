@@ -103,7 +103,7 @@ class CppPeripheral implements Peripheral {
     : _peripheral = driver.CppPeripheral(
         stringSerial: stringSerial,
         features: [
-          // Features.getState,
+          Features.getState,
           // Features.setState,
           Features.submoveState,
           Features.lastMove,

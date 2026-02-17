@@ -103,6 +103,14 @@ class BluetoothService {
     await _peripheral.handleRedo(position: position, lastMove: lastMove, time: time);
   }
 
+  Future<void> handleGetState() async {
+    await _peripheral.handleGetState();
+  }
+
+  Future<void> handleSetState() async {
+    await _peripheral.handleSetState();
+  }
+
   void _onConnectionStateChanged(BleConnectorStatus status) {
     if (status == BleConnectorStatus.disconnected) {
       _peripheral = DummyPeripheral();

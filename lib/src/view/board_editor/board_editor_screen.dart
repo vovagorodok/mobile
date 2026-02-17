@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
+import 'package:lichess_mobile/src/model/bluetooth/bluetooth_service.dart';
 import 'package:lichess_mobile/src/model/board_editor/board_editor_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
@@ -163,6 +164,15 @@ class _PieceMenu extends ConsumerStatefulWidget {
 
 class _PieceMenuState extends ConsumerState<_PieceMenu> {
   @override
+  void initState() {
+    super.initState();
+    final bluetoothService = ref.read(bluetoothServiceProvider);
+    if (bluetoothService.peripheral.isFeatureSupported.getState) {
+      bluetoothService.handleGetState();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final boardPrefs = ref.watch(boardPreferencesProvider);
     final editorController = boardEditorControllerProvider(widget.initialFen);
@@ -260,6 +270,7 @@ class _BottomBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final bluetoothService = ref.read(bluetoothServiceProvider);
     final editorController = boardEditorControllerProvider(initialFen);
     final editorState = ref.watch(editorController);
     final pieceCount = editorState.pieces.length;
@@ -371,6 +382,21 @@ class _BottomBar extends ConsumerWidget {
               : null,
           icon: Icons.biotech,
         ),
+        if (bluetoothService.peripheral.isFeatureSupported.getState)
+          StreamBuilder<void>(
+            stream: bluetoothService.roundUpdateStream,
+            builder: (context, constraints) => BottomBarButton(
+              key: const Key('load-bluetooth-position-board-button'),
+              label: 'Load Bluetooth position', // TODO: TRANSLATE: context.l10n.bluetooth,
+              onTap: bluetoothService.peripheral.round.isStateGettable
+                  ? () {
+                      final fen = bluetoothService.peripheral.round.fen!;
+                      ref.read(editorController.notifier).loadFen(fen);
+                    }
+                  : null,
+              icon: Icons.download,
+            ),
+          ),
         BottomBarButton(
           label: 'Filters',
           onTap: () => showModalBottomSheet<void>(
