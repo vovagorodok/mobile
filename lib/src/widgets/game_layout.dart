@@ -415,6 +415,7 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
   }
 
   IMap<Square, SquareHighlight> _createSquareHighlights(Position position) {
+    // TODO: Bluetooth: Create themed colors
     const Color rejectedMoveColor = Color.fromRGBO(199, 0, 109, 0.41);
     const Color pieceRemoveColor = Color.fromRGBO(255, 60, 60, 0.50);
     const Color pieceAddColor = Color.fromRGBO(60, 255, 60, 0.50);
@@ -427,7 +428,6 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
     IMap<Square, SquareHighlight> highlights = IMap();
 
     if (round.pieces != null && (isSubmoveSup || !isSynchronized)) {
-      // TODO: Bluetooth: Create themed colors
       final remColor = isSynchronized ? pieceChangeColor : pieceRemoveColor;
       final addColor = isSynchronized ? pieceChangeColor : pieceAddColor;
       final rplColor = isSynchronized ? pieceChangeColor : pieceReplaceColor;
