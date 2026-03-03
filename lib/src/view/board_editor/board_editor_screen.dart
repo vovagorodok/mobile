@@ -449,7 +449,7 @@ class _BottomBar extends ConsumerWidget {
             stream: bluetoothService.roundUpdateStream,
             builder: (context, constraints) => BottomBarButton(
               key: const Key('load-bluetooth-position-board-button'),
-              label: 'Load Bluetooth position', // TODO: TRANSLATE: context.l10n.bluetooth,
+              label: 'Load Bluetooth position', // TODO: Bluetooth: Translate
               onTap: bluetoothService.peripheral.round.isStateGettable
                   ? () {
                       final fen = bluetoothService.peripheral.round.fen!;

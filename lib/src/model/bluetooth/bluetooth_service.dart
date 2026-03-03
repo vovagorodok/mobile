@@ -119,7 +119,7 @@ class BluetoothService {
 
   Future<void> handleReject() async {
     await _peripheral.handleReject();
-    _showMessage('Rejected');
+    _showMessage('Rejected'); // TODO: Bluetooth: Translate
   }
 
   Future<void> handleUndo({required Position position, Move? lastMove, Time? time}) async {
@@ -154,11 +154,11 @@ class BluetoothService {
     if (status == BleConnectorStatus.disconnected) {
       _peripheral = DummyPeripheral();
       _logger.info('Disconnected');
-      _showMessage('Disconnected');
+      _showMessage('Disconnected'); // TODO: Bluetooth: Translate
     } else if (status == BleConnectorStatus.connected) {
       _initPeripheral(_bleConnector!);
       _logger.info('Connected');
-      _showMessage('Connected');
+      _showMessage('Connected'); // TODO: Bluetooth: Translate
     }
     _connectedController.add(null);
   }
@@ -168,7 +168,9 @@ class BluetoothService {
     final requestedMtu = await mtu.request(mtu: maxStringSize);
     if (requestedMtu < maxStringSize) {
       await bleConnector.disconnect();
-      _showError('Mtu: $requestedMtu, is less than the required: $maxStringSize');
+      _showError(
+        'Mtu: $requestedMtu, is less than the required: $maxStringSize',
+      ); // TODO: Bluetooth: Translate
       return;
     }
 
@@ -222,14 +224,14 @@ class BluetoothService {
   }
 
   void _handlePeripheralInitialized(_) {
-    _showMessage('Ready');
+    _showMessage('Ready'); // TODO: Bluetooth: Translate
     _initializedController.add(null);
   }
 
   void _handlePeripheralRoundInitialized(_) {
     _handlePeripheralRoundUpdate(null);
     if (!_peripheral.round.isVariantSupported) {
-      _showMessage('Unsupported variant');
+      _showMessage('Unsupported variant'); // TODO: Bluetooth: Translate
     }
   }
 
@@ -238,7 +240,7 @@ class BluetoothService {
   }
 
   void _handlePeripheralStateSynchronize(bool isSynchronized) {
-    _showMessage(isSynchronized ? 'Synchronized' : 'Unsynchronized');
+    _showMessage(isSynchronized ? 'Synchronized' : 'Unsynchronized'); // TODO: Bluetooth: Translate
   }
 
   void _handlePeripheralMove(Move move) {

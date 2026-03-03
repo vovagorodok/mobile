@@ -32,7 +32,7 @@ class _BluetoothScreenState extends ConsumerState<BluetoothScreen> {
       stream: service.connectedStream,
       builder: (context, constraints) => Scaffold(
         appBar: AppBar(
-          title: const Text('Bluetooth'), // TODO: TRANSLATE: context.l10n.bluetooth
+          title: const Text('Bluetooth'), // TODO: Bluetooth: Translate
           actions: [
             if (service.isConnected)
               IconButton(

@@ -21,19 +21,19 @@ class _StatusScreenState extends ConsumerState<StatusScreen> {
   String _determineText(BleCentralStatus status) {
     switch (status) {
       case BleCentralStatus.unsupported:
-        return 'This device does not support Bluetooth';
+        return 'This device does not support Bluetooth'; // TODO: Bluetooth: Translate
       case BleCentralStatus.unsupportedBrowser:
-        return 'This browser does not support Bluetooth';
+        return 'This browser does not support Bluetooth'; // TODO: Bluetooth: Translate
       case BleCentralStatus.unauthorized:
-        return 'Authorize application to use Bluetooth and location';
+        return 'Authorize application to use Bluetooth and location'; // TODO: Bluetooth: Translate
       case BleCentralStatus.poweredOff:
-        return 'Bluetooth is disabled, turn it on';
+        return 'Bluetooth is disabled, turn it on'; // TODO: Bluetooth: Translate
       case BleCentralStatus.locationServicesDisabled:
-        return 'Location services are disabled, enable them';
+        return 'Location services are disabled, enable them'; // TODO: Bluetooth: Translate
       case BleCentralStatus.ready:
-        return 'Bluetooth is up and running';
+        return 'Bluetooth is up and running'; // TODO: Bluetooth: Translate
       default:
-        return 'Waiting to fetch Bluetooth status: $status';
+        return 'Waiting to fetch Bluetooth status: $status'; // TODO: Bluetooth: Translate
     }
   }
 

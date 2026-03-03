@@ -107,7 +107,7 @@ class _BodyState extends ConsumerState<_Body> {
         showConfigureGameSheet(context, isDismissible: true);
       }
 
-      // TODO: Implement for all rounds types (AI, Online, Analysis ...)
+      // TODO: Bluetooth: Implement for all rounds types (AI, Online, Analysis ...)
       final service = ref.read(bluetoothServiceProvider);
       _moveSubscription = service.moveStream.listen(_handleBluetoothMove);
       _roundUpdateSubscription = service.roundUpdateStream.listen(_handleBluetoothRoundUpdate);
@@ -149,7 +149,9 @@ class _BodyState extends ConsumerState<_Body> {
       context: context,
       builder: (context) => YesNoDialog(
         title: Text('${context.l10n.draw}?'),
-        content: const Text('Device offers undo. Does opponent accept?'),
+        content: const Text(
+          'Device offers undo. Does opponent accept?',
+        ), // TODO: Bluetooth: Translate
         onYes: () {
           Navigator.pop(context);
           ref.read(overTheBoardGameControllerProvider.notifier).goBack();
@@ -172,7 +174,9 @@ class _BodyState extends ConsumerState<_Body> {
       context: context,
       builder: (context) => YesNoDialog(
         title: Text('${context.l10n.draw}?'),
-        content: const Text('Device offers draw. Does opponent accept?'),
+        content: const Text(
+          'Device offers draw. Does opponent accept?',
+        ), // TODO: Bluetooth: Translate
         onYes: () {
           Navigator.pop(context);
           ref.read(overTheBoardGameControllerProvider.notifier).draw();
@@ -453,7 +457,7 @@ class _BottomBar extends ConsumerWidget {
         ),
         if (bluetoothService.peripheral.isFeatureSupported.setState)
           BottomBarButton(
-            label: 'Autocomplete',
+            label: 'Autocomplete', // TODO: Bluetooth: Translate
             onTap: bluetoothService.peripheral.round.isStateSettable
                 ? bluetoothService.handleSetState
                 : null,

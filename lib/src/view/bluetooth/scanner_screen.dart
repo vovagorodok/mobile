@@ -76,13 +76,13 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen> {
 
   Widget _buildScanButton() => FilledButton.icon(
     icon: const Icon(Icons.search_rounded),
-    label: const Text('Scan'),
+    label: const Text('Scan'), // TODO: Bluetooth: Translate
     onPressed: !bleScanner.state.isScanInProgress ? _startScan : null,
   );
 
   Widget _buildStopButton() => FilledButton.icon(
     icon: const Icon(Icons.search_off_rounded),
-    label: const Text('Stop'),
+    label: const Text('Stop'), // TODO: Bluetooth: Translate
     onPressed: bleScanner.state.isScanInProgress ? _stopScan : null,
   );
 

@@ -188,7 +188,7 @@ class _OptionsScreenState extends State<OptionsScreen> {
           ),
           actions: [
             ElevatedButton(
-              child: const Text('Cancel'),
+              child: const Text('Cancel'), // TODO: Bluetooth: Translate
               onPressed: () => Navigator.of(context).pop(),
             ),
           ],
@@ -211,7 +211,9 @@ class _OptionsScreenState extends State<OptionsScreen> {
             controller: controller,
             autofocus: true,
             maxLines: 5,
-            decoration: const InputDecoration(hintText: 'Enter a value'),
+            decoration: const InputDecoration(
+              hintText: 'Enter a value',
+            ), // TODO: Bluetooth: Translate
             onFieldSubmitted: (String value) {
               onSelected(value);
               Navigator.of(context).pop();
@@ -220,7 +222,7 @@ class _OptionsScreenState extends State<OptionsScreen> {
           actions: [
             ElevatedButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Cancel'),
+              child: const Text('Cancel'), // TODO: Bluetooth: Translate
             ),
             ElevatedButton(
               onPressed: () {
@@ -238,7 +240,7 @@ class _OptionsScreenState extends State<OptionsScreen> {
   Widget _buildOptionsList() => ListView(
     children: [
       ListSection(
-        header: const SettingsSectionTitle('Options'),
+        header: const SettingsSectionTitle('Options'), // TODO: Bluetooth: Translate
         margin: EdgeInsets.zero,
         hasLeading: false,
         children: [Column(children: options.map(_createOption).toList())],
@@ -248,7 +250,7 @@ class _OptionsScreenState extends State<OptionsScreen> {
 
   Widget _buildOptionsResetButton() => FilledButton.icon(
     icon: const Icon(Icons.cached_rounded),
-    label: const Text('Default'),
+    label: const Text('Default'), // TODO: Bluetooth: Translate
     onPressed: areOptionsInitialized ? peripheral.handleOptionsReset : null,
   );
 
