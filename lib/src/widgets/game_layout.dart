@@ -422,16 +422,17 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
     const Color pieceReplaceColor = Color.fromRGBO(60, 60, 255, 0.50);
     const Color pieceChangeColor = Color.fromRGBO(20, 85, 30, 0.376);
     final service = ref.read(bluetoothServiceProvider);
-    final round = service.round;
-    final isSynchronized = round.isStateSynchronized;
+    final peripheralRound = service.round;
+    final peripheralPieces = peripheralRound.pieces;
+    final isSynchronized = peripheralRound.isStateSynchronized;
     final isSubmoveSup = service.isFeatureSupported.submoveState;
+    final rejectedMove = peripheralRound.rejectedMove;
     IMap<Square, SquareHighlight> highlights = IMap();
 
-    if (round.pieces != null && (isSubmoveSup || !isSynchronized)) {
+    if (peripheralPieces != null && (isSubmoveSup || !isSynchronized)) {
       final remColor = isSynchronized ? pieceChangeColor : pieceRemoveColor;
       final addColor = isSynchronized ? pieceChangeColor : pieceAddColor;
       final rplColor = isSynchronized ? pieceChangeColor : pieceReplaceColor;
-      final peripheralPieces = round.pieces!;
       final centralPieces = position.board.pieces;
       for (final (square, centralPiece) in centralPieces) {
         final peripheralPiece = peripheralPieces[square];
@@ -458,8 +459,7 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
         }
       }
     }
-    if (round.rejectedMove != null) {
-      final rejectedMove = round.rejectedMove!;
+    if (rejectedMove != null) {
       if (rejectedMove is NormalMove) {
         highlights = highlights.add(
           rejectedMove.from,
