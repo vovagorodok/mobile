@@ -240,7 +240,10 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
           ),
         );
 
-        final squareHighlights = _createSquareHighlights(fen);
+        final squareHighlights = switch (widget.boardParams) {
+          ReadonlyBoardParams() => IMap<Square, SquareHighlight>(),
+          InteractiveBoardParams(:final position) => _createSquareHighlights(position),
+        };
         final onTouchedSquare = switch (widget.boardParams) {
           ReadonlyBoardParams() => null,
           InteractiveBoardParams(:final position) => _createOnTouchedSquare(position),
@@ -411,7 +414,7 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
     });
   }
 
-  IMap<Square, SquareHighlight> _createSquareHighlights(String fen) {
+  IMap<Square, SquareHighlight> _createSquareHighlights(Position position) {
     const Color rejectedMoveColor = Color.fromRGBO(199, 0, 109, 0.41);
     const Color pieceRemoveColor = Color.fromRGBO(255, 60, 60, 0.50);
     const Color pieceAddColor = Color.fromRGBO(60, 255, 60, 0.50);
@@ -427,10 +430,8 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
       final addColor = isSynchronized ? pieceChangeColor : pieceAddColor;
       final rplColor = isSynchronized ? pieceChangeColor : pieceReplaceColor;
       final peripheralPieces = peripheral.round.pieces!;
-      final centralPieces = readFen(fen); // TODO: Find pieces instead parse fen each time
-      for (final entry in centralPieces.entries) {
-        final square = entry.key;
-        final centralPiece = entry.value;
+      final centralPieces = position.board.pieces;
+      for (final (square, centralPiece) in centralPieces) {
         final peripheralPiece = peripheralPieces[square];
         if (peripheralPiece == null) {
           highlights = highlights.add(
@@ -445,9 +446,8 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
           );
         }
       }
-      for (final entry in peripheralPieces.entries) {
-        final square = entry.key;
-        final centralPiece = centralPieces[square];
+      for (final square in peripheralPieces.keys) {
+        final centralPiece = position.board.pieceAt(square);
         if (centralPiece == null) {
           highlights = highlights.add(
             square,
