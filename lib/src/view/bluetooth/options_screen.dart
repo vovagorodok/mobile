@@ -119,7 +119,6 @@ class _OptionsScreenState extends State<OptionsScreen> {
           option.value = value.toInt();
         });
       },
-      year2023: false,
     ),
   );
 
@@ -142,7 +141,6 @@ class _OptionsScreenState extends State<OptionsScreen> {
           option.value = value;
         });
       },
-      year2023: false,
     ),
   );
 
@@ -173,21 +171,20 @@ class _OptionsScreenState extends State<OptionsScreen> {
         return AlertDialog(
           contentPadding: const EdgeInsets.only(top: 12),
           scrollable: true,
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: option.enumValues
-                .map((value) {
-                  return RadioListTile(
-                    title: Text(_convertToReadable(value)),
-                    value: value,
-                    groupValue: option.value,
-                    onChanged: (value) {
-                      if (value != null) onSelected(value);
-                      Navigator.of(context).pop();
-                    },
-                  );
-                })
-                .toList(growable: false),
+          content: RadioGroup(
+            groupValue: option.value,
+            onChanged: (value) {
+              if (value != null) onSelected(value);
+              Navigator.of(context).pop();
+            },
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: option.enumValues
+                  .map((value) {
+                    return RadioListTile(title: Text(_convertToReadable(value)), value: value);
+                  })
+                  .toList(growable: false),
+            ),
           ),
           actions: [
             ElevatedButton(
@@ -205,7 +202,7 @@ class _OptionsScreenState extends State<OptionsScreen> {
     required StrOption option,
     required void Function(String choice) onSelected,
   }) {
-    showDialog(
+    showDialog<String>(
       context: context,
       builder: (context) {
         final controller = TextEditingController(text: option.value);
