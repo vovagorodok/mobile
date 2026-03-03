@@ -70,7 +70,6 @@ class _BluetoothScreenState extends ConsumerState<BluetoothScreen> {
             ),
           ),
         ),
-        // bottomNavigationBar: _BottomBar(initialFen),
       ),
     );
   }
