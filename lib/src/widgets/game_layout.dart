@@ -427,6 +427,7 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
     IMap<Square, SquareHighlight> highlights = IMap();
 
     if (round.pieces != null && (isSubmoveSup || !isSynchronized)) {
+      // TODO: Bluetooth: Create themed colors
       final remColor = isSynchronized ? pieceChangeColor : pieceRemoveColor;
       final addColor = isSynchronized ? pieceChangeColor : pieceAddColor;
       final rplColor = isSynchronized ? pieceChangeColor : pieceReplaceColor;
