@@ -183,6 +183,9 @@ class _BodyState extends ConsumerState<_Body> {
   }
 
   void _handleCentralDrawOfferAck(bool ack) {
+    if (!context.mounted) return;
+    if (ModalRoute.of(context)?.isCurrent == true) return;
+
     Navigator.pop(context);
     if (ack) {
       ref.read(overTheBoardGameControllerProvider.notifier).draw();
