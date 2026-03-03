@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/bluetooth/bluetooth_service.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/game/game_board_params.dart';
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_clock.dart';
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_game_controller.dart';
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_game_storage.dart';
@@ -30,10 +32,13 @@ import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 
 class OverTheBoardScreen extends StatelessWidget {
-  const OverTheBoardScreen({super.key});
+  const OverTheBoardScreen({this.initialFen, super.key});
 
-  static Route<void> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const OverTheBoardScreen());
+  /// Optional initial FEN to start the game from a custom position.
+  final String? initialFen;
+
+  static Route<void> buildRoute(BuildContext context, {String? initialFen}) {
+    return buildScreenRoute(context, screen: OverTheBoardScreen(initialFen: initialFen));
   }
 
   @override
@@ -49,13 +54,15 @@ class OverTheBoardScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: const _Body(),
+      body: _Body(initialFen: initialFen),
     );
   }
 }
 
 class _Body extends ConsumerStatefulWidget {
-  const _Body();
+  const _Body({this.initialFen});
+
+  final String? initialFen;
 
   @override
   ConsumerState<_Body> createState() => _BodyState();
@@ -77,6 +84,13 @@ class _BodyState extends ConsumerState<_Body> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      // If we have an initial FEN, always show the new game dialog
+      if (widget.initialFen != null) {
+        if (!mounted) return;
+        showConfigureGameSheet(context, isDismissible: true, initialFen: widget.initialFen);
+        return;
+      }
+
       final ongoingGame = await ref.read(overTheBoardGameStorageProvider).fetchOngoingGame();
       if (ongoingGame != null && ongoingGame.game.steps.length > 1 && !ongoingGame.game.finished) {
         ref.read(overTheBoardGameControllerProvider.notifier).loadOngoingGame(ongoingGame.game);
@@ -297,20 +311,19 @@ class _BodyState extends ConsumerState<_Body> {
                     key: _boardKey,
                     topTable: _Player(
                       side: orientation.opposite,
-                      upsideDown:
-                          !overTheBoardPrefs.flipPiecesAfterMove || orientation != gameState.turn,
                       clockKey: const ValueKey('topClock'),
                     ),
+                    topTableUpsideDown:
+                        !overTheBoardPrefs.flipPiecesAfterMove || orientation != gameState.turn,
                     bottomTable: _Player(
                       side: orientation,
-                      upsideDown:
-                          overTheBoardPrefs.flipPiecesAfterMove && orientation != gameState.turn,
                       clockKey: const ValueKey('bottomClock'),
                     ),
+                    bottomTableUpsideDown:
+                        overTheBoardPrefs.flipPiecesAfterMove && orientation != gameState.turn,
                     orientation: orientation,
-                    fen: gameState.currentPosition.fen,
                     lastMove: gameState.lastMove,
-                    interactiveBoardParams: (
+                    boardParams: GameBoardParams.interactive(
                       variant: gameState.game.meta.variant,
                       position: gameState.currentPosition,
                       playerSide: gameState.game.finished
@@ -322,7 +335,7 @@ class _BodyState extends ConsumerState<_Body> {
                           .read(overTheBoardGameControllerProvider.notifier)
                           .onPromotionSelection,
                       promotionMove: gameState.promotionMove,
-                      onMove: (move, {isDrop}) {
+                      onMove: (move, {viaDragAndDrop}) {
                         ref
                             .read(overTheBoardClockProvider.notifier)
                             .onMove(newSideToMove: gameState.turn.opposite);
@@ -453,7 +466,7 @@ class _BottomBar extends ConsumerWidget {
       context: context,
       actions: [
         BottomSheetAction(
-          makeLabel: (context) => const Text('New game'),
+          makeLabel: (context) => Text(context.l10n.mobileNewGame),
           onPressed: () => showConfigureGameSheet(context, isDismissible: true),
         ),
         if (gameState.game.finished)
@@ -462,7 +475,8 @@ class _BottomBar extends ConsumerWidget {
             onPressed: () => Navigator.of(context).push(
               AnalysisScreen.buildRoute(
                 context,
-                AnalysisOptions.standalone(
+                AnalysisOptions.pgn(
+                  id: const StringId('otb_finished_game_analysis'),
                   orientation: Side.white,
                   pgn: gameState.game.makePgn(),
                   isComputerAnalysisAllowed: true,
@@ -520,11 +534,10 @@ class _BottomBar extends ConsumerWidget {
 }
 
 class _Player extends ConsumerWidget {
-  const _Player({required this.clockKey, required this.side, required this.upsideDown});
+  const _Player({required this.clockKey, required this.side});
 
   final Side side;
   final Key clockKey;
-  final bool upsideDown;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -532,27 +545,24 @@ class _Player extends ConsumerWidget {
     final boardPreferences = ref.watch(boardPreferencesProvider);
     final clock = ref.watch(overTheBoardClockProvider);
 
-    return RotatedBox(
-      quarterTurns: upsideDown ? 2 : 0,
-      child: GamePlayer(
-        game: gameState.game,
-        side: side,
-        materialDiff: boardPreferences.materialDifferenceFormat.visible
-            ? gameState.currentMaterialDiff(side)
-            : null,
-        materialDifferenceFormat: boardPreferences.materialDifferenceFormat,
-        shouldLinkToUserProfile: false,
-        clock: clock.timeIncrement.isInfinite
-            ? null
-            : Clock(
-                timeLeft: Duration(milliseconds: max(0, clock.timeLeft(side)!.inMilliseconds)),
-                key: clockKey,
-                active: clock.activeClock == side,
-                emergencyThreshold: Duration(
-                  seconds: (clock.timeIncrement.time * 0.125).clamp(10, 60).toInt(),
-                ),
+    return GamePlayer(
+      game: gameState.game,
+      side: side,
+      materialDiff: boardPreferences.materialDifferenceFormat.visible
+          ? gameState.currentMaterialDiff(side)
+          : null,
+      materialDifferenceFormat: boardPreferences.materialDifferenceFormat,
+      shouldLinkToUserProfile: false,
+      clock: clock.timeIncrement.isInfinite
+          ? null
+          : Clock(
+              timeLeft: Duration(milliseconds: max(0, clock.timeLeft(side)!.inMilliseconds)),
+              key: clockKey,
+              active: clock.activeClock == side,
+              emergencyThreshold: Duration(
+                seconds: (clock.timeIncrement.time * 0.125).clamp(10, 60).toInt(),
               ),
-      ),
+            ),
     );
   }
 }

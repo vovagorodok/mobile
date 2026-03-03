@@ -2,8 +2,8 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/game/game_board_params.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'package:lichess_mobile/src/model/tv/tv_controller.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
@@ -153,8 +153,16 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                     );
 
                     return GameLayout(
-                      orientation: gameState.orientation,
-                      fen: position.fen,
+                      orientation: variantBoardOrientation(
+                        variant: gameState.game.meta.variant,
+                        youAre: gameState.orientation,
+                        isBoardTurned: false,
+                      ),
+                      boardParams: GameBoardParams.readonly(
+                        fen: position.fen,
+                        variant: gameState.game.meta.variant,
+                        pockets: position.pockets,
+                      ),
                       boardSettingsOverrides: const BoardSettingsOverrides(
                         animationDuration: Duration.zero,
                       ),
@@ -214,7 +222,7 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                       topTable: LoadingPlayerWidget(),
                       bottomTable: LoadingPlayerWidget(),
                       orientation: Side.white,
-                      fen: kEmptyFEN,
+                      boardParams: GameBoardParams.emptyBoard,
                       moves: [],
                       userActionsBar: BottomBar.empty(),
                     ),
@@ -222,10 +230,8 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                   error: (err, stackTrace) {
                     debugPrint('SEVERE: [TvScreen] could not load stream; $err\n$stackTrace');
                     return const GameLayout(
-                      topTable: kEmptyWidget,
-                      bottomTable: kEmptyWidget,
                       orientation: Side.white,
-                      fen: kEmptyFEN,
+                      boardParams: GameBoardParams.emptyBoard,
                       errorMessage: 'Could not load TV stream.',
                       moves: [],
                     );

@@ -67,6 +67,9 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Je moet ingelogd zijn om deze pagina te bekijken.';
 
   @override
+  String get mobileNewGame => 'Nieuwe partij';
+
+  @override
   String get mobileNoSearchResults => 'Geen resultaten';
 
   @override
@@ -242,40 +245,43 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileWelcomeToLichessApp => 'Welkom bij de Lichess app!';
 
   @override
-  String get mobileViewGame => 'View Game';
+  String get mobileViewGame => 'Partij bekijken';
 
   @override
-  String get mobileCustomizeHomeTip => 'Tip: You can add more widgets to the Home Screen or remove those you don\'t need!';
+  String get mobileCustomizeHomeTip => 'Tip: je kunt meer widgets toevoegen aan het startscherm of widgets verwijderen die je niet nodig hebt!';
 
   @override
-  String get mobileCustomizeHomeTipDismiss => 'Dismiss';
+  String get mobileCustomizeHomeTipDismiss => 'Negeren';
 
   @override
-  String get mobileCustomizeButton => 'Customize';
+  String get mobileCustomizeButton => 'Aanpassen';
 
   @override
-  String get mobileStopShowingThreat => 'Stop showing threat';
+  String get mobileStopShowingThreat => 'Verberg dreiging';
 
   @override
-  String get mobileTournamentCompleted => 'Completed';
+  String get mobileTournamentCompleted => 'Afgelopen';
 
   @override
-  String get mobileTournamentJumpToMyPage => 'Jump to my page';
+  String get mobileTournamentJumpToMyPage => 'Ga naar mijn pagina';
 
   @override
   String get mobileDisplayModeCompact => 'Compact';
 
   @override
-  String get mobileDisplayModeDetailed => 'Detailed';
+  String get mobileDisplayModeDetailed => 'Gedetailleerd';
 
   @override
-  String get mobileOpeningExplorerNotAvailableOffline => 'Opening Explorer is not available offline.';
+  String get mobileOpeningExplorerNotAvailableOffline => 'Openingsverkenner is niet offline beschikbaar.';
 
   @override
-  String get mobileChallengeCreated => 'Challenge created: You will be notified when the game starts.\\nYou can access it from the home tab.';
+  String get mobileChallengeCreated => 'Uitdaging gemaakt: je krijgt bericht wanneer de partij begint.\\nJe kunt de partij vanaf je home-tabblad openen.';
 
   @override
-  String get mobilePreviousPage => 'Previous';
+  String get mobilePreviousPage => 'Vorige';
+
+  @override
+  String get mobileOrImportPgnFile => 'Or import a PGN file';
 
   @override
   String get activityActivity => 'Activiteit';
@@ -897,6 +903,9 @@ class AppLocalizationsNl extends AppLocalizations {
   String get broadcastScore => 'Score';
 
   @override
+  String get broadcastStandingsDisclaimer => 'Standen worden berekend aan de hand van uitgezonden partijen en kunnen verschillen van de officiële resultaten.';
+
+  @override
   String get broadcastAllTeams => 'Alle teams';
 
   @override
@@ -941,12 +950,82 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
+  String get broadcastMatchPoints => 'Wedstrijdpunten';
+
+  @override
+  String get broadcastGamePoints => 'Partijpunten';
+
+  @override
+  String get broadcastMatches => 'Wedstrijden';
+
+  @override
+  String get broadcastMatchHistory => 'Wedstrijdgeschiedenis';
+
+  @override
+  String get broadcastTeamResults => 'Teamresultaten';
+
+  @override
+  String broadcastTermsAutomaticallyTranslated(String param) {
+    return 'De volgende termen worden automatisch vertaald: $param.';
+  }
+
+  @override
   String broadcastRoundX(String param) {
     return 'Ronde $param';
   }
 
   @override
   String get broadcastDefaultRoundNameHelp => 'Laat de standaardnaam intact voor automatische vertaling naar alle andere talen.';
+
+  @override
+  String get broadcastOpenTournament => 'Open';
+
+  @override
+  String get broadcastWomenTournament => 'Dames';
+
+  @override
+  String get broadcastMenTournament => 'Heren';
+
+  @override
+  String get broadcastGirlsTournament => 'Meiden';
+
+  @override
+  String get broadcastBoysTournament => 'Jongens';
+
+  @override
+  String broadcastOpenUnderXAgeTournament(String param) {
+    return 'Open O$param';
+  }
+
+  @override
+  String broadcastGirlsUnderXAgeTournament(String param) {
+    return 'Meiden O$param';
+  }
+
+  @override
+  String broadcastBoysUnderXAgeTournament(String param) {
+    return 'Jongens O$param';
+  }
+
+  @override
+  String get broadcastQuarterfinals => 'Kwartfinales';
+
+  @override
+  String get broadcastSemifinals => 'Halve finales';
+
+  @override
+  String get broadcastFinals => 'Finale';
+
+  @override
+  String get broadcastTiebreaks => 'Tiebreaks';
+
+  @override
+  String broadcastGameX(String param) {
+    return 'Partij $param';
+  }
+
+  @override
+  String get broadcastKnockouts => 'Afvalrondes';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1891,6 +1970,12 @@ class AppLocalizationsNl extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'Tactiek met betrekking tot de en passant-regel, waarbij een pion een vijandelijke pion die vanuit zijn beginpositie twee velden tegelijk wordt opgespeeld, kan slaan.';
 
   @override
+  String get puzzleThemeEpauletteMate => 'Epaulettenmat';
+
+  @override
+  String get puzzleThemeEpauletteMateDescription => 'Twee aangrenzende ontsnappingsvakjes voor een koning in schaak worden bezet door andere stukken.';
+
+  @override
   String get puzzleThemeExposedKing => 'Onveilige koning';
 
   @override
@@ -1943,6 +2028,12 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get puzzleThemeMorphysMateDescription => 'Gebruik de loper om de koning te mat te zetten, terwijl je toren helpt om hem te de pas af te snijden.';
+
+  @override
+  String get puzzleThemeSwallowstailMate => 'Zwaluwstaartmat';
+
+  @override
+  String get puzzleThemeSwallowstailMateDescription => 'Een matpatroon dat visueel lijkt op de staart van een zwaluw, zoals de vorm van een V.';
 
   @override
   String get puzzleThemeTriangleMate => 'Driehoeksmat';
@@ -2215,6 +2306,12 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get orLetYourOpponentScanQrCode => 'Of laat je tegenstander deze QR-code scannen';
+
+  @override
+  String get reusableChallengeUrl => 'Herbruikbare URL';
+
+  @override
+  String get permanentLinkForAnyoneToChallengeYou => 'Een permanente link voor iedereen om je uit te dagen met exact deze instellingen.';
 
   @override
   String get waiting => 'Even geduld a.u.b.';
@@ -2551,16 +2648,16 @@ class AppLocalizationsNl extends AppLocalizations {
   String get evaluationGauge => 'Evaluatiemeter';
 
   @override
-  String get visualMotifs => 'Visual motifs';
+  String get visualMotifs => 'Visuele motieven';
 
   @override
-  String get undefendedPieces => 'Undefended pieces';
+  String get undefendedPieces => 'Onverdedigde stukken';
 
   @override
-  String get pinnedPieces => 'Pinned pieces';
+  String get pinnedPieces => 'Gepende stukken';
 
   @override
-  String get checkableKing => 'Checkable king';
+  String get checkableKing => 'Schaakbare koning';
 
   @override
   String get multipleLines => 'Meerdere varianten';
@@ -2729,7 +2826,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get signupUsernameHint => 'Zorg ervoor dat u een gezinsvriendelijke gebruikersnaam kiest. U kunt het later niet meer wijzigen en alle accounts met ongepaste gebruikersnamen zullen gesloten worden!';
 
   @override
-  String get signupEmailHint => 'We zullen het alleen gebruiken om het wachtwoord opnieuw in te stellen.';
+  String get signupEmailPromise => 'We sturen alleen e-mails over uw account en delen uw e-mail nooit.';
 
   @override
   String get password => 'Wachtwoord';
@@ -3157,6 +3254,12 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get gameAsGIF => 'Download partij als GIF';
+
+  @override
+  String get playerNames => 'Spelersnamen';
+
+  @override
+  String get moveAnnotations => 'Aantekeningen';
 
   @override
   String get pasteTheFenStringHere => 'Plak de FEN-code hier';
@@ -3980,18 +4083,6 @@ class AppLocalizationsNl extends AppLocalizations {
   String get keyRequestComputerAnalysis => 'Verzoek om computeranalyse, Leer van je fouten';
 
   @override
-  String get keyNextLearnFromYourMistakes => 'Volgende (leer van je fouten)';
-
-  @override
-  String get keyNextBlunder => 'Volgende blunder';
-
-  @override
-  String get keyNextMistake => 'Volgende fout';
-
-  @override
-  String get keyNextInaccuracy => 'Volgende onnauwkeurigheid';
-
-  @override
   String get keyPreviousBranch => 'Vorige vertakking';
 
   @override
@@ -4272,6 +4363,9 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get brightness => 'Helderheid';
+
+  @override
+  String get contrast => 'Contrast';
 
   @override
   String get hue => 'Kleurschakering';

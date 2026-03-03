@@ -9,6 +9,8 @@
   <string name="gameOver">Partidă încheiată</string>
   <string name="waitingForOpponent">Se așteaptă adversarul</string>
   <string name="orLetYourOpponentScanQrCode">Sau lăsați adversarul să scaneze acest cod QR</string>
+  <string name="reusableChallengeUrl">URL provocare reutilizabil</string>
+  <string name="permanentLinkForAnyoneToChallengeYou">Un link permanent pentru oricine să vă provoace cu aceste setări exacte.</string>
   <string name="waiting">Se așteaptă</string>
   <string name="yourTurn">Rândul tău</string>
   <string name="aiNameLevelAiLevel">%1$s nivelul %2$s</string>
@@ -129,6 +131,8 @@
   <string name="evaluationGauge">Indicator de evaluare</string>
   <string name="visualMotifs">Motive vizuale</string>
   <string name="undefendedPieces">Piese neapărate</string>
+  <string name="pinnedPieces">Piese țintuite</string>
+  <string name="checkableKing">Rege expus la șah</string>
   <string name="multipleLines">Mutări multiple</string>
   <string name="cpus">Procesoare</string>
   <string name="memory">Memorie</string>
@@ -248,7 +252,7 @@
   <string name="changeUsernameNotSame">Se poate interschimba doar din minuscule în majuscule. De exemplu: „johndoe” în „JohnDoe”.</string>
   <string name="changeUsernameDescription">Schimbă-ți numele de utilizator. Această operație poate fi efectuată o singură dată și presupune doar schimbarea literelor din minuscule în majuscule și invers.</string>
   <string name="signupUsernameHint">Asigurați-vă că alegeți un nume de utilizator decent. Nu îl puteți schimba mai târziu și orice cont cu nume de utilizator indecent va fi închis!</string>
-  <string name="signupEmailHint">Îl vom folosi doar pentru resetarea parolei.</string>
+  <string name="signupEmailPromise">Îți vom trimite doar e-mailuri despre contul tău și niciodată nu îți vom distribui e-mailul.</string>
   <string name="password">Parolă</string>
   <string name="changePassword">Schimbă parola</string>
   <string name="changeEmail">Schimbă emailul</string>
@@ -458,6 +462,8 @@
   <string name="leaderboard">Clasament</string>
   <string name="screenshotCurrentPosition">Captură de ecran cu poziția curentă</string>
   <string name="gameAsGIF">Salvați jocul ca fișier GIF</string>
+  <string name="playerNames">Nume jucători</string>
+  <string name="moveAnnotations">Notație mutări</string>
   <string name="pasteTheFenStringHere">Lipește textul FEN aici</string>
   <string name="pasteThePgnStringHere">Lipește textul PGN aici</string>
   <string name="orUploadPgnFile">Sau încarcă un fișier PGN</string>
@@ -755,16 +761,13 @@
   <string name="keyShowOrHideComments">arată/ascunde comentarii</string>
   <string name="keyEnterOrExitVariation">acceptă/respinge variație</string>
   <string name="keyRequestComputerAnalysis">Solicită analiza calculatorului, Învață din greșelile tale</string>
-  <string name="keyNextLearnFromYourMistakes">Următorul (Învață din greșelile tale)</string>
-  <string name="keyNextBlunder">Următoarea greșeală gravă</string>
-  <string name="keyNextMistake">Următoarea greșeală</string>
-  <string name="keyNextInaccuracy">Următoarea neacuratețe</string>
   <string name="keyPreviousBranch">Ramura precedentă</string>
   <string name="keyNextBranch">Ramura următoare</string>
   <string name="toggleVariationArrows">Comută săgețile de variație</string>
   <string name="cyclePreviousOrNextVariation">Ciclu de variație precedentă/următoare</string>
   <string name="toggleGlyphAnnotations">Comută comentarii la mutări</string>
   <string name="togglePositionAnnotations">Activează/Dezactivează adnotările pozițiilor</string>
+  <string name="toggleObservationAnnotations">Comută adnotări observaționale</string>
   <string name="variationArrowsInfo">Săgețile de variație vă permit să navigați fără a utiliza lista mutărilor.</string>
   <string name="playSelectedMove">joacă mutarea selectată</string>
   <string name="newTournament">Turneu nou</string>
@@ -852,6 +855,7 @@
   <string name="size">Dimensiune</string>
   <string name="opacity">Opacitate</string>
   <string name="brightness">Luminozitate</string>
+  <string name="contrast">Contrast</string>
   <string name="hue">Nuanță</string>
   <string name="boardReset">Resetează culorile la valorile implicite</string>
   <string name="pieceSet">Set de piese</string>
@@ -1064,4 +1068,5 @@ Toate costurile de operare și de dezvoltare sunt finanțate doar din donațiile
   <string name="search">Căutare</string>
   <string name="clearSearch">Șterge căutarea</string>
   <string name="tags">Etichete</string>
+  <string name="enPassant">En passant legale</string>
 </resources>

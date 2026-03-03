@@ -7,8 +7,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
+import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/study/study_controller.dart';
@@ -75,6 +78,7 @@ class _StudyScreenLoader extends ConsumerWidget {
             length: 1,
             child: AnalysisLayout(
               pov: Side.white,
+              sideToMove: null,
               boardBuilder: (context, boardSize, borderRadius) => Chessboard.fixed(
                 size: boardSize,
                 settings: boardPrefs.toBoardSettings().copyWith(
@@ -111,6 +115,7 @@ class _StudyScreenLoader extends ConsumerWidget {
             length: 1,
             child: AnalysisLayout(
               pov: Side.white,
+              sideToMove: null,
               boardBuilder: (context, boardSize, borderRadius) => Chessboard.fixed(
                 size: boardSize,
                 settings: boardPrefs.toBoardSettings().copyWith(
@@ -180,9 +185,19 @@ class _StudyScreenState extends ConsumerState<_StudyScreen> with TickerProviderS
 
   @override
   Widget build(BuildContext context) {
+    final variant = widget.studyState.variant;
     return Scaffold(
       appBar: AppBar(
-        title: AppBarTitleText(widget.studyState.currentChapterTitle, maxLines: 2),
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (variant != Variant.standard && variant != Variant.fromPosition) ...[
+              Icon(variant.icon),
+              const SizedBox(width: 5.0),
+            ],
+            Flexible(child: AppBarTitleText(widget.studyState.currentChapterTitle)),
+          ],
+        ),
         actions: [
           if (tabs.length > 1) AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController),
           _StudyMenu(id: widget.id),
@@ -397,6 +412,7 @@ class _Body extends ConsumerWidget {
         length: 1,
         child: AnalysisLayout(
           pov: Side.white,
+          sideToMove: null,
           boardBuilder: (context, boardSize, borderRadius) => SizedBox.square(
             dimension: boardSize,
             child: Center(child: Text('${variant.label} is not supported yet.')),
@@ -421,6 +437,7 @@ class _Body extends ConsumerWidget {
     return AnalysisLayout(
       tabController: tabController,
       pov: pov,
+      sideToMove: studyState.currentPosition?.turn,
       boardBuilder: (context, boardSize, borderRadius) =>
           StudyAnalysisBoard(id: id, boardSize: boardSize, boardRadius: borderRadius),
       engineGaugeBuilder:
@@ -435,12 +452,14 @@ class _Body extends ConsumerWidget {
               isLocalEvaluationEnabled &&
               numEvalLines > 0
           ? EngineLines(
+              filters: (id: studyState.evaluationContext.id, path: studyState.currentPath),
               savedEval: currentNode.eval,
               isGameOver: currentNode.position?.isGameOver ?? false,
               onTapMove: ref.read(studyControllerProvider(id).notifier).onUserMove,
             )
           : null,
       bottomBar: StudyBottomBar(id: id),
+      pockets: studyState.currentPosition?.pockets,
       children: tabs.map((tab) {
         switch (tab) {
           case AnalysisTab.explorer:
@@ -499,9 +518,13 @@ class _StudyAnalysisBoardState
   bool get showAnnotations => analysisPrefs.showAnnotations;
 
   @override
-  void onUserMove(NormalMove move) {
+  void onUserMove(Move move) {
     ref.read(studyControllerProvider(widget.id).notifier).onUserMove(move);
   }
+
+  @override
+  EngineEvaluationFilters get engineEvaluationFilters =>
+      (id: analysisState.evaluationContext.id, path: analysisState.currentPath);
 
   @override
   void onPromotionSelection(Role? role) {
@@ -522,13 +545,21 @@ class _StudyAnalysisBoardState
         analysisState.currentNode.children.length > 1;
 
     final pgnShapes = ISet(analysisState.pgnShapes.map((shape) => shape.chessground));
+    final boardPrefs = ref.watch(boardPreferencesProvider);
 
     final variationArrows = ISet<Shape>(
       showVariationArrows
-          ? analysisState.currentNode.children.mapIndexed((i, move) {
-              final color = Colors.white.withValues(alpha: i == 0 ? 0.9 : 0.5);
-              return Arrow(color: color, orig: (move as NormalMove).from, dest: move.to);
-            }).toList()
+          ? analysisState.currentNode.children
+                .mapIndexed(
+                  (i, move) => moveShapes(
+                    move: move,
+                    color: Colors.white.withValues(alpha: i == 0 ? 0.9 : 0.5),
+                    sideToMove: analysisState.currentPosition!.turn,
+                    pieceAssets: boardPrefs.pieceSet.assets,
+                  ),
+                )
+                .flattened
+                .toList()
           : [],
     );
 

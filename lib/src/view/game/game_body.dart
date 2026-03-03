@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
+import 'package:lichess_mobile/src/model/game/game_board_params.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_preferences.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
@@ -252,9 +253,13 @@ class GameBody extends ConsumerWidget {
                 autoQueenPromotionOnPremove: gameState.canAutoQueenOnPremove,
                 blindfoldMode: blindfoldMode,
               ),
-              orientation: isBoardTurned ? youAre.opposite : youAre,
-              lastMove: gameState.game.moveAt(gameState.stepCursor) as NormalMove?,
-              interactiveBoardParams: (
+              orientation: variantBoardOrientation(
+                variant: gameState.game.meta.variant,
+                youAre: youAre,
+                isBoardTurned: isBoardTurned,
+              ),
+              lastMove: gameState.game.moveAt(gameState.stepCursor),
+              boardParams: GameBoardParams.interactive(
                 variant: gameState.game.meta.variant,
                 position: gameState.currentPosition,
                 playerSide: gameState.game.playable && !gameState.isReplaying
@@ -263,8 +268,8 @@ class GameBody extends ConsumerWidget {
                           : PlayerSide.black
                     : PlayerSide.none,
                 promotionMove: gameState.promotionMove,
-                onMove: (move, {isDrop}) {
-                  ref.read(ctrlProvider.notifier).userMove(move, isDrop: isDrop);
+                onMove: (move, {viaDragAndDrop}) {
+                  ref.read(ctrlProvider.notifier).userMove(move, viaDragAndDrop: viaDragAndDrop);
                 },
                 onPromotionSelection: (role) {
                   ref.read(ctrlProvider.notifier).onPromotionSelection(role);

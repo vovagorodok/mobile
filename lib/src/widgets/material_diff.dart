@@ -5,6 +5,7 @@ import 'package:lichess_mobile/src/model/game/material_diff.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/screen.dart';
 
 class MaterialDifferenceDisplay extends StatelessWidget {
   const MaterialDifferenceDisplay({
@@ -32,22 +33,32 @@ class MaterialDifferenceDisplay extends StatelessWidget {
               : materialDiff!.pieces)
         : IMap();
 
+    final isShortScreen = isShortVerticalScreen(context);
+    final iconSize = isShortScreen ? 11.0 : 13.0;
+    final textSize = isShortScreen ? 12.0 : 14.0;
+
+    Icon roleIcon(Role role) =>
+        Icon(_iconByRole[role], size: iconSize, color: textShade(context, 0.5));
+
     return materialDifferenceFormat?.visible ?? true
         ? Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               for (final role in Role.values)
-                for (int i = 0; i < (piecesToRender.get(role) ?? 0); i++)
-                  Icon(_iconByRole[role], size: 13, color: textShade(context, 0.5)),
+                for (int i = 0; i < (piecesToRender.get(role) ?? 0); i++) roleIcon(role),
               const SizedBox(width: 3),
               Text(
                 // a text font size of 14 is used to ensure that the text will take more vertical space
                 // than the icons
                 // this is a trick to make sure the player name widget will not shift, since the text
                 // widget is always present (contrary to the icons)
-                style: TextStyle(fontSize: 14, color: textShade(context, 0.5)),
+                style: TextStyle(fontSize: textSize, color: textShade(context, 0.5)),
                 materialDiff != null && materialDiff!.score > 0 ? '+${materialDiff!.score}' : '',
               ),
+              if (materialDiff?.checksGiven != null) ...[
+                const SizedBox(width: 3),
+                ...Iterable.generate(materialDiff?.checksGiven ?? 0, (_) => roleIcon(Role.king)),
+              ],
             ],
           )
         : const SizedBox.shrink();

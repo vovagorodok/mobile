@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart';
@@ -16,7 +17,7 @@ import 'package:lichess_mobile/src/view/bluetooth/bluetooth_screen.dart';
 import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
 import 'package:lichess_mobile/src/view/clock/clock_tool_screen.dart';
 import 'package:lichess_mobile/src/view/explorer/opening_explorer_screen.dart';
-import 'package:lichess_mobile/src/view/more/load_position_screen.dart';
+import 'package:lichess_mobile/src/view/more/import_pgn_screen.dart';
 import 'package:lichess_mobile/src/view/relation/friend_screen.dart';
 import 'package:lichess_mobile/src/view/user/player_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -73,8 +74,8 @@ class _Body extends ConsumerWidget {
                 trailing: Theme.of(context).platform == TargetPlatform.iOS
                     ? const CupertinoListTileChevron()
                     : null,
-                title: Text(context.l10n.loadPosition),
-                onTap: () => Navigator.of(context).push(LoadPositionScreen.buildRoute(context)),
+                title: Text(context.l10n.importPgn),
+                onTap: () => Navigator.of(context).push(ImportPgnScreen.buildRoute(context)),
               ),
               ListTile(
                 leading: const Icon(Icons.biotech_outlined),
@@ -85,7 +86,8 @@ class _Body extends ConsumerWidget {
                 onTap: () => Navigator.of(context, rootNavigator: true).push(
                   AnalysisScreen.buildRoute(
                     context,
-                    const AnalysisOptions.standalone(
+                    const AnalysisOptions.pgn(
+                      id: StringId('standalone'),
                       orientation: Side.white,
                       pgn: '',
                       isComputerAnalysisAllowed: true,
@@ -104,7 +106,8 @@ class _Body extends ConsumerWidget {
                 onTap: () => Navigator.of(context, rootNavigator: true).push(
                   OpeningExplorerScreen.buildRoute(
                     context,
-                    const AnalysisOptions.standalone(
+                    const AnalysisOptions.pgn(
+                      id: StringId('standalone_opening_explorer'),
                       orientation: Side.white,
                       pgn: '',
                       isComputerAnalysisAllowed: false,
@@ -119,10 +122,12 @@ class _Body extends ConsumerWidget {
                     ? const CupertinoListTileChevron()
                     : null,
                 title: Text(context.l10n.boardEditor),
-                onTap: () => Navigator.of(
-                  context,
-                  rootNavigator: true,
-                ).push(BoardEditorScreen.buildRoute(context)),
+                onTap: () => Navigator.of(context, rootNavigator: true).push(
+                  BoardEditorScreen.buildRoute(context, (
+                    initialVariant: Variant.standard,
+                    initialFen: null,
+                  )),
+                ),
               ),
               ListTile(
                 leading: const Icon(Icons.alarm_outlined),

@@ -9,6 +9,8 @@
   <string name="gameOver">Partiet er avsluttet</string>
   <string name="waitingForOpponent">Venter på motstander</string>
   <string name="orLetYourOpponentScanQrCode">Eller få motstanderen din til å skanne denne QR-koden</string>
+  <string name="reusableChallengeUrl">Gjenbrukbar utfordringslenke</string>
+  <string name="permanentLinkForAnyoneToChallengeYou">En permanent lenke som hvem som helst kan bruke til å utfordre deg med disse nøyaktige innstillingene.</string>
   <string name="waiting">Venter</string>
   <string name="yourTurn">Ditt trekk</string>
   <string name="aiNameLevelAiLevel">%1$s på nivå %2$s</string>
@@ -235,7 +237,6 @@
   <string name="changeUsernameNotSame">Du kan bare endre små bokstaver til store eller store til små. For eksempel \"olanordmann\" til \"OlaNordmann\".</string>
   <string name="changeUsernameDescription">Endre brukernavnet ditt. Dette kan bare gjøres én gang, og du bare kan endre små bokstaver til store eller store til små.</string>
   <string name="signupUsernameHint">Velg et sømmelig brukernavn. Det kan ikke endres, og alle kontoer med usømmelige brukernavn vil bli avsluttet.</string>
-  <string name="signupEmailHint">Vi bruker den bare når du tilbakestiller passordet ditt.</string>
   <string name="password">Passord</string>
   <string name="changePassword">Bytt passord</string>
   <string name="changeEmail">Endre e-postadresse</string>
@@ -429,6 +430,8 @@
   <string name="leaderboard">Ledertabell</string>
   <string name="screenshotCurrentPosition">Skjermbilde av stillingen</string>
   <string name="gameAsGIF">Parti som gif</string>
+  <string name="playerNames">Spillernavn</string>
+  <string name="moveAnnotations">Trekk-kommentarer</string>
   <string name="pasteTheFenStringHere">Lim inn FEN-teksten her</string>
   <string name="pasteThePgnStringHere">Lim inn PGN-teksten her</string>
   <string name="orUploadPgnFile">Eller last opp en PGN-fil</string>
@@ -718,10 +721,6 @@
   <string name="keyShowOrHideComments">Vis/skjul kommentarer</string>
   <string name="keyEnterOrExitVariation">Gå inn i/ut av variant</string>
   <string name="keyRequestComputerAnalysis">Be om maskinanalyse, lær av feilene dine</string>
-  <string name="keyNextLearnFromYourMistakes">Neste (lær av feilene dine)</string>
-  <string name="keyNextBlunder">Neste bukk</string>
-  <string name="keyNextMistake">Neste feil</string>
-  <string name="keyNextInaccuracy">Neste unøyaktighet</string>
   <string name="keyPreviousBranch">Forrige gren</string>
   <string name="keyNextBranch">Neste gren</string>
   <string name="toggleVariationArrows">Skru variantpiler av eller på</string>
@@ -813,6 +812,7 @@
   <string name="size">Størrelse</string>
   <string name="opacity">Ugjennomsiktighet</string>
   <string name="brightness">Lysstyrke</string>
+  <string name="contrast">Kontrast</string>
   <string name="hue">Fargetone</string>
   <string name="boardReset">Tilbake til standardfarger</string>
   <string name="pieceSet">Brikkesett</string>

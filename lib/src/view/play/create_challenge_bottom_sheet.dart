@@ -4,7 +4,6 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_preferences.dart';
@@ -253,7 +252,7 @@ class _CreateChallengeBottomSheetState extends ConsumerState<CreateChallengeBott
               expand: preferences.variant == Variant.fromPosition,
               child: SmallBoardPreview(
                 orientation: preferences.sideChoice == SideChoice.black ? Side.black : Side.white,
-                fen: fromPositionFenInput ?? kEmptyFen,
+                fen: fromPositionFenInput ?? kEmptyFEN,
                 description: TextField(
                   maxLines: 5,
                   decoration: InputDecoration(
@@ -266,24 +265,21 @@ class _CreateChallengeBottomSheetState extends ConsumerState<CreateChallengeBott
                 ),
               ),
             ),
-            ExpandedSection(
-              expand: preferences.rated == false || preferences.variant == Variant.fromPosition,
-              child: ListTile(
-                title: Text(context.l10n.side),
-                trailing: TextButton(
-                  onPressed: () {
-                    showChoicePicker<SideChoice>(
-                      context,
-                      choices: SideChoice.values,
-                      selectedItem: preferences.sideChoice,
-                      labelBuilder: (SideChoice side) => Text(side.label(context.l10n)),
-                      onSelectedItemChanged: (SideChoice side) {
-                        ref.read(challengePreferencesProvider.notifier).setSideChoice(side);
-                      },
-                    );
-                  },
-                  child: Text(preferences.sideChoice.label(context.l10n)),
-                ),
+            ListTile(
+              title: Text(context.l10n.side),
+              trailing: TextButton(
+                onPressed: () {
+                  showChoicePicker<SideChoice>(
+                    context,
+                    choices: SideChoice.values,
+                    selectedItem: preferences.sideChoice,
+                    labelBuilder: (SideChoice side) => Text(side.label(context.l10n)),
+                    onSelectedItemChanged: (SideChoice side) {
+                      ref.read(challengePreferencesProvider.notifier).setSideChoice(side);
+                    },
+                  );
+                },
+                child: Text(preferences.sideChoice.label(context.l10n)),
               ),
             ),
             if (account != null)

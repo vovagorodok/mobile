@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -5,6 +7,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/bluetooth/bluetooth_service.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/chess960.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
@@ -15,6 +18,8 @@ import 'package:lichess_mobile/src/model/game/material_diff.dart';
 import 'package:lichess_mobile/src/model/game/over_the_board_game.dart';
 
 part 'over_the_board_game_controller.freezed.dart';
+
+final _random = Random();
 
 final overTheBoardGameControllerProvider =
     NotifierProvider.autoDispose<OverTheBoardGameController, OverTheBoardGameState>(
@@ -29,8 +34,12 @@ class OverTheBoardGameController extends Notifier<OverTheBoardGameState> {
     Speed.fromTimeIncrement(const TimeIncrement(0, 0)),
   );
 
-  void startNewGame(Variant variant, TimeIncrement timeIncrement) {
-    state = OverTheBoardGameState.fromVariant(variant, Speed.fromTimeIncrement(timeIncrement));
+  void startNewGame(Variant variant, TimeIncrement timeIncrement, {String? initialFen}) {
+    state = OverTheBoardGameState.fromVariant(
+      variant,
+      Speed.fromTimeIncrement(timeIncrement),
+      initialFen: initialFen,
+    );
     _beginBluetooth();
   }
 
@@ -40,7 +49,11 @@ class OverTheBoardGameController extends Notifier<OverTheBoardGameState> {
   }
 
   void rematch() {
-    state = OverTheBoardGameState.fromVariant(state.game.meta.variant, state.game.meta.speed);
+    state = OverTheBoardGameState.fromVariant(
+      state.game.meta.variant,
+      state.game.meta.speed,
+      initialFen: state.game.initialFen,
+    );
     _beginBluetooth();
   }
 
@@ -56,8 +69,8 @@ class OverTheBoardGameController extends Notifier<OverTheBoardGameState> {
     _endBluetooth();
   }
 
-  void makeMove(NormalMove move) {
-    if (isPromotionPawnMove(state.currentPosition, move)) {
+  void makeMove(Move move) {
+    if (move case NormalMove() when isPromotionPawnMove(state.currentPosition, move)) {
       state = state.copyWith(promotionMove: move);
       return;
     }
@@ -67,7 +80,7 @@ class OverTheBoardGameController extends Notifier<OverTheBoardGameState> {
     final newStep = GameStep(
       position: newPos,
       sanMove: sanMove,
-      diff: MaterialDiff.fromBoard(newPos.board),
+      diff: MaterialDiff.fromPosition(newPos),
     );
 
     // In an over-the-board game, we support "implicit takebacks":
@@ -95,6 +108,19 @@ class OverTheBoardGameController extends Notifier<OverTheBoardGameState> {
       );
     } else if (state.currentPosition.isStalemate) {
       state = state.copyWith(game: state.game.copyWith(status: GameStatus.stalemate));
+    } else if (state.currentPosition.variantOutcome != null) {
+      switch (state.currentPosition.variantOutcome!.winner) {
+        case Side.white:
+          state = state.copyWith(
+            game: state.game.copyWith(status: GameStatus.variantEnd, winner: Side.white),
+          );
+        case Side.black:
+          state = state.copyWith(
+            game: state.game.copyWith(status: GameStatus.variantEnd, winner: Side.black),
+          );
+        case null:
+          state = state.copyWith(game: state.game.copyWith(status: GameStatus.variantEnd));
+      }
     }
 
     _moveBluetooth(move);
@@ -185,7 +211,9 @@ class OverTheBoardGameController extends Notifier<OverTheBoardGameState> {
   void _moveFeedback(SanMove sanMove) {
     final isCheck = sanMove.san.contains('+');
     if (sanMove.san.contains('x')) {
-      ref.read(moveFeedbackServiceProvider).captureFeedback(check: isCheck);
+      ref
+          .read(moveFeedbackServiceProvider)
+          .captureFeedback(state.game.meta.variant, check: isCheck);
     } else {
       ref.read(moveFeedbackServiceProvider).moveFeedback(check: isCheck);
     }
@@ -202,21 +230,32 @@ sealed class OverTheBoardGameState with _$OverTheBoardGameState {
     @Default(null) NormalMove? promotionMove,
   }) = _OverTheBoardGameState;
 
-  factory OverTheBoardGameState.fromVariant(Variant variant, Speed speed) {
-    final position = variant == Variant.chess960
-        ? randomChess960Position()
-        : variant.initialPosition;
+  factory OverTheBoardGameState.fromVariant(Variant variant, Speed speed, {String? initialFen}) {
+    final Position position;
+    final Variant effectiveVariant;
+    if (initialFen != null) {
+      position = Chess.fromSetup(Setup.parseFen(initialFen));
+      effectiveVariant = variant == Variant.standard ? Variant.fromPosition : variant;
+    } else if (variant == Variant.chess960) {
+      position = randomChess960Position();
+      effectiveVariant = variant;
+    } else {
+      position = variant.initialPosition;
+      effectiveVariant = variant;
+    }
+    final sessionId = StringId('otb_${_random.nextInt(1 << 32).toRadixString(16).padLeft(8, '0')}');
     return OverTheBoardGameState(
       game: OverTheBoardGame(
+        id: sessionId,
         steps: [GameStep(position: position)].lock,
         status: GameStatus.started,
-        initialFen: position.fen,
+        initialFen: initialFen,
         meta: GameMeta(
           createdAt: DateTime.now(),
           rated: false,
-          variant: variant,
+          variant: effectiveVariant,
           speed: speed,
-          perf: Perf.fromVariantAndSpeed(variant, speed),
+          perf: Perf.fromVariantAndSpeed(effectiveVariant, speed),
         ),
       ),
     );
@@ -225,8 +264,8 @@ sealed class OverTheBoardGameState with _$OverTheBoardGameState {
   Position get currentPosition => game.stepAt(stepCursor).position;
   Side get turn => currentPosition.turn;
   bool get finished => game.finished;
-  NormalMove? get lastMove =>
-      stepCursor > 0 ? NormalMove.fromUci(game.steps[stepCursor].sanMove!.move.uci) : null;
+  Move? get lastMove =>
+      stepCursor > 0 ? Move.parse(game.steps[stepCursor].sanMove!.move.uci) : null;
 
   MaterialDiffSide? currentMaterialDiff(Side side) {
     return game.steps[stepCursor].diff?.bySide(side);

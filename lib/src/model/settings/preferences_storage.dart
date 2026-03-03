@@ -31,7 +31,8 @@ enum PrefCategory {
   broadcast('preferences.broadcast'),
   engineEvaluation('preferences.engineEvaluation'),
   offlineComputerGame('preferences.offlineComputerGame'),
-  bluetooth('preferences.bluetooth');
+  bluetooth('preferences.bluetooth'),
+  log('preferences.log');
 
   const PrefCategory(this.storageKey);
 

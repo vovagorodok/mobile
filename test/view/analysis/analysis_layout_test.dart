@@ -23,6 +23,7 @@ void main() {
             length: 1,
             child: AnalysisLayout(
               pov: Side.white,
+              sideToMove: Side.white,
               boardBuilder: (context, boardSize, boardRadius) {
                 return Chessboard.fixed(
                   size: boardSize,
@@ -71,6 +72,7 @@ void main() {
             length: 1,
             child: AnalysisLayout(
               pov: Side.white,
+              sideToMove: Side.white,
               boardBuilder: (context, boardSize, boardRadius) {
                 return Chessboard.fixed(
                   size: boardSize,
@@ -92,7 +94,7 @@ void main() {
       final boardSize = tester.getSize(find.byType(Chessboard));
 
       if (isPortrait) {
-        final expectedBoardSize = isTablet ? surface.width - 32.0 : surface.width - 16.0;
+        final expectedBoardSize = isTablet ? surface.width - 32.0 : surface.width;
         expect(
           boardSize,
           Size(expectedBoardSize, expectedBoardSize),

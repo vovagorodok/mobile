@@ -9,6 +9,8 @@
   <string name="gameOver">Partie beendet</string>
   <string name="waitingForOpponent">Auf den Gegner warten</string>
   <string name="orLetYourOpponentScanQrCode">Oder lass deinen Gegner diesen QR-Code scannen</string>
+  <string name="reusableChallengeUrl">Wiederverwendbare Herausforderungs-URL</string>
+  <string name="permanentLinkForAnyoneToChallengeYou">Ein permanenter Link für jeden, der dich mit genau diesen Einstellungen herausfordert.</string>
   <string name="waiting">Warten</string>
   <string name="yourTurn">Du bist am Zug</string>
   <string name="aiNameLevelAiLevel">%1$s Stufe %2$s</string>
@@ -235,7 +237,7 @@
   <string name="changeUsernameNotSame">Nur die Groß-/Kleinschreibung kann geändert werden, z.B. \"jondoe\" zu \"JonDoe\".</string>
   <string name="changeUsernameDescription">Ändere deinen Benutzernamen. Dies ist nur einmalig möglich und bezieht sich lediglich auf Anpassungen der Groß- und Kleinschreibung deines Benutzernamens.</string>
   <string name="signupUsernameHint">Bitte wähle einen familienfreundlichen Benutzernamen. Du kannst ihn später nicht mehr ändern und Konten mit unpassenden Benutzernamen werden geschlossen!</string>
-  <string name="signupEmailHint">Wir werden sie nur zum Zurücksetzen deines Passworts verwenden.</string>
+  <string name="signupEmailPromise">Wir werden dir nur E-Mails bezüglich deines Kontos senden und niemals deine E-Mail-Adresse weitergeben.</string>
   <string name="password">Passwort</string>
   <string name="changePassword">Passwort ändern</string>
   <string name="changeEmail">E-Mail-Adresse ändern</string>
@@ -429,6 +431,8 @@
   <string name="leaderboard">Rangliste</string>
   <string name="screenshotCurrentPosition">Eine Bildschirmaufnahme der aktuellen Stellung anfertigen</string>
   <string name="gameAsGIF">Partie als GIF</string>
+  <string name="playerNames">Spielernamen</string>
+  <string name="moveAnnotations">Zugnotation</string>
   <string name="pasteTheFenStringHere">Füge den FEN-Text hier ein</string>
   <string name="pasteThePgnStringHere">Füge den PGN-Text hier ein</string>
   <string name="orUploadPgnFile">Oder lade eine PGN-Datei hoch</string>
@@ -718,10 +722,6 @@
   <string name="keyShowOrHideComments">zeige/verberge Kommentare</string>
   <string name="keyEnterOrExitVariation">Variante wählen/verlassen</string>
   <string name="keyRequestComputerAnalysis">Hole dir eine Computer-Analyse, lerne aus deinen Fehlern</string>
-  <string name="keyNextLearnFromYourMistakes">Als Nächstes (Lerne aus deinen Fehlern)</string>
-  <string name="keyNextBlunder">Der nächste grobe Patzer</string>
-  <string name="keyNextMistake">Der nächste Fehler</string>
-  <string name="keyNextInaccuracy">Die nächste Ungenauigkeit</string>
   <string name="keyPreviousBranch">Vorherige Verzweigung</string>
   <string name="keyNextBranch">Nächste Verzweigung</string>
   <string name="toggleVariationArrows">Varianten-Pfeile ein-/auschalten</string>
@@ -814,6 +814,7 @@
   <string name="size">Größe</string>
   <string name="opacity">Transparenz</string>
   <string name="brightness">Helligkeit</string>
+  <string name="contrast">Kontrast</string>
   <string name="hue">Farbton</string>
   <string name="boardReset">Farben auf Standardwerte zurücksetzen</string>
   <string name="pieceSet">Figurenstil</string>

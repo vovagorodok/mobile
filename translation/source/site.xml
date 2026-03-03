@@ -9,6 +9,8 @@
   <string name="gameOver">Game Over</string>
   <string name="waitingForOpponent">Waiting for opponent</string>
   <string name="orLetYourOpponentScanQrCode">Or let your opponent scan this QR code</string>
+  <string name="reusableChallengeUrl">Reusable challenge URL</string>
+  <string name="permanentLinkForAnyoneToChallengeYou">A permanent link for anyone to challenge you with these exact settings.</string>
   <string name="waiting">Waiting</string>
   <string name="yourTurn">Your turn</string>
   <string name="aiNameLevelAiLevel">%1$s level %2$s</string>
@@ -235,7 +237,7 @@
   <string name="changeUsernameNotSame">Only the case of the letters can change. For example "johndoe" to "JohnDoe".</string>
   <string name="changeUsernameDescription">Change your username. This can only be done once and you are only allowed to change the case of the letters in your username.</string>
   <string name="signupUsernameHint">Make sure to choose a username that's appropriate for all ages. You cannot change it later and any accounts with inappropriate usernames will get closed!</string>
-  <string name="signupEmailHint">We will only use it for password reset and account activation.</string>
+  <string name="signupEmailPromise">We will only send you emails about your account and never share your email.</string>
   <string name="password">Password</string>
   <string name="changePassword">Change password</string>
   <string name="changeEmail">Change email</string>
@@ -429,6 +431,8 @@
   <string name="leaderboard">Leaderboard</string>
   <string name="screenshotCurrentPosition">Screenshot current position</string>
   <string name="gameAsGIF">Game as GIF</string>
+  <string name="playerNames">Player names</string>
+  <string name="moveAnnotations">Move annotations</string>
   <string name="pasteTheFenStringHere">Paste the FEN text here</string>
   <string name="pasteThePgnStringHere">Paste the PGN text here</string>
   <string name="orUploadPgnFile">Or upload a PGN file</string>
@@ -580,7 +584,7 @@
   <string name="reportCheatBoostHelp">Paste the link to the game(s) and explain what is wrong about this user's behaviour. Don't just say "they cheat", but tell us how you came to this conclusion.</string>
   <string name="reportUsernameHelp">Explain what about this username is offensive. Don't just say "it's offensive/inappropriate", but tell us how you came to this conclusion, especially if the insult is obfuscated, not in english, is in slang, or is a historical/cultural reference.</string>
   <string name="reportProcessedFasterInEnglish">Your report will be processed faster if written in English.</string>
-  <string name="error.provideOneCheatedGameLink">Please provide at least one link to a game with suspected cheating.</string>
+  <string name="error.provideOneCheatedGameLink">Please provide at least one link to a game for review.</string>
   <string name="by">by %s</string>
   <string name="importedByX">Imported by %s</string>
   <string name="thisTopicIsNowClosed">This topic is now closed.</string>
@@ -661,7 +665,7 @@
   <string name="onlyExistingConversations">Only existing conversations</string>
   <string name="onlyFriends">Only friends</string>
   <string name="menu">Menu</string>
-  <string name="castling">Castling</string>
+  <string name="castling">Castling rights</string>
   <string name="whiteCastlingKingside">White O-O</string>
   <string name="blackCastlingKingside">Black O-O</string>
   <plurals name="nbForumPosts">
@@ -719,10 +723,6 @@
   <string name="keyShowOrHideComments">show/hide comments</string>
   <string name="keyEnterOrExitVariation">enter/exit variation</string>
   <string name="keyRequestComputerAnalysis">Request computer analysis, Learn from your mistakes</string>
-  <string name="keyNextLearnFromYourMistakes">Next (Learn from your mistakes)</string>
-  <string name="keyNextBlunder">Next blunder</string>
-  <string name="keyNextMistake">Next mistake</string>
-  <string name="keyNextInaccuracy">Next inaccuracy</string>
   <string name="keyPreviousBranch">Previous branch</string>
   <string name="keyNextBranch">Next branch</string>
   <string name="toggleVariationArrows">Toggle variation arrows</string>
@@ -815,6 +815,7 @@
   <string name="size">Size</string>
   <string name="opacity">Opacity</string>
   <string name="brightness">Brightness</string>
+  <string name="contrast">Contrast</string>
   <string name="hue">Hue</string>
   <string name="boardReset">Reset colours to default</string>
   <string name="pieceSet">Piece set</string>
@@ -1023,5 +1024,5 @@ All operating costs, development, and content are funded solely by user donation
   <string name="search">Search</string>
   <string name="clearSearch">Clear search</string>
   <string name="tags">Tags</string>
-  <string name="enPassant">En passant</string>
+  <string name="enPassant">En passant rights</string>
 </resources>
