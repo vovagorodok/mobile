@@ -127,7 +127,7 @@ class OverTheBoardGameController extends Notifier<OverTheBoardGameState> {
     _moveFeedback(sanMove);
   }
 
-  void makeBluetoothMove(NormalMove move) {
+  void makeBluetoothMove(Move move) {
     if (state.currentPosition.isLegal(move)) {
       makeMove(move);
     } else {
@@ -185,7 +185,7 @@ class OverTheBoardGameController extends Notifier<OverTheBoardGameState> {
     );
   }
 
-  void _moveBluetooth(NormalMove move) {
+  void _moveBluetooth(Move move) {
     final service = ref.read(bluetoothServiceProvider);
     service.handleMove(position: state.currentPosition, move: move);
     if (state.game.finished) {

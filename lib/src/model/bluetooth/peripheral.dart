@@ -48,7 +48,7 @@ abstract class Round {
 
   String? get fen;
   PeripheralPieces? get pieces;
-  NormalMove? get rejectedMove;
+  Move? get rejectedMove;
 }
 
 abstract class Peripheral {
@@ -65,7 +65,7 @@ abstract class Peripheral {
   Stream<void> get roundInitializedStream;
   Stream<void> get roundUpdateStream;
   Stream<bool> get stateSynchronizeStream;
-  Stream<NormalMove> get moveStream;
+  Stream<Move> get moveStream;
   Stream<String> get errStream;
   // msg feature
   Stream<String> get msgStream;
@@ -85,19 +85,19 @@ abstract class Peripheral {
   Future<void> handleBegin({
     required Position position,
     Variant? variant,
-    NormalMove? lastMove,
+    Move? lastMove,
     Side? side,
     Time? time,
   });
-  Future<void> handleMove({required Position position, required NormalMove move, Time? time});
+  Future<void> handleMove({required Position position, required Move move, Time? time});
   Future<void> handleReject();
   Future<void> handleEnd({GameStatus? status, Variant? variant, Score? score});
   Future<void> handleErr({required String err});
   // msg feature
   Future<void> handleMsg({required String msg});
   // undo_redo feature
-  Future<void> handleUndo({required Position position, NormalMove? lastMove, Time? time});
-  Future<void> handleRedo({required Position position, NormalMove? lastMove, Time? time});
+  Future<void> handleUndo({required Position position, Move? lastMove, Time? time});
+  Future<void> handleRedo({required Position position, Move? lastMove, Time? time});
   // undo_offer feature
   Future<void> handleUndoOffer();
   // draw_offer feature

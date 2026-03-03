@@ -94,8 +94,7 @@ class CppRound implements Round {
   @override
   PeripheralPieces? get pieces => _round.fen != null ? readPeripheralFen(_round.fen!) : null;
   @override
-  NormalMove? get rejectedMove =>
-      _round.rejectedMove != null ? NormalMove.fromUci(_round.rejectedMove!) : null;
+  Move? get rejectedMove => _round.rejectedMove != null ? Move.parse(_round.rejectedMove!) : null;
 }
 
 class CppPeripheral implements Peripheral {
@@ -142,7 +141,7 @@ class CppPeripheral implements Peripheral {
   late CppVariantSupport _variants;
   late CppRound _round;
 
-  final _moveController = StreamController<NormalMove>.broadcast();
+  final _moveController = StreamController<Move>.broadcast();
 
   @override
   FeatureSupport get isFeatureSupported => _features;
@@ -167,7 +166,7 @@ class CppPeripheral implements Peripheral {
   @override
   Stream<bool> get stateSynchronizeStream => _peripheral.stateSynchronizeStream;
   @override
-  Stream<NormalMove> get moveStream => _moveController.stream;
+  Stream<Move> get moveStream => _moveController.stream;
   @override
   Stream<String> get errStream => _peripheral.errStream;
   @override
@@ -191,7 +190,7 @@ class CppPeripheral implements Peripheral {
   Future<void> handleBegin({
     required Position position,
     Variant? variant,
-    NormalMove? lastMove,
+    Move? lastMove,
     Side? side,
     Time? time,
   }) async {
@@ -206,11 +205,7 @@ class CppPeripheral implements Peripheral {
   }
 
   @override
-  Future<void> handleMove({
-    required Position position,
-    required NormalMove move,
-    Time? time,
-  }) async {
+  Future<void> handleMove({required Position position, required Move move, Time? time}) async {
     await _peripheral.handleMove(move: move.uci, check: _getCheck(position), time: _getTime(time));
   }
 
@@ -240,7 +235,7 @@ class CppPeripheral implements Peripheral {
   }
 
   @override
-  Future<void> handleUndo({required Position position, NormalMove? lastMove, Time? time}) async {
+  Future<void> handleUndo({required Position position, Move? lastMove, Time? time}) async {
     await _peripheral.handleUndo(
       fen: position.fen,
       lastMove: lastMove?.uci,
@@ -250,7 +245,7 @@ class CppPeripheral implements Peripheral {
   }
 
   @override
-  Future<void> handleRedo({required Position position, NormalMove? lastMove, Time? time}) async {
+  Future<void> handleRedo({required Position position, Move? lastMove, Time? time}) async {
     await _peripheral.handleRedo(
       fen: position.fen,
       lastMove: lastMove?.uci,
@@ -295,7 +290,8 @@ class CppPeripheral implements Peripheral {
   }
 
   void _handlePeripheralMove(String uci) {
-    _moveController.add(NormalMove.fromUci(uci));
+    final move = Move.parse(uci);
+    move != null ? _moveController.add(move) : _peripheral.handleReject();
   }
 
   String? _getVariant(Variant? variant) {

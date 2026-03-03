@@ -70,7 +70,7 @@ class _Body extends ConsumerStatefulWidget {
 
 class _BodyState extends ConsumerState<_Body> {
   final _boardKey = GlobalKey(debugLabel: 'boardOnOverTheBoardScreen');
-  StreamSubscription<NormalMove>? _moveSubscription;
+  StreamSubscription<Move>? _moveSubscription;
   StreamSubscription<void>? _roundUpdateSubscription;
   StreamSubscription<void>? _resignSubscription;
   StreamSubscription<void>? _undoOfferSubscription;
@@ -129,7 +129,7 @@ class _BodyState extends ConsumerState<_Body> {
     super.dispose();
   }
 
-  void _handlePeripheralMove(NormalMove move) {
+  void _handlePeripheralMove(Move move) {
     ref.read(overTheBoardGameControllerProvider.notifier).makeBluetoothMove(move);
   }
 

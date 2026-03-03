@@ -48,8 +48,8 @@ class BluetoothService {
   final _roundUpdateController = StreamController<void>.broadcast();
   Stream<void> get roundUpdateStream => _roundUpdateController.stream;
 
-  final _moveController = StreamController<NormalMove>.broadcast();
-  Stream<NormalMove> get moveStream => _moveController.stream;
+  final _moveController = StreamController<Move>.broadcast();
+  Stream<Move> get moveStream => _moveController.stream;
 
   final _resignController = StreamController<void>.broadcast();
   Stream<void> get resignStream => _resignController.stream;
@@ -96,7 +96,7 @@ class BluetoothService {
   Future<void> handleBegin({
     required Position position,
     Variant? variant,
-    NormalMove? lastMove,
+    Move? lastMove,
     Side? side,
     Time? time,
   }) async {
@@ -109,11 +109,7 @@ class BluetoothService {
     );
   }
 
-  Future<void> handleMove({
-    required Position position,
-    required NormalMove move,
-    Time? time,
-  }) async {
+  Future<void> handleMove({required Position position, required Move move, Time? time}) async {
     await _peripheral.handleMove(position: position, move: move, time: time);
   }
 
@@ -126,7 +122,7 @@ class BluetoothService {
     _showMessage('Rejected');
   }
 
-  Future<void> handleUndo({required Position position, NormalMove? lastMove, Time? time}) async {
+  Future<void> handleUndo({required Position position, Move? lastMove, Time? time}) async {
     if (!_peripheral.isFeatureSupported.undoRedo) {
       await _peripheral.handleBegin(position: position, lastMove: lastMove, time: time);
       return;
@@ -134,7 +130,7 @@ class BluetoothService {
     await _peripheral.handleUndo(position: position, lastMove: lastMove, time: time);
   }
 
-  Future<void> handleRedo({required Position position, NormalMove? lastMove, Time? time}) async {
+  Future<void> handleRedo({required Position position, Move? lastMove, Time? time}) async {
     if (!_peripheral.isFeatureSupported.undoRedo) {
       await _peripheral.handleBegin(position: position, lastMove: lastMove, time: time);
       return;
@@ -245,7 +241,7 @@ class BluetoothService {
     _showMessage(isSynchronized ? 'Synchronized' : 'Unsynchronized');
   }
 
-  void _handlePeripheralMove(NormalMove move) {
+  void _handlePeripheralMove(Move move) {
     _moveController.add(move);
   }
 

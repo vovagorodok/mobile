@@ -79,7 +79,7 @@ class DummyRound implements Round {
   @override
   PeripheralPieces? get pieces => null;
   @override
-  NormalMove? get rejectedMove => null;
+  Move? get rejectedMove => null;
 }
 
 class DummyPeripheral implements Peripheral {
@@ -110,7 +110,7 @@ class DummyPeripheral implements Peripheral {
   @override
   Stream<bool> get stateSynchronizeStream => const Stream.empty();
   @override
-  Stream<NormalMove> get moveStream => const Stream.empty();
+  Stream<Move> get moveStream => const Stream.empty();
   @override
   Stream<String> get errStream => const Stream.empty();
   @override
@@ -134,16 +134,12 @@ class DummyPeripheral implements Peripheral {
   Future<void> handleBegin({
     required Position position,
     Variant? variant,
-    NormalMove? lastMove,
+    Move? lastMove,
     Side? side,
     Time? time,
   }) async {}
   @override
-  Future<void> handleMove({
-    required Position position,
-    required NormalMove move,
-    Time? time,
-  }) async {}
+  Future<void> handleMove({required Position position, required Move move, Time? time}) async {}
   @override
   Future<void> handleReject() async {}
   @override
@@ -153,9 +149,9 @@ class DummyPeripheral implements Peripheral {
   @override
   Future<void> handleMsg({required String msg}) async {}
   @override
-  Future<void> handleUndo({required Position position, NormalMove? lastMove, Time? time}) async {}
+  Future<void> handleUndo({required Position position, Move? lastMove, Time? time}) async {}
   @override
-  Future<void> handleRedo({required Position position, NormalMove? lastMove, Time? time}) async {}
+  Future<void> handleRedo({required Position position, Move? lastMove, Time? time}) async {}
   @override
   Future<void> handleUndoOffer() async {}
   @override

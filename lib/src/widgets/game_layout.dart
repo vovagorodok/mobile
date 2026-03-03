@@ -241,9 +241,10 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
         );
 
         final squareHighlights = _createSquareHighlights(fen);
-        final onTouchedSquare = widget.interactiveBoardParams != null
-            ? _createOnTouchedSquare(widget.interactiveBoardParams!.position)
-            : null;
+        final onTouchedSquare = switch (widget.boardParams) {
+          ReadonlyBoardParams() => null,
+          InteractiveBoardParams(:final position) => _createOnTouchedSquare(position),
+        };
 
         if (orientation == Orientation.landscape) {
           final defaultBoardSize =
@@ -457,10 +458,12 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
     }
     if (peripheral.round.rejectedMove != null) {
       final rejectedMove = peripheral.round.rejectedMove!;
-      highlights = highlights.add(
-        rejectedMove.from,
-        const SquareHighlight(details: HighlightDetails(solidColor: rejectedMoveColor)),
-      );
+      if (rejectedMove is NormalMove) {
+        highlights = highlights.add(
+          rejectedMove.from,
+          const SquareHighlight(details: HighlightDetails(solidColor: rejectedMoveColor)),
+        );
+      }
       highlights = highlights.add(
         rejectedMove.to,
         const SquareHighlight(details: HighlightDetails(solidColor: rejectedMoveColor)),
