@@ -420,16 +420,17 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
     const Color pieceAddColor = Color.fromRGBO(60, 255, 60, 0.50);
     const Color pieceReplaceColor = Color.fromRGBO(60, 60, 255, 0.50);
     const Color pieceChangeColor = Color.fromRGBO(20, 85, 30, 0.376);
-    final peripheral = ref.read(bluetoothServiceProvider).peripheral;
-    final isSynchronized = peripheral.round.isStateSynchronized;
-    final isSubmoveSup = peripheral.isFeatureSupported.submoveState;
+    final service = ref.read(bluetoothServiceProvider);
+    final round = service.round;
+    final isSynchronized = round.isStateSynchronized;
+    final isSubmoveSup = service.isFeatureSupported.submoveState;
     IMap<Square, SquareHighlight> highlights = IMap();
 
-    if (peripheral.round.pieces != null && (isSubmoveSup || !isSynchronized)) {
+    if (round.pieces != null && (isSubmoveSup || !isSynchronized)) {
       final remColor = isSynchronized ? pieceChangeColor : pieceRemoveColor;
       final addColor = isSynchronized ? pieceChangeColor : pieceAddColor;
       final rplColor = isSynchronized ? pieceChangeColor : pieceReplaceColor;
-      final peripheralPieces = peripheral.round.pieces!;
+      final peripheralPieces = round.pieces!;
       final centralPieces = position.board.pieces;
       for (final (square, centralPiece) in centralPieces) {
         final peripheralPiece = peripheralPieces[square];
@@ -456,8 +457,8 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
         }
       }
     }
-    if (peripheral.round.rejectedMove != null) {
-      final rejectedMove = peripheral.round.rejectedMove!;
+    if (round.rejectedMove != null) {
+      final rejectedMove = round.rejectedMove!;
       if (rejectedMove is NormalMove) {
         highlights = highlights.add(
           rejectedMove.from,
@@ -474,9 +475,9 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
 
   void Function(Square) _createOnTouchedSquare(Position position) {
     return (Square square) {
-      final peripheral = ref.read(bluetoothServiceProvider).peripheral;
-      if (peripheral.isFeatureSupported.submoveState && position.board.pieceAt(square) != null) {
-        peripheral.handleState(
+      final service = ref.read(bluetoothServiceProvider);
+      if (service.isFeatureSupported.submoveState && position.board.pieceAt(square) != null) {
+        service.handleState(
           position: position.copyWith(board: position.board.removePieceAt(square)),
         );
       }

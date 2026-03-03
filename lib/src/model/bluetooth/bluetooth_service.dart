@@ -149,6 +149,10 @@ class BluetoothService {
     await _peripheral.handleSetState();
   }
 
+  Future<void> handleState({required Position position}) async {
+    await _peripheral.handleState(position: position);
+  }
+
   Future<void> handleDrawOffer() async {
     await _peripheral.handleDrawOffer();
   }
