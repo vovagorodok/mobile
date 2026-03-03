@@ -109,12 +109,12 @@ class _BodyState extends ConsumerState<_Body> {
 
       // TODO: Implement for all rounds types (AI, Online, Analysis ...)
       final service = ref.read(bluetoothServiceProvider);
-      _moveSubscription = service.moveStream.listen(_handlePeripheralMove);
-      _roundUpdateSubscription = service.roundUpdateStream.listen(_handlePeripheralRoundUpdate);
-      _resignSubscription = service.resignStream.listen(_handlePeripheralResign);
-      _undoOfferSubscription = service.undoOfferStream.listen(_handlePeripheralUndoOffer);
-      _drawOfferSubscription = service.drawOfferStream.listen(_handlePeripheralDrawOffer);
-      _drawOfferAckSubscription = service.drawOfferAckStream.listen(_handleCentralDrawOfferAck);
+      _moveSubscription = service.moveStream.listen(_handleBluetoothMove);
+      _roundUpdateSubscription = service.roundUpdateStream.listen(_handleBluetoothRoundUpdate);
+      _resignSubscription = service.resignStream.listen(_handleBluetoothResign);
+      _undoOfferSubscription = service.undoOfferStream.listen(_handleBluetoothUndoOffer);
+      _drawOfferSubscription = service.drawOfferStream.listen(_handleBluetoothDrawOffer);
+      _drawOfferAckSubscription = service.drawOfferAckStream.listen(_handleBluetoothDrawOfferAck);
     });
   }
 
@@ -129,19 +129,19 @@ class _BodyState extends ConsumerState<_Body> {
     super.dispose();
   }
 
-  void _handlePeripheralMove(Move move) {
+  void _handleBluetoothMove(Move move) {
     ref.read(overTheBoardGameControllerProvider.notifier).makeBluetoothMove(move);
   }
 
-  void _handlePeripheralRoundUpdate(_) {
+  void _handleBluetoothRoundUpdate(_) {
     setState(() {});
   }
 
-  void _handlePeripheralResign(_) {
+  void _handleBluetoothResign(_) {
     ref.read(overTheBoardGameControllerProvider.notifier).resign();
   }
 
-  void _handlePeripheralUndoOffer(_) {
+  void _handleBluetoothUndoOffer(_) {
     final gameState = ref.read(overTheBoardGameControllerProvider);
     if (!gameState.canGoBack) return;
 
@@ -164,7 +164,7 @@ class _BodyState extends ConsumerState<_Body> {
     );
   }
 
-  void _handlePeripheralDrawOffer(_) {
+  void _handleBluetoothDrawOffer(_) {
     final gameState = ref.read(overTheBoardGameControllerProvider);
     if (!gameState.game.drawable) return;
 
@@ -182,7 +182,7 @@ class _BodyState extends ConsumerState<_Body> {
     );
   }
 
-  void _handleCentralDrawOfferAck(bool ack) {
+  void _handleBluetoothDrawOfferAck(bool ack) {
     if (!context.mounted) return;
     if (ModalRoute.of(context)?.isCurrent == true) return;
 

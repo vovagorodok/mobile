@@ -40,12 +40,12 @@ class OverTheBoardGameController extends Notifier<OverTheBoardGameState> {
       Speed.fromTimeIncrement(timeIncrement),
       initialFen: initialFen,
     );
-    _beginBluetooth();
+    _beginBluetoothRound();
   }
 
   void loadOngoingGame(OverTheBoardGame game) {
     state = OverTheBoardGameState(game: game, stepCursor: game.steps.length - 1);
-    _beginBluetooth();
+    _beginBluetoothRound();
   }
 
   void rematch() {
@@ -54,19 +54,19 @@ class OverTheBoardGameController extends Notifier<OverTheBoardGameState> {
       state.game.meta.speed,
       initialFen: state.game.initialFen,
     );
-    _beginBluetooth();
+    _beginBluetoothRound();
   }
 
   void resign() {
     state = state.copyWith(
       game: state.game.copyWith(status: GameStatus.resign, winner: state.turn.opposite),
     );
-    _endBluetooth();
+    _endBluetoothRound();
   }
 
   void draw() {
     state = state.copyWith(game: state.game.copyWith(status: GameStatus.draw));
-    _endBluetooth();
+    _endBluetoothRound();
   }
 
   void makeMove(Move move) {
@@ -123,7 +123,7 @@ class OverTheBoardGameController extends Notifier<OverTheBoardGameState> {
       }
     }
 
-    _moveBluetooth(move);
+    _moveBluetoothRound(move);
     _moveFeedback(sanMove);
   }
 
@@ -152,20 +152,20 @@ class OverTheBoardGameController extends Notifier<OverTheBoardGameState> {
     state = state.copyWith(
       game: state.game.copyWith(status: GameStatus.outoftime, winner: side.opposite),
     );
-    _endBluetooth();
+    _endBluetoothRound();
   }
 
   void goForward() {
     if (state.canGoForward) {
       state = state.copyWith(stepCursor: state.stepCursor + 1, promotionMove: null);
-      _redoBluetooth();
+      _redoBluetoothRound();
     }
   }
 
   void goBack() {
     if (state.canGoBack) {
       state = state.copyWith(stepCursor: state.stepCursor - 1, promotionMove: null);
-      _undoBluetooth();
+      _undoBluetoothRound();
     }
   }
 
@@ -176,7 +176,7 @@ class OverTheBoardGameController extends Notifier<OverTheBoardGameState> {
     }
   }
 
-  void _beginBluetooth() {
+  void _beginBluetoothRound() {
     final service = ref.read(bluetoothServiceProvider);
     service.handleBegin(
       position: state.currentPosition,
@@ -185,7 +185,7 @@ class OverTheBoardGameController extends Notifier<OverTheBoardGameState> {
     );
   }
 
-  void _moveBluetooth(Move move) {
+  void _moveBluetoothRound(Move move) {
     final service = ref.read(bluetoothServiceProvider);
     service.handleMove(position: state.currentPosition, move: move);
     if (state.game.finished) {
@@ -193,17 +193,17 @@ class OverTheBoardGameController extends Notifier<OverTheBoardGameState> {
     }
   }
 
-  void _endBluetooth() {
+  void _endBluetoothRound() {
     final service = ref.read(bluetoothServiceProvider);
     service.handleEnd(status: state.game.status, variant: state.game.meta.variant);
   }
 
-  void _undoBluetooth() {
+  void _undoBluetoothRound() {
     final service = ref.read(bluetoothServiceProvider);
     service.handleUndo(position: state.currentPosition, lastMove: state.lastMove);
   }
 
-  void _redoBluetooth() {
+  void _redoBluetoothRound() {
     final service = ref.read(bluetoothServiceProvider);
     service.handleRedo(position: state.currentPosition, lastMove: state.lastMove);
   }
