@@ -30,7 +30,8 @@ enum PrefCategory {
   puzzle('preferences.puzzle'),
   broadcast('preferences.broadcast'),
   engineEvaluation('preferences.engineEvaluation'),
-  offlineComputerGame('preferences.offlineComputerGame');
+  offlineComputerGame('preferences.offlineComputerGame'),
+  bluetooth('preferences.bluetooth');
 
   const PrefCategory(this.storageKey);
 

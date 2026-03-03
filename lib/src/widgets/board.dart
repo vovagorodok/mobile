@@ -10,6 +10,8 @@ class BoardWidget extends StatelessWidget {
     required this.orientation,
     required this.gameData,
     this.lastMove,
+    this.squareHighlights = const IMapConst({}),
+    this.onTouchedSquare,
     this.shapes,
     required this.settings,
     this.boardOverlay,
@@ -22,6 +24,8 @@ class BoardWidget extends StatelessWidget {
   final Side orientation;
   final GameData? gameData;
   final Move? lastMove;
+  final IMap<Square, SquareHighlight> squareHighlights;
+  final void Function(Square)? onTouchedSquare;
   final ISet<Shape>? shapes;
   final ChessboardSettings settings;
   final String? error;
@@ -37,6 +41,8 @@ class BoardWidget extends StatelessWidget {
       orientation: orientation,
       game: gameData,
       lastMove: lastMove,
+      squareHighlights: squareHighlights,
+      onTouchedSquare: onTouchedSquare,
       shapes: shapes,
       settings: settings,
     );
