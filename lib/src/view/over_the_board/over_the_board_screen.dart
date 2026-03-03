@@ -455,12 +455,10 @@ class _BottomBar extends ConsumerWidget {
               : null,
           icon: Icons.undo,
         ),
-        if (bluetoothService.peripheral.isFeatureSupported.setState)
+        if (bluetoothService.isFeatureSupported.setState)
           BottomBarButton(
             label: 'Autocomplete', // TODO: Bluetooth: Translate
-            onTap: bluetoothService.peripheral.round.isStateSettable
-                ? bluetoothService.handleSetState
-                : null,
+            onTap: bluetoothService.round.isStateSettable ? bluetoothService.handleSetState : null,
             icon: Icons.auto_awesome,
           ),
       ],

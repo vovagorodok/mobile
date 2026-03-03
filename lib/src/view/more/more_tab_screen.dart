@@ -147,7 +147,7 @@ class _Body extends ConsumerWidget {
                 trailing: Theme.of(context).platform == TargetPlatform.iOS
                     ? const CupertinoListTileChevron()
                     : null,
-                title: const Text('Bluetooth'), // TODO: TRANSLATE: context.l10n.bluetooth
+                title: const Text('Bluetooth'), // TODO: Bluetooth: Translate
                 onTap: () => Navigator.of(
                   context,
                   rootNavigator: true,

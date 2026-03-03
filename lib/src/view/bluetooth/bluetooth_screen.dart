@@ -51,7 +51,7 @@ class _BluetoothScreenState extends ConsumerState<BluetoothScreen> {
                   builder: (context, constraints) => StreamBuilder<void>(
                     stream: service.initializedStream,
                     builder: (context, constraints) {
-                      if (service.isInitialized && service.peripheral.isFeatureSupported.option) {
+                      if (service.isInitialized && service.isFeatureSupported.option) {
                         return OptionsScreen(peripheral: service.peripheral);
                       } else if (service.isConnected) {
                         return const SizedBox.shrink();

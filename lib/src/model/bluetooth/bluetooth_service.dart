@@ -36,6 +36,9 @@ class BluetoothService {
   StreamSubscription<BleConnectorStatus>? _subscription;
 
   Peripheral get peripheral => _peripheral;
+  FeatureSupport get isFeatureSupported => _peripheral.isFeatureSupported;
+  VariantSupport get isVariantSupported => _peripheral.isVariantSupported;
+  Round get round => _peripheral.round;
 
   final _connectedController = StreamController<void>.broadcast();
   Stream<void> get connectedStream => _connectedController.stream;

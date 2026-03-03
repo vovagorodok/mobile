@@ -187,7 +187,7 @@ class _PieceMenuState extends ConsumerState<_PieceMenu> {
   void initState() {
     super.initState();
     final bluetoothService = ref.read(bluetoothServiceProvider);
-    if (bluetoothService.peripheral.isFeatureSupported.getState) {
+    if (bluetoothService.isFeatureSupported.getState) {
       bluetoothService.handleGetState();
     }
   }
@@ -444,15 +444,15 @@ class _BottomBar extends ConsumerWidget {
               : null,
           icon: Icons.biotech,
         ),
-        if (bluetoothService.peripheral.isFeatureSupported.getState)
+        if (bluetoothService.isFeatureSupported.getState)
           StreamBuilder<void>(
             stream: bluetoothService.roundUpdateStream,
             builder: (context, constraints) => BottomBarButton(
               key: const Key('load-bluetooth-position-board-button'),
               label: 'Load Bluetooth position', // TODO: Bluetooth: Translate
-              onTap: bluetoothService.peripheral.round.isStateGettable
+              onTap: bluetoothService.round.isStateGettable
                   ? () {
-                      final fen = bluetoothService.peripheral.round.fen!;
+                      final fen = bluetoothService.round.fen!;
                       ref.read(editorController.notifier).loadFen(fen);
                     }
                   : null,

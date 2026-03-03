@@ -171,7 +171,7 @@ class OverTheBoardGameController extends Notifier<OverTheBoardGameState> {
 
   void offerDraw() {
     final service = ref.read(bluetoothServiceProvider);
-    if (service.peripheral.isFeatureSupported.drawOffer) {
+    if (service.isFeatureSupported.drawOffer) {
       service.handleDrawOffer();
     }
   }
