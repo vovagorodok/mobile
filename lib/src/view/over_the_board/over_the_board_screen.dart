@@ -107,7 +107,7 @@ class _BodyState extends ConsumerState<_Body> {
         showConfigureGameSheet(context, isDismissible: true);
       }
 
-      // TODO: Bluetooth: Implement for all rounds types (AI, Online, Analysis ...)
+      // TODO: Bluetooth: Implement for all rounds types (AI, Online, Analysis, Study...)
       final service = ref.read(bluetoothServiceProvider);
       _moveSubscription = service.moveStream.listen(_handleBluetoothMove);
       _roundUpdateSubscription = service.roundUpdateStream.listen(_handleBluetoothRoundUpdate);
