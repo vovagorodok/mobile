@@ -158,8 +158,9 @@ class BluetoothService {
   }
 
   void _onConnectionStateChanged(BleConnectorStatus status) {
-    if (status == BleConnectorStatus.disconnected) {
+    if (status == BleConnectorStatus.disconnected && _peripheral is! DummyPeripheral) {
       _peripheral = DummyPeripheral();
+      _roundUpdateController.add(null);
       _logger.info('Disconnected');
       _showMessage('Disconnected'); // TODO: Bluetooth: Translate
     } else if (status == BleConnectorStatus.connected) {
