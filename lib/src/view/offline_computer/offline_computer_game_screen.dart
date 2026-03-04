@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
+import 'package:lichess_mobile/src/model/bluetooth/bluetooth_service.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/game/game_board_params.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
@@ -111,6 +112,9 @@ class _Body extends ConsumerStatefulWidget {
 
 class _BodyState extends ConsumerState<_Body> {
   final _boardKey = GlobalKey(debugLabel: 'boardOnOfflineComputerScreen');
+  StreamSubscription<Move>? _moveSubscription;
+  StreamSubscription<void>? _roundUpdateSubscription;
+  StreamSubscription<void>? _resignSubscription;
 
   @override
   void initState() {
@@ -131,7 +135,32 @@ class _BodyState extends ConsumerState<_Body> {
         if (!mounted) return;
         _showNewGameDialog();
       }
+
+      final service = ref.read(bluetoothServiceProvider);
+      _moveSubscription = service.moveStream.listen(_handleBluetoothMove);
+      _roundUpdateSubscription = service.roundUpdateStream.listen(_handleBluetoothRoundUpdate);
+      _resignSubscription = service.resignStream.listen(_handleBluetoothResign);
     });
+  }
+
+  @override
+  void dispose() {
+    _moveSubscription?.cancel();
+    _roundUpdateSubscription?.cancel();
+    _resignSubscription?.cancel();
+    super.dispose();
+  }
+
+  void _handleBluetoothMove(Move move) {
+    ref.read(offlineComputerGameControllerProvider.notifier).makeBluetoothMove(move);
+  }
+
+  void _handleBluetoothRoundUpdate(_) {
+    setState(() {});
+  }
+
+  void _handleBluetoothResign(_) {
+    ref.read(offlineComputerGameControllerProvider.notifier).resign();
   }
 
   Future<void> _saveGameState() async {
@@ -321,6 +350,7 @@ class _BottomBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final bluetoothService = ref.read(bluetoothServiceProvider);
     final gameState = ref.watch(offlineComputerGameControllerProvider);
 
     return BottomBar(
@@ -350,6 +380,14 @@ class _BottomBar extends ConsumerWidget {
           icon: CupertinoIcons.lightbulb,
           highlighted: gameState.hintSquare != null,
         ),
+        if (bluetoothService.peripheral.isFeatureSupported.setState)
+          BottomBarButton(
+            label: 'Autocomplete', // TODO: Bluetooth: Translate
+            onTap: bluetoothService.peripheral.round.isStateSettable
+                ? bluetoothService.handleSetState
+                : null,
+            icon: Icons.auto_awesome,
+          ),
       ],
     );
   }
