@@ -122,7 +122,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       practiceMode: practiceMode,
       initialFen: initialFen,
     );
-    _beginBluetoothRound();
+    _sendBeginToBluetooth();
 
     if (state.turn != playerSide) {
       _playEngineMove();
@@ -135,7 +135,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
   void loadGame(SavedOfflineComputerGame savedGame) {
     final game = savedGame.game;
     state = OfflineComputerGameState(game: game, stepCursor: game.steps.length - 1);
-    _beginBluetoothRound();
+    _sendBeginToBluetooth();
 
     if (game.playable && state.turn == game.playerSide && (game.casual || game.practiceMode)) {
       _computeHints();
@@ -228,7 +228,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       state = state.copyWith(game: state.game.copyWith(status: GameStatus.draw));
     }
 
-    _moveBluetoothRound(move);
+    _sendMoveToBluetooth(move);
     _moveFeedback(sanMove);
 
     return sanMove;
@@ -689,7 +689,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       game: state.game.copyWith(status: GameStatus.resign, winner: state.game.playerSide.opposite),
       isEngineThinking: false,
     );
-    _endBluetoothRound();
+    _sendEndToBluetooth();
   }
 
   /// Claim a draw due to threefold repetition.
@@ -700,7 +700,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       game: state.game.copyWith(status: GameStatus.draw, isThreefoldRepetition: false),
       isEngineThinking: false,
     );
-    _endBluetoothRound();
+    _sendEndToBluetooth();
   }
 
   void takeback() {
@@ -726,7 +726,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       hintIndex: null,
       showingSuggestedMove: null,
     );
-    _undoBluetoothRound();
+    _sendUndoToBluetooth();
 
     if (state.turn != state.game.playerSide && state.game.playable) {
       _playEngineMove();
@@ -738,14 +738,14 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
   void goForward() {
     if (state.canGoForward) {
       state = state.copyWith(stepCursor: state.stepCursor + 1, promotionMove: null);
-      _redoBluetoothRound();
+      _sendRedoToBluetooth();
     }
   }
 
   void goBack() {
     if (state.canGoBack) {
       state = state.copyWith(stepCursor: state.stepCursor - 1, promotionMove: null);
-      _undoBluetoothRound();
+      _sendUndoToBluetooth();
     }
   }
 
@@ -848,7 +848,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     }
   }
 
-  void _beginBluetoothRound() {
+  void _sendBeginToBluetooth() {
     final service = ref.read(bluetoothServiceProvider);
     service.handleBegin(
       position: state.currentPosition,
@@ -857,7 +857,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     );
   }
 
-  void _moveBluetoothRound(Move move) {
+  void _sendMoveToBluetooth(Move move) {
     final service = ref.read(bluetoothServiceProvider);
     service.handleMove(position: state.currentPosition, move: move);
     if (state.game.finished) {
@@ -865,17 +865,17 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     }
   }
 
-  void _endBluetoothRound() {
+  void _sendEndToBluetooth() {
     final service = ref.read(bluetoothServiceProvider);
     service.handleEnd(status: state.game.status, variant: state.game.meta.variant);
   }
 
-  void _undoBluetoothRound() {
+  void _sendUndoToBluetooth() {
     final service = ref.read(bluetoothServiceProvider);
     service.handleUndo(position: state.currentPosition, lastMove: state.lastMove);
   }
 
-  void _redoBluetoothRound() {
+  void _sendRedoToBluetooth() {
     final service = ref.read(bluetoothServiceProvider);
     service.handleRedo(position: state.currentPosition, lastMove: state.lastMove);
   }

@@ -206,6 +206,7 @@ class CppPeripheral implements Peripheral {
 
   @override
   Future<void> handleMove({required Position position, required Move move, Time? time}) async {
+    // TODO: Bluetooth: Convert castling as from king+rook positions to king move
     await _peripheral.handleMove(move: move.uci, check: _getCheck(position), time: _getTime(time));
   }
 
@@ -290,6 +291,7 @@ class CppPeripheral implements Peripheral {
   }
 
   void _handlePeripheralMove(String uci) {
+    // TODO: Bluetooth: Convert castling as from king move to king+rook positions
     final move = Move.parse(uci);
     move != null ? _moveController.add(move) : _peripheral.handleReject();
   }
