@@ -17,6 +17,7 @@ class BoardWidget extends StatelessWidget {
     this.boardOverlay,
     this.error,
     this.boardKey,
+    this.explosionSquares,
   });
 
   final double size;
@@ -31,6 +32,7 @@ class BoardWidget extends StatelessWidget {
   final String? error;
   final Widget? boardOverlay;
   final GlobalKey? boardKey;
+  final ISet<Square>? explosionSquares;
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +47,7 @@ class BoardWidget extends StatelessWidget {
       onTouchedSquare: onTouchedSquare,
       shapes: shapes,
       settings: settings,
+      explosionSquares: explosionSquares,
     );
 
     if (boardOverlay != null) {

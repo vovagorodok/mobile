@@ -111,67 +111,78 @@ void main() {
       );
     });
 
-    for (final pgn in ['', sanMoves]) {
-      testWidgets('change variant if PGN is empty, pgn: $pgn', (tester) async {
-        final app = await makeTestProviderScopeApp(
-          tester,
-          home: AnalysisScreen(
-            options: AnalysisOptions.pgn(
-              id: const StringId('standalone'),
-              orientation: Side.white,
-              pgn: pgn,
-              isComputerAnalysisAllowed: false,
-              variant: Variant.standard,
-            ),
+    testWidgets('change variant in standalone analysis', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const AnalysisScreen(options: AnalysisOptions.standalone(variant: Variant.standard)),
+      );
+
+      await tester.pumpWidget(app);
+
+      expect(find.byType(PocketsMenu), findsNothing);
+
+      await tester.tap(find.bySemanticsLabel('Menu'));
+      await tester.pumpAndSettle(); // wait for menu to open
+
+      expect(find.text('Variant'), findsOneWidget);
+
+      await tester.tap(find.text('Variant'));
+      await tester.pumpAndSettle(); // wait for dialog to open
+
+      expect(find.textContaining('Standard'), findsOneWidget);
+      expect(find.textContaining('Chess960'), findsNothing);
+      expect(find.textContaining('From Position'), findsNothing);
+      expect(find.textContaining('Antichess'), findsOneWidget);
+      expect(find.textContaining('King of the Hill'), findsOneWidget);
+      expect(find.textContaining('Three Check'), findsOneWidget);
+      expect(find.textContaining('Atomic'), findsOneWidget);
+      expect(find.textContaining('Horde'), findsOneWidget);
+      expect(find.textContaining('Racing Kings'), findsOneWidget);
+      expect(find.textContaining('Crazyhouse'), findsOneWidget);
+
+      await tester.tap(find.textContaining('Horde'));
+      await tester.pumpAndSettle(); // wait for dialog to close and new variant to be loaded
+
+      expect(find.byType(PocketsMenu), findsNothing);
+
+      // Horde starting position should be loaded:
+      expect(find.byKey(const ValueKey('b5-whitepawn')), findsOneWidget);
+
+      // Change to crazhouse, pockets should be displayed:
+      await tester.tap(find.bySemanticsLabel('Menu'));
+      await tester.pumpAndSettle(); // wait for menu to open
+      await tester.tap(find.text('Variant'));
+      await tester.pumpAndSettle(); // wait for dialog to open
+      await tester.tap(find.textContaining('Crazyhouse'));
+      await tester.pumpAndSettle(); // wait for dialog to close and new variant to be loaded
+
+      // One for white, one for black
+      expect(find.byType(PocketsMenu), findsNWidgets(2));
+    });
+
+    testWidgets('Cannot change variant in PGN analysis', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const AnalysisScreen(
+          options: AnalysisOptions.pgn(
+            id: StringId('standalone'),
+            pgn: '',
+            isComputerAnalysisAllowed: false,
+            orientation: Side.white,
+            variant: Variant.standard,
           ),
-        );
+        ),
+      );
 
-        await tester.pumpWidget(app);
+      await tester.pumpWidget(app);
 
-        expect(find.byType(PocketsMenu), findsNothing);
+      expect(find.byType(PocketsMenu), findsNothing);
 
-        await tester.tap(find.bySemanticsLabel('Menu'));
-        await tester.pumpAndSettle(); // wait for menu to open
+      await tester.tap(find.bySemanticsLabel('Menu'));
+      await tester.pumpAndSettle(); // wait for menu to open
 
-        final canChangeVariant = pgn.isEmpty;
-        expect(find.text('Variant'), canChangeVariant ? findsOneWidget : findsNothing);
-
-        if (canChangeVariant) {
-          await tester.tap(find.text('Variant'));
-          await tester.pumpAndSettle(); // wait for dialog to open
-
-          expect(find.textContaining('Standard'), findsOneWidget);
-          expect(find.textContaining('Chess960'), findsNothing);
-          expect(find.textContaining('From Position'), findsNothing);
-          expect(find.textContaining('Antichess'), findsOneWidget);
-          expect(find.textContaining('King of the Hill'), findsOneWidget);
-          expect(find.textContaining('Three Check'), findsOneWidget);
-          expect(find.textContaining('Atomic'), findsNothing);
-          expect(find.textContaining('Horde'), findsOneWidget);
-          expect(find.textContaining('Racing Kings'), findsOneWidget);
-          expect(find.textContaining('Crazyhouse'), findsOneWidget);
-
-          await tester.tap(find.textContaining('Horde'));
-          await tester.pumpAndSettle(); // wait for dialog to close and new variant to be loaded
-
-          expect(find.byType(PocketsMenu), findsNothing);
-
-          // Horde starting position should be loaded:
-          expect(find.byKey(const ValueKey('b5-whitepawn')), findsOneWidget);
-
-          // Change to crazhouse, pockets should be displayed:
-          await tester.tap(find.bySemanticsLabel('Menu'));
-          await tester.pumpAndSettle(); // wait for menu to open
-          await tester.tap(find.text('Variant'));
-          await tester.pumpAndSettle(); // wait for dialog to open
-          await tester.tap(find.textContaining('Crazyhouse'));
-          await tester.pumpAndSettle(); // wait for dialog to close and new variant to be loaded
-
-          // One for white, one for black
-          expect(find.byType(PocketsMenu), findsNWidgets(2));
-        }
-      });
-    }
+      expect(find.text('Variant'), findsNothing);
+    });
 
     testWidgets('Crazyhouse support DropMoves for both sides', (tester) async {
       final app = await makeTestProviderScopeApp(
@@ -204,6 +215,60 @@ void main() {
 
       await playDropMove(tester, Side.black, Role.pawn, 'h5');
       expect(find.byKey(const ValueKey('h5-blackpawn')), findsOneWidget);
+    });
+
+    testWidgets('Continue against computer', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const AnalysisScreen(
+          options: AnalysisOptions.pgn(
+            id: StringId('standalone'),
+            orientation: Side.white,
+            pgn: '',
+            isComputerAnalysisAllowed: true,
+            variant: Variant.atomic,
+          ),
+        ),
+      );
+
+      await tester.pumpWidget(app);
+
+      await tester.tap(find.bySemanticsLabel('Menu'));
+      await tester.pumpAndSettle(); // wait for menu to open
+      await tester.tap(find.text('Continue from here'));
+      await tester.pumpAndSettle(); // wait for dialog to open
+
+      await tester.tap(find.text('Play against computer'));
+      await tester.pumpAndSettle(); // wait for play menu to open
+      // Variant we set previously should be preselected
+      expect(find.text('Atomic'), findsOneWidget);
+    });
+
+    testWidgets('Continue OTB', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const AnalysisScreen(
+          options: AnalysisOptions.pgn(
+            id: StringId('standalone'),
+            orientation: Side.white,
+            pgn: '',
+            isComputerAnalysisAllowed: true,
+            variant: Variant.atomic,
+          ),
+        ),
+      );
+
+      await tester.pumpWidget(app);
+
+      await tester.tap(find.bySemanticsLabel('Menu'));
+      await tester.pumpAndSettle(); // wait for menu to open
+      await tester.tap(find.text('Continue from here'));
+      await tester.pumpAndSettle(); // wait for dialog to open
+
+      await tester.tap(find.text('Over the board'));
+      await tester.pumpAndSettle(); // wait for play menu to open
+      // Variant we set previously should be preselected
+      expect(find.text('Atomic'), findsOneWidget);
     });
   });
 
@@ -954,6 +1019,87 @@ void main() {
         // ensure that the eval is displayed and pending eval throttle time is over
         await tester.pump(kRequestEvalDebounceDelay + kEngineEvalEmissionThrottleDelay);
         expect(find.byType(BoardShapeWidget), findsOne);
+      });
+    });
+
+    group('show threat button', () {
+      testWidgets('is visible when engine is available and position is normal', (tester) async {
+        await makeEngineTestApp(tester, pgn: 'e4 e5');
+
+        await tester.tap(find.bySemanticsLabel('Menu'));
+        await tester.pumpAndSettle();
+
+        expect(find.text('Show threat'), findsOneWidget);
+      });
+
+      testWidgets('is hidden when king is in check', (tester) async {
+        await makeEngineTestApp(
+          tester,
+          // Ends with Qxe5+: black king is in check
+          pgn: 'e4 e5 Qh5 Nf6 Qxe5+',
+        );
+
+        await tester.tap(find.bySemanticsLabel('Menu'));
+        await tester.pumpAndSettle();
+
+        expect(find.text('Show threat'), findsNothing);
+      });
+
+      testWidgets('is hidden when position is checkmate', (tester) async {
+        await makeEngineTestApp(
+          tester,
+          pgn: sanMoves, // ends with checkmate
+        );
+
+        await tester.tap(find.bySemanticsLabel('Menu'));
+        await tester.pumpAndSettle();
+
+        expect(find.text('Show threat'), findsNothing);
+      });
+
+      testWidgets('is hidden when opponent would be in stalemate', (tester) async {
+        await makeEngineTestApp(
+          tester,
+          pgn: '''
+[Variant "From Position"]
+[FEN "5bnr/4p1pq/4Qpkr/7p/7P/4P3/PPPP1PP1/RNB1KBNR w KQ - 2 10"]
+''',
+        );
+
+        await tester.tap(find.bySemanticsLabel('Menu'));
+        await tester.pumpAndSettle();
+
+        expect(find.text('Show threat'), findsNothing);
+      });
+
+      testWidgets('is hidden when position is stalemate for both sides', (tester) async {
+        await makeEngineTestApp(
+          tester,
+          pgn: '''
+[Variant "From Position"]
+[FEN "8/8/8/pp6/qp6/kp6/1p6/1K6 b - - 0 1"]
+''',
+        );
+
+        await tester.tap(find.bySemanticsLabel('Menu'));
+        await tester.pumpAndSettle();
+
+        expect(find.text('Show threat'), findsNothing);
+      });
+
+      testWidgets('is visible when position is stalemate but opponent can move', (tester) async {
+        await makeEngineTestApp(
+          tester,
+          pgn: '''
+[Variant "From Position"]
+[FEN "5bnr/4p1pq/4Qpkr/7p/7P/4P3/PPPP1PP1/RNB1KBNR b KQ - 2 10"]
+''',
+        );
+
+        await tester.tap(find.bySemanticsLabel('Menu'));
+        await tester.pumpAndSettle();
+
+        expect(find.text('Show threat'), findsOneWidget);
       });
     });
   });

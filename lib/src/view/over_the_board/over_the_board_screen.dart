@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/bluetooth/bluetooth_service.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game_board_params.dart';
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_clock.dart';
@@ -15,6 +16,7 @@ import 'package:lichess_mobile/src/model/over_the_board/over_the_board_game_cont
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_game_storage.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/over_the_board_preferences.dart';
+import 'package:lichess_mobile/src/utils/chessboard.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -32,13 +34,23 @@ import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 
 class OverTheBoardScreen extends StatelessWidget {
-  const OverTheBoardScreen({this.initialFen, super.key});
+  const OverTheBoardScreen({this.initialFen, this.initialVariant, super.key});
 
   /// Optional initial FEN to start the game from a custom position.
   final String? initialFen;
 
-  static Route<void> buildRoute(BuildContext context, {String? initialFen}) {
-    return buildScreenRoute(context, screen: OverTheBoardScreen(initialFen: initialFen));
+  /// Initial variant to be preselected in the "New Game" dialog.
+  final Variant? initialVariant;
+
+  static Route<void> buildRoute(
+    BuildContext context, {
+    Variant? initialVariant,
+    String? initialFen,
+  }) {
+    return buildScreenRoute(
+      context,
+      screen: OverTheBoardScreen(initialVariant: initialVariant, initialFen: initialFen),
+    );
   }
 
   @override
@@ -54,13 +66,15 @@ class OverTheBoardScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: _Body(initialFen: initialFen),
+      body: _Body(initialVariant: initialVariant ?? Variant.standard, initialFen: initialFen),
     );
   }
 }
 
 class _Body extends ConsumerStatefulWidget {
-  const _Body({this.initialFen});
+  const _Body({required this.initialVariant, this.initialFen});
+
+  final Variant initialVariant;
 
   final String? initialFen;
 
@@ -87,7 +101,12 @@ class _BodyState extends ConsumerState<_Body> {
       // If we have an initial FEN, always show the new game dialog
       if (widget.initialFen != null) {
         if (!mounted) return;
-        showConfigureGameSheet(context, isDismissible: true, initialFen: widget.initialFen);
+        showConfigureGameSheet(
+          context,
+          isDismissible: true,
+          initialVariant: widget.initialVariant,
+          initialFen: widget.initialFen,
+        );
         return;
       }
 
@@ -104,7 +123,7 @@ class _BodyState extends ConsumerState<_Body> {
             );
       } else {
         if (!mounted) return;
-        showConfigureGameSheet(context, isDismissible: true);
+        showConfigureGameSheet(context, initialVariant: widget.initialVariant, isDismissible: true);
       }
 
       // TODO: Bluetooth: Implement for all rounds types (AI, Online, Analysis, Study...)
@@ -330,6 +349,12 @@ class _BodyState extends ConsumerState<_Body> {
                         overTheBoardPrefs.flipPiecesAfterMove && orientation != gameState.turn,
                     orientation: orientation,
                     lastMove: gameState.lastMove,
+                    explosionSquares: gameState.stepCursor > 0
+                        ? atomicExplosionSquares(
+                            gameState.game.stepAt(gameState.stepCursor - 1).position,
+                            gameState.lastMove,
+                          )
+                        : null,
                     boardParams: GameBoardParams.interactive(
                       variant: gameState.game.meta.variant,
                       position: gameState.currentPosition,
@@ -472,7 +497,11 @@ class _BottomBar extends ConsumerWidget {
       actions: [
         BottomSheetAction(
           makeLabel: (context) => Text(context.l10n.mobileNewGame),
-          onPressed: () => showConfigureGameSheet(context, isDismissible: true),
+          onPressed: () => showConfigureGameSheet(
+            context,
+            initialVariant: gameState.game.meta.variant,
+            isDismissible: true,
+          ),
         ),
         if (gameState.game.finished)
           BottomSheetAction(

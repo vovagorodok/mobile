@@ -61,6 +61,7 @@ class GameLayout extends ConsumerStatefulWidget {
     this.boardKey,
     this.zenMode = false,
     this.userActionsBar,
+    this.explosionSquares,
     super.key,
   });
 
@@ -82,7 +83,8 @@ class GameLayout extends ConsumerStatefulWidget {
       boardOverlay = null,
       boardKey = null,
       zenMode = false,
-      userActionsBar = null;
+      userActionsBar = null,
+      explosionSquares = null;
 
   final GameBoardParams boardParams;
 
@@ -138,6 +140,11 @@ class GameLayout extends ConsumerStatefulWidget {
   /// Optional widget that contains various user actions, usually a `BottomBar`.
   /// Displayed below the board, or below the move list if landscape mode is used.
   final Widget? userActionsBar;
+
+  /// Squares on which an atomic chess explosion should be shown.
+  ///
+  /// See [Chessboard.explosionSquares] for details.
+  final ISet<Square>? explosionSquares;
 
   @override
   ConsumerState<GameLayout> createState() => _GameLayoutState();
@@ -275,6 +282,7 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
                   boardKey: widget.boardKey,
                   boardOverlay: widget.boardOverlay,
                   error: widget.errorMessage,
+                  explosionSquares: widget.explosionSquares,
                 ),
                 const SizedBox(width: 16.0),
                 Expanded(
@@ -372,6 +380,7 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
                   boardKey: widget.boardKey,
                   boardOverlay: widget.boardOverlay,
                   error: widget.errorMessage,
+                  explosionSquares: widget.explosionSquares,
                 ),
               ),
               Expanded(
