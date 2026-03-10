@@ -215,7 +215,6 @@ class GameController extends AsyncNotifier<GameState> {
       ),
     );
 
-    _sendMoveToBluetooth(move);
     _playMoveFeedback(sanMove, skipAnimationDelay: viaDragAndDrop ?? false);
 
     _sendMoveToSocket(
@@ -746,7 +745,6 @@ class GameController extends AsyncNotifier<GameState> {
           if (!curState.isReplaying) {
             newState = newState.copyWith(stepCursor: newState.stepCursor + 1);
 
-            _sendMoveToBluetooth(move);
             _playMoveFeedback(sanMove);
           }
         }
@@ -815,6 +813,8 @@ class GameController extends AsyncNotifier<GameState> {
         }
 
         state = AsyncValue.data(newState);
+
+        _sendMoveToBluetooth(Move.parse(data.uci)!);
 
       // End game event
       case 'endData':
