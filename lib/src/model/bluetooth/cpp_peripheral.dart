@@ -198,7 +198,7 @@ class CppPeripheral implements Peripheral {
       fen: position.fen,
       variant: _getVariant(variant),
       side: _getSide(side),
-      lastMove: lastMove?.uci,
+      lastMove: _getLastMove(position, lastMove),
       check: _getCheck(position),
       time: _getTime(time),
     );
@@ -206,8 +206,11 @@ class CppPeripheral implements Peripheral {
 
   @override
   Future<void> handleMove({required Position position, required Move move, Time? time}) async {
-    // TODO: Bluetooth: Convert castling as from king+rook positions to king move
-    await _peripheral.handleMove(move: move.uci, check: _getCheck(position), time: _getTime(time));
+    await _peripheral.handleMove(
+      move: _getMove(position, move),
+      check: _getCheck(position),
+      time: _getTime(time),
+    );
   }
 
   @override
@@ -239,7 +242,7 @@ class CppPeripheral implements Peripheral {
   Future<void> handleUndo({required Position position, Move? lastMove, Time? time}) async {
     await _peripheral.handleUndo(
       fen: position.fen,
-      lastMove: lastMove?.uci,
+      lastMove: _getLastMove(position, lastMove),
       check: _getCheck(position),
       time: _getTime(time),
     );
@@ -249,7 +252,7 @@ class CppPeripheral implements Peripheral {
   Future<void> handleRedo({required Position position, Move? lastMove, Time? time}) async {
     await _peripheral.handleRedo(
       fen: position.fen,
-      lastMove: lastMove?.uci,
+      lastMove: _getLastMove(position, lastMove),
       check: _getCheck(position),
       time: _getTime(time),
     );
@@ -291,9 +294,26 @@ class CppPeripheral implements Peripheral {
   }
 
   void _handlePeripheralMove(String uci) {
-    // TODO: Bluetooth: Convert castling as from king move to king+rook positions
+    // TODO: Bluetooth: Convert castling from king move to king and rook positions?
     final move = Move.parse(uci);
     move != null ? _moveController.add(move) : _peripheral.handleReject();
+  }
+
+  String _getMove(Position pos, Move move) {
+    final uci = move.uci;
+    if (move is! NormalMove) return uci;
+    final kingUci = altCastles[uci];
+    if (kingUci == null) return uci;
+    final kingMove = NormalMove.fromUci(kingUci);
+    return pos.board.pieceAt(move.to) == null &&
+            pos.board.pieceAt(kingMove.from) == null &&
+            pos.board.roleAt(kingMove.to) == Role.king
+        ? kingUci
+        : uci;
+  }
+
+  String? _getLastMove(Position pos, Move? move) {
+    return move != null ? _getMove(pos, move) : null;
   }
 
   String? _getVariant(Variant? variant) {
