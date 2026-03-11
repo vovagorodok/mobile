@@ -19,6 +19,7 @@ dependencies:
   ble_chess_peripheral_driver: 
     git:
       url: https://github.com/dkwach/chess_peripheral_driver.git
+      ref: 782919998d0cbdbd2e41790f72175fccff9b66a1
   chessground: ^8.0.1
   clock: ^1.1.1
   collection: ^1.17.0
