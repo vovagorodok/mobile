@@ -438,10 +438,6 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
     final rejectedMove = peripheralRound.rejectedMove;
     IMap<Square, SquareHighlight> highlights = IMap();
 
-    if (!peripheralRound.isVariantSupported) {
-      return highlights;
-    }
-
     if (peripheralPieces != null && (isSubmoveSup || !isSynchronized)) {
       final remColor = isSynchronized ? pieceChangeColor : pieceRemoveColor;
       final addColor = isSynchronized ? pieceChangeColor : pieceAddColor;
