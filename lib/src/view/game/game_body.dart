@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
+import 'package:lichess_mobile/src/model/bluetooth/bluetooth_service.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/game/game_board_params.dart';
@@ -98,6 +99,15 @@ class GameBody extends ConsumerWidget {
       ctrlProvider,
       (prev, state) => _stateListener(prev, state, context: context, ref: ref),
     );
+
+    final bluetoothMoveProvider = StreamProvider<Move>((ref) {
+      return ref.read(bluetoothServiceProvider).moveStream;
+    });
+    ref.listen(bluetoothMoveProvider, (prev, next) {
+      next.whenData((move) {
+        ref.read(ctrlProvider.notifier).makeBluetoothMove(move);
+      });
+    });
 
     final boardPreferences = ref.watch(boardPreferencesProvider);
     final gamePrefs = ref.watch(gamePreferencesProvider);
@@ -408,6 +418,10 @@ class GameBody extends ConsumerWidget {
         Navigator.of(context).popUntil((route) => route is! PopupRoute);
         onLoadGameCallback(state.requireValue.redirectGameId!);
       }
+    }
+
+    if (prev?.hasValue != true && state.hasValue) {
+      ref.read(gameControllerProvider(gameId).notifier).sendBeginToBluetooth();
     }
   }
 }

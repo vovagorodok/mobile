@@ -5,6 +5,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/bluetooth/bluetooth_service.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/game/game_board_params.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
@@ -246,6 +247,15 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
           ),
         );
 
+        final squareHighlights = switch (widget.boardParams) {
+          ReadonlyBoardParams() => IMap<Square, SquareHighlight>(),
+          InteractiveBoardParams(:final position) => _createSquareHighlights(position),
+        };
+        final onTouchedSquare = switch (widget.boardParams) {
+          ReadonlyBoardParams() => null,
+          InteractiveBoardParams(:final position) => _createOnTouchedSquare(position),
+        };
+
         if (orientation == Orientation.landscape) {
           final defaultBoardSize =
               constraints.biggest.shortestSide - (kTabletBoardTableSidePadding * 2);
@@ -265,6 +275,8 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
                   orientation: widget.orientation,
                   gameData: gameData,
                   lastMove: widget.lastMove,
+                  squareHighlights: squareHighlights,
+                  onTouchedSquare: onTouchedSquare,
                   shapes: shapes,
                   settings: settings,
                   boardKey: widget.boardKey,
@@ -361,6 +373,8 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
                   orientation: widget.orientation,
                   gameData: gameData,
                   lastMove: widget.lastMove,
+                  squareHighlights: squareHighlights,
+                  onTouchedSquare: onTouchedSquare,
                   shapes: shapes,
                   settings: settings,
                   boardKey: widget.boardKey,
@@ -407,6 +421,81 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
     setState(() {
       userShapes = ISet();
     });
+  }
+
+  IMap<Square, SquareHighlight> _createSquareHighlights(Position position) {
+    // TODO: Bluetooth: Create themed colors
+    const Color rejectedMoveColor = Color.fromRGBO(199, 0, 109, 0.41);
+    const Color pieceRemoveColor = Color.fromRGBO(255, 60, 60, 0.50);
+    const Color pieceAddColor = Color.fromRGBO(60, 255, 60, 0.50);
+    const Color pieceReplaceColor = Color.fromRGBO(60, 60, 255, 0.50);
+    const Color pieceChangeColor = Color.fromRGBO(20, 85, 30, 0.376);
+    final service = ref.read(bluetoothServiceProvider);
+    final peripheralRound = service.round;
+    final peripheralPieces = peripheralRound.pieces;
+    final isSynchronized = peripheralRound.isStateSynchronized;
+    final isSubmoveSup = service.isFeatureSupported.submoveState;
+    final rejectedMove = peripheralRound.rejectedMove;
+    IMap<Square, SquareHighlight> highlights = IMap();
+
+    if (!peripheralRound.isVariantSupported) {
+      return highlights;
+    }
+
+    if (peripheralPieces != null && (isSubmoveSup || !isSynchronized)) {
+      final remColor = isSynchronized ? pieceChangeColor : pieceRemoveColor;
+      final addColor = isSynchronized ? pieceChangeColor : pieceAddColor;
+      final rplColor = isSynchronized ? pieceChangeColor : pieceReplaceColor;
+      final centralPieces = position.board.pieces;
+      for (final (square, centralPiece) in centralPieces) {
+        final peripheralPiece = peripheralPieces[square];
+        if (peripheralPiece == null) {
+          highlights = highlights.add(
+            square,
+            SquareHighlight(details: HighlightDetails(solidColor: addColor)),
+          );
+        } else if ((peripheralPiece.role != null && peripheralPiece.role != centralPiece.role) ||
+            (peripheralPiece.color != null && peripheralPiece.color != centralPiece.color)) {
+          highlights = highlights.add(
+            square,
+            SquareHighlight(details: HighlightDetails(solidColor: rplColor)),
+          );
+        }
+      }
+      for (final square in peripheralPieces.keys) {
+        final centralPiece = position.board.pieceAt(square);
+        if (centralPiece == null) {
+          highlights = highlights.add(
+            square,
+            SquareHighlight(details: HighlightDetails(solidColor: remColor)),
+          );
+        }
+      }
+    }
+    if (rejectedMove != null) {
+      if (rejectedMove is NormalMove) {
+        highlights = highlights.add(
+          rejectedMove.from,
+          const SquareHighlight(details: HighlightDetails(solidColor: rejectedMoveColor)),
+        );
+      }
+      highlights = highlights.add(
+        rejectedMove.to,
+        const SquareHighlight(details: HighlightDetails(solidColor: rejectedMoveColor)),
+      );
+    }
+    return highlights;
+  }
+
+  void Function(Square) _createOnTouchedSquare(Position position) {
+    return (Square square) {
+      final service = ref.read(bluetoothServiceProvider);
+      if (service.isFeatureSupported.submoveState && position.board.pieceAt(square) != null) {
+        service.handleState(
+          position: position.copyWith(board: position.board.removePieceAt(square)),
+        );
+      }
+    };
   }
 }
 
