@@ -133,25 +133,44 @@ class DummyPeripheral implements Peripheral {
   @override
   Future<void> handleBegin({
     required Position position,
-    Variant? variant,
+    required Variant variant,
     Move? lastMove,
     Side? side,
     Time? time,
   }) async {}
   @override
-  Future<void> handleMove({required Position position, required Move move, Time? time}) async {}
+  Future<void> handleMove({
+    required Position position,
+    required Variant variant,
+    required Move move,
+    Time? time,
+  }) async {}
   @override
   Future<void> handleReject() async {}
   @override
-  Future<void> handleEnd({GameStatus? status, Variant? variant, Score? score}) async {}
+  Future<void> handleEnd({
+    required Variant variant,
+    required GameStatus status,
+    Score? score,
+  }) async {}
   @override
   Future<void> handleErr({required String err}) async {}
   @override
   Future<void> handleMsg({required String msg}) async {}
   @override
-  Future<void> handleUndo({required Position position, Move? lastMove, Time? time}) async {}
+  Future<void> handleUndo({
+    required Position position,
+    required Variant variant,
+    Move? lastMove,
+    Time? time,
+  }) async {}
   @override
-  Future<void> handleRedo({required Position position, Move? lastMove, Time? time}) async {}
+  Future<void> handleRedo({
+    required Position position,
+    required Variant variant,
+    Move? lastMove,
+    Time? time,
+  }) async {}
   @override
   Future<void> handleUndoOffer() async {}
   @override

@@ -98,7 +98,7 @@ class BluetoothService {
 
   Future<void> handleBegin({
     required Position position,
-    Variant? variant,
+    required Variant variant,
     Move? lastMove,
     Side? side,
     Time? time,
@@ -112,12 +112,21 @@ class BluetoothService {
     );
   }
 
-  Future<void> handleMove({required Position position, required Move move, Time? time}) async {
-    await _peripheral.handleMove(position: position, move: move, time: time);
+  Future<void> handleMove({
+    required Position position,
+    required Variant variant,
+    required Move move,
+    Time? time,
+  }) async {
+    await _peripheral.handleMove(position: position, variant: variant, move: move, time: time);
   }
 
-  Future<void> handleEnd({GameStatus? status, Variant? variant, Score? score}) async {
-    await _peripheral.handleEnd(status: status, variant: variant, score: score);
+  Future<void> handleEnd({
+    required Variant variant,
+    required GameStatus status,
+    Score? score,
+  }) async {
+    await _peripheral.handleEnd(variant: variant, status: status, score: score);
   }
 
   Future<void> handleReject() async {
@@ -125,20 +134,50 @@ class BluetoothService {
     _showMessage('Rejected'); // TODO: Bluetooth: Translate
   }
 
-  Future<void> handleUndo({required Position position, Move? lastMove, Time? time}) async {
+  Future<void> handleUndo({
+    required Position position,
+    required Variant variant,
+    Move? lastMove,
+    Time? time,
+  }) async {
     if (!_peripheral.isFeatureSupported.undoRedo) {
-      await _peripheral.handleBegin(position: position, lastMove: lastMove, time: time);
+      await _peripheral.handleBegin(
+        position: position,
+        variant: variant,
+        lastMove: lastMove,
+        time: time,
+      );
       return;
     }
-    await _peripheral.handleUndo(position: position, lastMove: lastMove, time: time);
+    await _peripheral.handleUndo(
+      position: position,
+      variant: variant,
+      lastMove: lastMove,
+      time: time,
+    );
   }
 
-  Future<void> handleRedo({required Position position, Move? lastMove, Time? time}) async {
+  Future<void> handleRedo({
+    required Position position,
+    required Variant variant,
+    Move? lastMove,
+    Time? time,
+  }) async {
     if (!_peripheral.isFeatureSupported.undoRedo) {
-      await _peripheral.handleBegin(position: position, lastMove: lastMove, time: time);
+      await _peripheral.handleBegin(
+        position: position,
+        variant: variant,
+        lastMove: lastMove,
+        time: time,
+      );
       return;
     }
-    await _peripheral.handleRedo(position: position, lastMove: lastMove, time: time);
+    await _peripheral.handleRedo(
+      position: position,
+      variant: variant,
+      lastMove: lastMove,
+      time: time,
+    );
   }
 
   Future<void> handleGetState() async {

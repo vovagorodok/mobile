@@ -187,25 +187,37 @@ class OverTheBoardGameController extends Notifier<OverTheBoardGameState> {
 
   void _sendMoveToBluetooth(Move move) {
     final service = ref.read(bluetoothServiceProvider);
-    service.handleMove(position: state.currentPosition, move: move);
+    service.handleMove(
+      position: state.currentPosition,
+      variant: state.game.meta.variant,
+      move: move,
+    );
     if (state.game.finished) {
-      service.handleEnd(status: state.game.status, variant: state.game.meta.variant);
+      service.handleEnd(variant: state.game.meta.variant, status: state.game.status);
     }
   }
 
   void _sendEndToBluetooth() {
     final service = ref.read(bluetoothServiceProvider);
-    service.handleEnd(status: state.game.status, variant: state.game.meta.variant);
+    service.handleEnd(variant: state.game.meta.variant, status: state.game.status);
   }
 
   void _sendUndoToBluetooth() {
     final service = ref.read(bluetoothServiceProvider);
-    service.handleUndo(position: state.currentPosition, lastMove: state.lastMove);
+    service.handleUndo(
+      position: state.currentPosition,
+      variant: state.game.meta.variant,
+      lastMove: state.lastMove,
+    );
   }
 
   void _sendRedoToBluetooth() {
     final service = ref.read(bluetoothServiceProvider);
-    service.handleRedo(position: state.currentPosition, lastMove: state.lastMove);
+    service.handleRedo(
+      position: state.currentPosition,
+      variant: state.game.meta.variant,
+      lastMove: state.lastMove,
+    );
   }
 
   void _moveFeedback(SanMove sanMove) {

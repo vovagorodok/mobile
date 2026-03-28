@@ -189,7 +189,7 @@ class CppPeripheral implements Peripheral {
   @override
   Future<void> handleBegin({
     required Position position,
-    Variant? variant,
+    required Variant variant,
     Move? lastMove,
     Side? side,
     Time? time,
@@ -198,16 +198,21 @@ class CppPeripheral implements Peripheral {
       fen: position.fen,
       variant: _getVariant(variant),
       side: _getSide(side),
-      lastMove: _getLastMove(position, lastMove),
+      lastMove: _getLastMove(position, variant, lastMove),
       check: _getCheck(position),
       time: _getTime(time),
     );
   }
 
   @override
-  Future<void> handleMove({required Position position, required Move move, Time? time}) async {
+  Future<void> handleMove({
+    required Position position,
+    required Variant variant,
+    required Move move,
+    Time? time,
+  }) async {
     await _peripheral.handleMove(
-      move: _getMove(position, move),
+      move: _getMove(position, variant, move),
       check: _getCheck(position),
       time: _getTime(time),
     );
@@ -219,11 +224,15 @@ class CppPeripheral implements Peripheral {
   }
 
   @override
-  Future<void> handleEnd({GameStatus? status, Variant? variant, Score? score}) async {
+  Future<void> handleEnd({
+    required Variant variant,
+    required GameStatus status,
+    Score? score,
+  }) async {
     await _peripheral.handleEnd(
       reason: _getEndReason(status),
       drawReason: _getDrawReason(status),
-      variantReason: _getVariantReason(status, variant),
+      variantReason: _getVariantReason(variant, status),
       score: _getScore(score),
     );
   }
@@ -239,20 +248,30 @@ class CppPeripheral implements Peripheral {
   }
 
   @override
-  Future<void> handleUndo({required Position position, Move? lastMove, Time? time}) async {
+  Future<void> handleUndo({
+    required Position position,
+    required Variant variant,
+    Move? lastMove,
+    Time? time,
+  }) async {
     await _peripheral.handleUndo(
       fen: position.fen,
-      lastMove: _getLastMove(position, lastMove),
+      lastMove: _getLastMove(position, variant, lastMove),
       check: _getCheck(position),
       time: _getTime(time),
     );
   }
 
   @override
-  Future<void> handleRedo({required Position position, Move? lastMove, Time? time}) async {
+  Future<void> handleRedo({
+    required Position position,
+    required Variant variant,
+    Move? lastMove,
+    Time? time,
+  }) async {
     await _peripheral.handleRedo(
       fen: position.fen,
-      lastMove: _getLastMove(position, lastMove),
+      lastMove: _getLastMove(position, variant, lastMove),
       check: _getCheck(position),
       time: _getTime(time),
     );
@@ -299,8 +318,9 @@ class CppPeripheral implements Peripheral {
     move != null ? _moveController.add(move) : _peripheral.handleReject();
   }
 
-  String _getMove(Position pos, Move move) {
+  String _getMove(Position pos, Variant variant, Move move) {
     final uci = move.uci;
+    if (variant == Variant.chess960) return uci;
     if (move is! NormalMove) return uci;
     final kingUci = altCastles[uci];
     if (kingUci == null) return uci;
@@ -312,24 +332,24 @@ class CppPeripheral implements Peripheral {
         : uci;
   }
 
-  String? _getLastMove(Position pos, Move? move) {
-    return move != null ? _getMove(pos, move) : null;
+  String? _getLastMove(Position pos, Variant variant, Move? lastMove) {
+    return lastMove != null ? _getMove(pos, variant, lastMove) : null;
   }
 
-  String? _getVariant(Variant? variant) {
-    return variant != null ? _variantsMap[variant] : null;
+  String? _getVariant(Variant variant) {
+    return _variantsMap[variant];
   }
 
-  String? _getEndReason(GameStatus? status) {
-    return status != null ? _endReasonsMap[status] ?? EndReasons.undefined : null;
+  String? _getEndReason(GameStatus status) {
+    return _endReasonsMap[status] ?? EndReasons.undefined;
   }
 
-  String? _getDrawReason(GameStatus? status) {
-    return status != null ? _drawReasonsMap[status] : null;
+  String? _getDrawReason(GameStatus status) {
+    return _drawReasonsMap[status];
   }
 
-  String? _getVariantReason(GameStatus? status, Variant? variant) {
-    return status == GameStatus.variantEnd && variant != null ? _variantReasonsMap[variant] : null;
+  String? _getVariantReason(Variant variant, GameStatus status) {
+    return status == GameStatus.variantEnd ? _variantReasonsMap[variant] : null;
   }
 
   String? _getSide(Side? side) {

@@ -557,16 +557,20 @@ class GameController extends AsyncNotifier<GameState> {
   void _sendMoveToBluetooth(Move move) {
     final service = ref.read(bluetoothServiceProvider);
     final currentState = state.requireValue;
-    service.handleMove(position: currentState.currentPosition, move: move);
+    service.handleMove(
+      position: currentState.currentPosition,
+      variant: currentState.game.meta.variant,
+      move: move,
+    );
     if (currentState.game.finished) {
-      service.handleEnd(status: currentState.game.status, variant: currentState.game.meta.variant);
+      service.handleEnd(variant: currentState.game.meta.variant, status: currentState.game.status);
     }
   }
 
   void _sendEndToBluetooth() {
     final service = ref.read(bluetoothServiceProvider);
     final currentState = state.requireValue;
-    service.handleEnd(status: currentState.game.status, variant: currentState.game.meta.variant);
+    service.handleEnd(variant: currentState.game.meta.variant, status: currentState.game.status);
   }
 
   void _sendUndoToBluetooth() {
@@ -574,6 +578,7 @@ class GameController extends AsyncNotifier<GameState> {
     final currentState = state.requireValue;
     service.handleUndo(
       position: currentState.currentPosition,
+      variant: currentState.game.meta.variant,
       lastMove: currentState.game.moveAt(currentState.stepCursor),
     );
   }
@@ -583,6 +588,7 @@ class GameController extends AsyncNotifier<GameState> {
   //   final currentState = state.requireValue;
   //   service.handleRedo(
   //     position: currentState.currentPosition,
+  //     variant: currentState.game.meta.variant,
   //     lastMove: currentState.game.moveAt(currentState.stepCursor),
   //   );
   // }

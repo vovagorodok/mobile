@@ -84,20 +84,35 @@ abstract class Peripheral {
 
   Future<void> handleBegin({
     required Position position,
-    Variant? variant,
+    required Variant variant,
     Move? lastMove,
     Side? side,
     Time? time,
   });
-  Future<void> handleMove({required Position position, required Move move, Time? time});
+  Future<void> handleMove({
+    required Position position,
+    required Variant variant,
+    required Move move,
+    Time? time,
+  });
   Future<void> handleReject();
-  Future<void> handleEnd({GameStatus? status, Variant? variant, Score? score});
+  Future<void> handleEnd({required Variant variant, required GameStatus status, Score? score});
   Future<void> handleErr({required String err});
   // msg feature
   Future<void> handleMsg({required String msg});
   // undo_redo feature
-  Future<void> handleUndo({required Position position, Move? lastMove, Time? time});
-  Future<void> handleRedo({required Position position, Move? lastMove, Time? time});
+  Future<void> handleUndo({
+    required Position position,
+    required Variant variant,
+    Move? lastMove,
+    Time? time,
+  });
+  Future<void> handleRedo({
+    required Position position,
+    required Variant variant,
+    Move? lastMove,
+    Time? time,
+  });
   // undo_offer feature
   Future<void> handleUndoOffer();
   // draw_offer feature
