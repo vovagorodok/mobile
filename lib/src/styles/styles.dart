@@ -26,6 +26,7 @@ abstract class Styles {
   static const horizontalBodyPadding = EdgeInsets.symmetric(horizontal: 16.0);
   static const sectionBottomPadding = EdgeInsets.only(bottom: 16.0);
   static const sectionTopPadding = EdgeInsets.only(top: 16.0);
+  static const sectionLeftPadding = EdgeInsets.only(left: 16.0);
   static const bodySectionPadding = EdgeInsets.all(16.0);
 
   /// Horizontal and bottom padding for the body section.

@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:lichess_mobile/src/model/bluetooth/bluetooth_service.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
@@ -79,6 +82,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
   final _blackClockKey = GlobalKey(debugLabel: 'blackClockOnGameScreen');
   final _boardKey = GlobalKey(debugLabel: 'boardOnGameScreen');
   AppLifecycleListener? _appLifecycleListener;
+  StreamSubscription<void>? _roundUpdateSubscription;
 
   @override
   void initState() {
@@ -86,12 +90,19 @@ class _GameScreenState extends ConsumerState<GameScreen> {
     // Cancel pending seek when app goes to background to prevent games being created
     // while the user is away from the app.
     _appLifecycleListener = AppLifecycleListener(onPause: _cancelSeek);
+    final service = ref.read(bluetoothServiceProvider);
+    _roundUpdateSubscription = service.roundUpdateStream.listen(_handleBluetoothRoundUpdate);
   }
 
   @override
   void dispose() {
+    _roundUpdateSubscription?.cancel();
     _appLifecycleListener?.dispose();
     super.dispose();
+  }
+
+  void _handleBluetoothRoundUpdate(_) {
+    setState(() {});
   }
 
   Future<void> _cancelSeek() async {

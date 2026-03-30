@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
+import 'package:lichess_mobile/src/model/bluetooth/bluetooth_service.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game_board_params.dart';
@@ -83,6 +84,12 @@ class _Body extends ConsumerStatefulWidget {
 
 class _BodyState extends ConsumerState<_Body> {
   final _boardKey = GlobalKey(debugLabel: 'boardOnOverTheBoardScreen');
+  StreamSubscription<Move>? _moveSubscription;
+  StreamSubscription<void>? _roundUpdateSubscription;
+  StreamSubscription<void>? _resignSubscription;
+  StreamSubscription<void>? _undoOfferSubscription;
+  StreamSubscription<void>? _drawOfferSubscription;
+  StreamSubscription<bool>? _drawOfferAckSubscription;
 
   Side orientation = Side.white;
 
@@ -118,7 +125,94 @@ class _BodyState extends ConsumerState<_Body> {
         if (!mounted) return;
         showConfigureGameSheet(context, initialVariant: widget.initialVariant, isDismissible: true);
       }
+
+      // TODO: Bluetooth: Implement for all rounds types (AI, Online, Analysis, Study...)
+      final service = ref.read(bluetoothServiceProvider);
+      _moveSubscription = service.moveStream.listen(_handleBluetoothMove);
+      _roundUpdateSubscription = service.roundUpdateStream.listen(_handleBluetoothRoundUpdate);
+      _resignSubscription = service.resignStream.listen(_handleBluetoothResign);
+      _undoOfferSubscription = service.undoOfferStream.listen(_handleBluetoothUndoOffer);
+      _drawOfferSubscription = service.drawOfferStream.listen(_handleBluetoothDrawOffer);
+      _drawOfferAckSubscription = service.drawOfferAckStream.listen(_handleBluetoothDrawOfferAck);
     });
+  }
+
+  @override
+  void dispose() {
+    _moveSubscription?.cancel();
+    _roundUpdateSubscription?.cancel();
+    _resignSubscription?.cancel();
+    _undoOfferSubscription?.cancel();
+    _drawOfferSubscription?.cancel();
+    _drawOfferAckSubscription?.cancel();
+    super.dispose();
+  }
+
+  void _handleBluetoothMove(Move move) {
+    ref.read(overTheBoardGameControllerProvider.notifier).makeBluetoothMove(move);
+  }
+
+  void _handleBluetoothRoundUpdate(_) {
+    setState(() {});
+  }
+
+  void _handleBluetoothResign(_) {
+    ref.read(overTheBoardGameControllerProvider.notifier).resign();
+  }
+
+  void _handleBluetoothUndoOffer(_) {
+    final gameState = ref.read(overTheBoardGameControllerProvider);
+    if (!gameState.canGoBack) return;
+
+    showAdaptiveDialog<void>(
+      context: context,
+      builder: (context) => YesNoDialog(
+        title: Text('${context.l10n.draw}?'),
+        content: const Text(
+          'Device offers undo. Does opponent accept?',
+        ), // TODO: Bluetooth: Translate
+        onYes: () {
+          Navigator.pop(context);
+          ref.read(overTheBoardGameControllerProvider.notifier).goBack();
+          if (ref.read(overTheBoardClockProvider).active) {
+            ref
+                .read(overTheBoardClockProvider.notifier)
+                .switchSide(newSideToMove: gameState.turn.opposite, addIncrement: false);
+          }
+        },
+        onNo: () => Navigator.pop(context),
+      ),
+    );
+  }
+
+  void _handleBluetoothDrawOffer(_) {
+    final gameState = ref.read(overTheBoardGameControllerProvider);
+    if (!gameState.game.drawable) return;
+
+    showAdaptiveDialog<void>(
+      context: context,
+      builder: (context) => YesNoDialog(
+        title: Text('${context.l10n.draw}?'),
+        content: const Text(
+          'Device offers draw. Does opponent accept?',
+        ), // TODO: Bluetooth: Translate
+        onYes: () {
+          Navigator.pop(context);
+          ref.read(overTheBoardGameControllerProvider.notifier).draw();
+        },
+        onNo: () => Navigator.pop(context),
+      ),
+    );
+  }
+
+  void _handleBluetoothDrawOfferAck(bool ack) {
+    if (!context.mounted) return;
+    if (ModalRoute.of(context)?.isCurrent == true) return;
+
+    Navigator.pop(context);
+    if (ack) {
+      ref.read(overTheBoardGameControllerProvider.notifier).draw();
+    }
   }
 
   void _saveGameState() {
@@ -317,6 +411,7 @@ class _BottomBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final bluetoothService = ref.read(bluetoothServiceProvider);
     final gameState = ref.watch(overTheBoardGameControllerProvider);
     final clock = ref.watch(overTheBoardClockProvider);
 
@@ -385,6 +480,12 @@ class _BottomBar extends ConsumerWidget {
               : null,
           icon: Icons.undo,
         ),
+        if (bluetoothService.isFeatureSupported.setState)
+          BottomBarButton(
+            label: 'Autocomplete', // TODO: Bluetooth: Translate
+            onTap: bluetoothService.round.isStateSettable ? bluetoothService.handleSetState : null,
+            icon: Icons.auto_awesome,
+          ),
       ],
     );
   }
@@ -427,6 +528,7 @@ class _BottomBar extends ConsumerWidget {
             makeLabel: (context) => Text(context.l10n.offerDraw),
             onPressed: () {
               final offerer = gameState.turn.name.capitalize();
+              ref.read(overTheBoardGameControllerProvider.notifier).offerDraw();
               showAdaptiveDialog<void>(
                 context: context,
                 builder: (context) => YesNoDialog(

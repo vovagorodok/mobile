@@ -9,6 +9,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
+import 'package:lichess_mobile/src/model/bluetooth/bluetooth_service.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/chess960.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
@@ -124,6 +125,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       variant: variant,
       initialFen: initialFen,
     );
+    _sendBeginToBluetooth();
 
     if (state.turn != playerSide) {
       _playEngineMove();
@@ -136,6 +138,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
   void loadGame(SavedOfflineComputerGame savedGame) {
     final game = savedGame.game;
     state = OfflineComputerGameState(game: game, stepCursor: game.steps.length - 1);
+    _sendBeginToBluetooth();
 
     if (game.playable && state.turn == game.playerSide && (game.casual || game.practiceMode)) {
       _computeHints();
@@ -159,6 +162,19 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       if (state.game.playable) {
         _playEngineMove();
       }
+    }
+  }
+
+  void makeBluetoothMove(Move move) {
+    if (state.isEngineThinking || state.isEvaluatingMove || !state.game.playable) {
+      ref.read(bluetoothServiceProvider).handleReject();
+      return;
+    }
+
+    if (state.currentPosition.isLegal(move)) {
+      makeMove(move);
+    } else {
+      ref.read(bluetoothServiceProvider).handleReject();
     }
   }
 
@@ -222,6 +238,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       );
     }
 
+    _sendMoveToBluetooth(move);
     _moveFeedback(sanMove);
 
     return sanMove;
@@ -682,6 +699,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       game: state.game.copyWith(status: GameStatus.resign, winner: state.game.playerSide.opposite),
       isEngineThinking: false,
     );
+    _sendEndToBluetooth();
   }
 
   /// Claim a draw due to threefold repetition.
@@ -692,6 +710,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       game: state.game.copyWith(status: GameStatus.draw, isThreefoldRepetition: false),
       isEngineThinking: false,
     );
+    _sendEndToBluetooth();
   }
 
   void takeback() {
@@ -717,6 +736,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       hintIndex: null,
       showingSuggestedMove: null,
     );
+    _sendUndoToBluetooth();
 
     if (state.turn != state.game.playerSide && state.game.playable) {
       _playEngineMove();
@@ -728,12 +748,21 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
   void goForward() {
     if (state.canGoForward) {
       state = state.copyWith(stepCursor: state.stepCursor + 1, promotionMove: null);
+      _sendRedoToBluetooth();
     }
   }
 
   void goBack() {
     if (state.canGoBack) {
       state = state.copyWith(stepCursor: state.stepCursor - 1, promotionMove: null);
+      _sendUndoToBluetooth();
+    }
+  }
+
+  void offerDraw() {
+    final service = ref.read(bluetoothServiceProvider);
+    if (service.isFeatureSupported.drawOffer) {
+      service.handleDrawOffer();
     }
   }
 
@@ -827,6 +856,50 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     } else {
       state = state.copyWith(showingSuggestedMove: move);
     }
+  }
+
+  void _sendBeginToBluetooth() {
+    final service = ref.read(bluetoothServiceProvider);
+    service.handleBegin(
+      position: state.currentPosition,
+      variant: state.game.meta.variant,
+      lastMove: state.lastMove,
+    );
+  }
+
+  void _sendMoveToBluetooth(Move move) {
+    final service = ref.read(bluetoothServiceProvider);
+    service.handleMove(
+      position: state.currentPosition,
+      variant: state.game.meta.variant,
+      move: move,
+    );
+    if (state.game.finished) {
+      service.handleEnd(variant: state.game.meta.variant, status: state.game.status);
+    }
+  }
+
+  void _sendEndToBluetooth() {
+    final service = ref.read(bluetoothServiceProvider);
+    service.handleEnd(variant: state.game.meta.variant, status: state.game.status);
+  }
+
+  void _sendUndoToBluetooth() {
+    final service = ref.read(bluetoothServiceProvider);
+    service.handleUndo(
+      position: state.currentPosition,
+      variant: state.game.meta.variant,
+      lastMove: state.lastMove,
+    );
+  }
+
+  void _sendRedoToBluetooth() {
+    final service = ref.read(bluetoothServiceProvider);
+    service.handleRedo(
+      position: state.currentPosition,
+      variant: state.game.meta.variant,
+      lastMove: state.lastMove,
+    );
   }
 
   void _moveFeedback(SanMove sanMove) {

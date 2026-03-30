@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/account/account_service.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
+import 'package:lichess_mobile/src/model/bluetooth/bluetooth_service.dart';
 import 'package:lichess_mobile/src/model/chat/chat_controller.dart';
 import 'package:lichess_mobile/src/model/clock/chess_clock.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -223,6 +224,19 @@ class GameController extends AsyncNotifier<GameState> {
       // we want to send client lag only at the beginning of the game when the clock is not running yet
       withLag: curState.game.clock != null && curState.activeClockSide == null,
     );
+  }
+
+  void sendBeginToBluetooth() {
+    _sendBeginToBluetooth();
+  }
+
+  void makeBluetoothMove(Move move) {
+    final currentState = state.requireValue;
+    if (currentState.currentPosition.isLegal(move)) {
+      userMove(move);
+    } else {
+      ref.read(bluetoothServiceProvider).handleReject();
+    }
   }
 
   void onPromotionSelection(Role? role) {
@@ -470,6 +484,7 @@ class GameController extends AsyncNotifier<GameState> {
   void acceptTakeback() {
     _socketClient.send('takeback-yes', null);
     setPremove(null);
+    _sendUndoToBluetooth();
   }
 
   void cancelOrDeclineTakeback() {
@@ -528,6 +543,55 @@ class GameController extends AsyncNotifier<GameState> {
 
     _transientMoveTimer = Timer(const Duration(seconds: 10), _reloadGame);
   }
+
+  void _sendBeginToBluetooth() {
+    final service = ref.read(bluetoothServiceProvider);
+    final currentState = state.requireValue;
+    service.handleBegin(
+      position: currentState.currentPosition,
+      variant: currentState.game.meta.variant,
+      lastMove: currentState.game.moveAt(currentState.stepCursor),
+    );
+  }
+
+  void _sendMoveToBluetooth(Move move) {
+    final service = ref.read(bluetoothServiceProvider);
+    final currentState = state.requireValue;
+    service.handleMove(
+      position: currentState.currentPosition,
+      variant: currentState.game.meta.variant,
+      move: move,
+    );
+    if (currentState.game.finished) {
+      service.handleEnd(variant: currentState.game.meta.variant, status: currentState.game.status);
+    }
+  }
+
+  void _sendEndToBluetooth() {
+    final service = ref.read(bluetoothServiceProvider);
+    final currentState = state.requireValue;
+    service.handleEnd(variant: currentState.game.meta.variant, status: currentState.game.status);
+  }
+
+  void _sendUndoToBluetooth() {
+    final service = ref.read(bluetoothServiceProvider);
+    final currentState = state.requireValue;
+    service.handleUndo(
+      position: currentState.currentPosition,
+      variant: currentState.game.meta.variant,
+      lastMove: currentState.game.moveAt(currentState.stepCursor),
+    );
+  }
+
+  // void _sendRedoToBluetooth() {
+  //   final service = ref.read(bluetoothServiceProvider);
+  //   final currentState = state.requireValue;
+  //   service.handleRedo(
+  //     position: currentState.currentPosition,
+  //     variant: currentState.game.meta.variant,
+  //     lastMove: currentState.game.moveAt(currentState.stepCursor),
+  //   );
+  // }
 
   /// Move feedback while playing
   void _playMoveFeedback(SanMove sanMove, {bool skipAnimationDelay = false}) {
@@ -756,6 +820,8 @@ class GameController extends AsyncNotifier<GameState> {
 
         state = AsyncValue.data(newState);
 
+        _sendMoveToBluetooth(Move.parse(data.uci)!);
+
       // End game event
       case 'endData':
         final endData = GameEndEvent.fromJson(event.data as Map<String, dynamic>);
@@ -807,6 +873,8 @@ class GameController extends AsyncNotifier<GameState> {
                 _logger.warning('Could not get post game data', e, s);
               });
         }
+
+        _sendEndToBluetooth();
 
       case 'clockInc':
         final data = event.data as Map<String, dynamic>;
