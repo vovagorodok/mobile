@@ -275,13 +275,43 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'Книга дебютов недоступна офлайн.';
 
   @override
-  String get mobileChallengeCreated => 'Вызов создан: вы получите уведомление о начале партии.\\nВы можете получить доступ к нему с главной вкладки.';
+  String get mobileChallengeCreated => 'Вызов создан: вы получите уведомление о начале партии.\nВы можете получить доступ к нему с главной вкладки.';
 
   @override
   String get mobilePreviousPage => 'Предыдущие';
 
   @override
-  String get mobileOrImportPgnFile => 'Or import a PGN file';
+  String get mobileOrImportPgnFile => 'Или импортировать в PGN файл';
+
+  @override
+  String get variantStandardTitle => 'Стандартные правила шахмат (FIDE)';
+
+  @override
+  String get variantChess960Title => 'Стартовая позиция фигур определяется случайно.';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Проведите короля в центр доски, чтобы выиграть партию.';
+
+  @override
+  String get variantThreeCheckTitle => 'Объявите 3 шаха, чтобы победить.';
+
+  @override
+  String get variantAntichessTitle => 'Проиграйте все ваши фигуры (или получите пат), чтобы выиграть игру.';
+
+  @override
+  String get variantAtomicTitle => 'Взорвите короля противника, чтобы победить.';
+
+  @override
+  String get variantHordeTitle => 'Одна сторона имеет большое количество пешек, когда другая имеет стандартный набор фигур.';
+
+  @override
+  String get variantRacingKingsTitle => 'Проведите своего короля на другою сторону доски, чтобы победить.';
+
+  @override
+  String get variantCrazyhouseTitle => 'Срубленные фигуры могут быть возвращены на доску вместо хода фигурой.';
+
+  @override
+  String get variantFromPositionTitle => 'Стандартные шахматы с заданной позиции';
 
   @override
   String get activityActivity => 'Активность';
@@ -1066,6 +1096,16 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get broadcastKnockouts => 'Нокауты';
+
+  @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'До $param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'До $param';
+  }
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1945,10 +1985,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Взятие или размен фигуры, защищающей другую фигуру, с последующим взятием фигуры, оставшейся без защиты.';
 
   @override
-  String get puzzleThemeCollinearMove => 'Collinear move';
+  String get puzzleThemeCollinearMove => 'Коллинеарный ход';
 
   @override
-  String get puzzleThemeCollinearMoveDescription => 'Two opposing pieces face each other, and one slides along the line of attack without capturing the enemy piece.';
+  String get puzzleThemeCollinearMoveDescription => 'Две противоположные фигуры видят друг друга, и одна передвигается по линии боя, не снимая фигуру противника.';
 
   @override
   String get puzzleThemeCornerMate => 'Угловой мат';
@@ -3793,6 +3833,15 @@ class AppLocalizationsRu extends AppLocalizations {
   String get invalidAuthenticationCode => 'Неверный код аутентификации';
 
   @override
+  String get clearField => 'Очистить поле';
+
+  @override
+  String get orSeparator => 'Или';
+
+  @override
+  String get logInByEmail => 'Авторизация через электронную почту';
+
+  @override
   String get emailMeALink => 'Прислать ссылку мне на почту';
 
   @override
@@ -4715,9 +4764,6 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'Подтверждаю, что я буду следовать всем правилам Lichess.';
-
-  @override
   String get searchOrStartNewDiscussion => 'Найти обсуждение или начать новое';
 
   @override
@@ -5075,6 +5121,11 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get clearSearch => 'Очистить поиск';
+
+  @override
+  String thereAreNoResultsForX(String param) {
+    return 'Нет результатов для «$param»';
+  }
 
   @override
   String get tags => 'Теги';
@@ -6701,4 +6752,12 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Двухфакторная аутентификация';
+
+  @override
+  String get ublogCommunity => 'Сообщество';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'Блог $param';
+  }
 }

@@ -275,13 +275,43 @@ class AppLocalizationsDa extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'Åbningsudforsker er ikke tilgængelig offline.';
 
   @override
-  String get mobileChallengeCreated => 'Udfordring oprettet: Du vil blive underrettet, når partiet starter.\\nDu kan få adgang til det fra hjemfanen.';
+  String get mobileChallengeCreated => 'Udfordring oprettet: Du vil blive underrettet, når partiet starter.\nDu kan få adgang til det fra hjemfanen.';
 
   @override
   String get mobilePreviousPage => 'Forrige';
 
   @override
   String get mobileOrImportPgnFile => 'Eller importer en PGN-fil';
+
+  @override
+  String get variantStandardTitle => 'Standardregler for skak (FIDE)';
+
+  @override
+  String get variantChess960Title => 'Startopstillingen af den bageste rækkes brikker er tilfældig.';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Få din konge ind i centrum for at vinde partiet.';
+
+  @override
+  String get variantThreeCheckTitle => 'Sæt din modstander skak 3 gange for at vinde partiet.';
+
+  @override
+  String get variantAntichessTitle => 'Du vinder partiet ved at miste alle dine brikker (eller blive pat).';
+
+  @override
+  String get variantAtomicTitle => 'Spring din modstanders konge i luften for at vinde.';
+
+  @override
+  String get variantHordeTitle => 'Den ene side har et stort antal bønder, den anden har en normal hær.';
+
+  @override
+  String get variantRacingKingsTitle => 'Få din konge til den anden side af brættet for at vinde.';
+
+  @override
+  String get variantCrazyhouseTitle => 'Erobrede brikker kan genindsættes på brættet i stedet for at foretage et træk.';
+
+  @override
+  String get variantFromPositionTitle => 'Standard skak fra en brugerdefineret position';
 
   @override
   String get activityActivity => 'Aktivitet';
@@ -1026,6 +1056,16 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get broadcastKnockouts => 'Elimineringsrunder';
+
+  @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'U$param';
+  }
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -3737,6 +3777,15 @@ class AppLocalizationsDa extends AppLocalizations {
   String get invalidAuthenticationCode => 'Ugyldig godkendelseskode';
 
   @override
+  String get clearField => 'Ryd felt';
+
+  @override
+  String get orSeparator => 'Eller';
+
+  @override
+  String get logInByEmail => 'Log ind via e-mail';
+
+  @override
   String get emailMeALink => 'E-mail mig et link';
 
   @override
@@ -4659,9 +4708,6 @@ class AppLocalizationsDa extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'Jeg lover, at jeg vil overholde alle Lichess-politikker.';
-
-  @override
   String get searchOrStartNewDiscussion => 'Søg eller start ny diskussion';
 
   @override
@@ -5019,6 +5065,11 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get clearSearch => 'Ryd søgning';
+
+  @override
+  String thereAreNoResultsForX(String param) {
+    return 'Ingen resultater for \"$param\"';
+  }
 
   @override
   String get tags => 'Etiketter';
@@ -6511,4 +6562,12 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'To-faktor-godkendelse';
+
+  @override
+  String get ublogCommunity => 'Fællesskab';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'Blog - $param';
+  }
 }

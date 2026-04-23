@@ -2,7 +2,6 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_player.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
@@ -47,11 +46,20 @@ import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:lichess_mobile/src/widgets/variant_app_bar_title.dart';
 import 'package:logging/logging.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:url_launcher/url_launcher.dart';
+
+extension _AnalysisGameResultColor on AnalysisGameResult {
+  Color? colorFor(Side side, BuildContext context) => switch (this) {
+    AnalysisGameResult.whiteWins =>
+      side == Side.white ? context.lichessColors.good : context.lichessColors.error,
+    AnalysisGameResult.blackWins =>
+      side == Side.white ? context.lichessColors.error : context.lichessColors.good,
+    _ => null,
+  };
+}
 
 final _logger = Logger('AnalysisScreen');
 
-class AnalysisScreen extends ConsumerWidget {
+class AnalysisScreen extends StatelessWidget {
   const AnalysisScreen({required this.options, super.key});
 
   final AnalysisOptions options;
@@ -61,83 +69,8 @@ class AnalysisScreen extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final analysisState = ref.watch(analysisControllerProvider(options));
-
-    return analysisState.when(
-      data: (state) => _AnalysisScreen(options: options),
-      loading: () => const Scaffold(body: Center(child: CircularProgressIndicator.adaptive())),
-      error: (error, _) {
-        debugPrint('Error loading analysis: $error');
-        if (error is UnsupportedVariantException) {
-          return _UnsupportedVariantErrorScreen(error: error);
-        }
-        return Scaffold(
-          appBar: AppBar(title: Text(context.l10n.analysis)),
-          body: FullScreenRetryRequest(
-            onRetry: () {
-              ref.invalidate(analysisControllerProvider(options));
-            },
-          ),
-        );
-      },
-    );
-  }
-}
-
-class _UnsupportedVariantErrorScreen extends StatelessWidget {
-  const _UnsupportedVariantErrorScreen({required this.error});
-
-  final UnsupportedVariantException error;
-
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.analysis)),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              context.l10n.mobileSomethingWentWrong,
-              style: Theme.of(
-                context,
-              ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w600),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 12),
-            Text(
-              context.l10n.mobileUnsupportedVariant(error.variant.name),
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 32),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: Text(context.l10n.cancel),
-                ),
-                Flexible(
-                  child: ElevatedButton.icon(
-                    onPressed: () async {
-                      final gameUrl = 'https://$kLichessHost/${error.gameId.value}';
-                      await launchUrl(Uri.parse(gameUrl), mode: LaunchMode.externalApplication);
-                    },
-                    icon: const Icon(Icons.open_in_browser),
-                    label: const Text('Open game in your browser'),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
+    return _AnalysisScreen(options: options);
   }
 }
 
@@ -322,12 +255,14 @@ class _Body extends ConsumerWidget {
         clock: footerClock,
         isSideToMove: analysisState.currentPosition.turn == pov,
         result: result?.resultToString(pov),
+        resultColor: result?.colorFor(pov, context),
       );
       boardHeader = _PlayerWidget(
         player: headerPlayer,
         clock: headerClock,
         isSideToMove: analysisState.currentPosition.turn == pov.opposite,
         result: result?.resultToString(pov.opposite),
+        resultColor: result?.colorFor(pov.opposite, context),
       );
     } else if (options case Pgn()) {
       // PGN analysis - try to get player info from PGN headers
@@ -341,12 +276,17 @@ class _Body extends ConsumerWidget {
             : null;
 
         boardFooter = footerPlayer != null
-            ? _AnalysisPlayerWidget(player: footerPlayer, result: result?.resultToString(pov))
+            ? _AnalysisPlayerWidget(
+                player: footerPlayer,
+                result: result?.resultToString(pov),
+                resultColor: result?.colorFor(pov, context),
+              )
             : null;
         boardHeader = headerPlayer != null
             ? _AnalysisPlayerWidget(
                 player: headerPlayer,
                 result: result?.resultToString(pov.opposite),
+                resultColor: result?.colorFor(pov.opposite, context),
               )
             : null;
       }
@@ -411,11 +351,13 @@ class _PlayerWidget extends StatelessWidget {
     required this.clock,
     required this.isSideToMove,
     this.result,
+    this.resultColor,
   });
 
   final Player player;
   final Duration? clock;
   final String? result;
+  final Color? resultColor;
   final bool isSideToMove;
 
   @override
@@ -426,7 +368,10 @@ class _PlayerWidget extends StatelessWidget {
       child: Row(
         children: [
           if (result != null) ...[
-            Text(result!, style: const TextStyle(fontWeight: FontWeight.bold)),
+            Text(
+              result!,
+              style: TextStyle(fontWeight: FontWeight.bold, color: resultColor),
+            ),
             const SizedBox(width: 16.0),
           ],
           if (player.user != null)
@@ -587,15 +532,7 @@ class _BottomBar extends ConsumerWidget {
                   )
                   .toList(),
               selectedItem: analysisState.variant,
-              labelBuilder: (Variant variant) => Text.rich(
-                TextSpan(
-                  children: [
-                    WidgetSpan(child: Icon(variant.icon), alignment: PlaceholderAlignment.middle),
-                    const WidgetSpan(child: SizedBox(width: 8)),
-                    TextSpan(text: variant.label),
-                  ],
-                ),
-              ),
+              labelBuilder: (variant) => VariantLabel(variant),
               onSelectedItemChanged: (Variant variant) =>
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     ref
@@ -741,10 +678,11 @@ class _BottomBar extends ConsumerWidget {
 
 /// Player widget for PGN imports, displaying analysis player info
 class _AnalysisPlayerWidget extends StatelessWidget {
-  const _AnalysisPlayerWidget({required this.player, this.result});
+  const _AnalysisPlayerWidget({required this.player, this.result, this.resultColor});
 
   final AnalysisPlayer player;
   final String? result;
+  final Color? resultColor;
 
   @override
   Widget build(BuildContext context) {
@@ -754,7 +692,10 @@ class _AnalysisPlayerWidget extends StatelessWidget {
       child: Row(
         children: [
           if (result != null) ...[
-            Text(result!, style: const TextStyle(fontWeight: .bold)),
+            Text(
+              result!,
+              style: TextStyle(fontWeight: .bold, color: resultColor),
+            ),
             const SizedBox(width: 16.0),
           ],
           if (player.title != null) ...[

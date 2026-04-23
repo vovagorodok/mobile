@@ -141,11 +141,11 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
       }
     });
 
-    final connectivity = ref.watch(connectivityChangesProvider);
+    final isOnlineAsync = ref.watch(onlineStatusProvider);
 
-    return connectivity.when(
+    return isOnlineAsync.when(
       skipLoadingOnReload: true,
-      data: (status) {
+      data: (isOnline) {
         final authUser = ref.watch(authControllerProvider);
         final unreadLichessMessage = ref.watch(unreadMessagesProvider).value?.lichess == true;
         final ongoingGames = ref.watch(ongoingGamesProvider);
@@ -153,12 +153,14 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
         final recentGames = ref.watch(myRecentGamesProvider);
         final nbOfGames = ref.watch(userNumberOfGamesProvider(null)).value ?? 0;
         final isTablet = isTabletOrLarger(context);
-        final featuredTournaments = status.isOnline
+        final featuredTournaments = isOnline
             ? ref.watch(featuredTournamentsProvider)
             : const AsyncValue.data(IListConst<LightTournament>([]));
-        final blogPosts = status.isOnline
+        final blogPosts = isOnline
             ? ref.watch(blogCarouselProvider)
             : const AsyncValue.data(IListConst<BlogPost>([]));
+
+        final isKidMode = ref.watch(kidModeProvider).value ?? false;
 
         // Show the welcome screen if not logged in and there are no recent games and no stored games
         // (i.e. first installation, or the user has never played a game)
@@ -230,7 +232,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
               )
             else ...[
               ...welcomeWidgets,
-              if (status.isOnline)
+              if (isOnline)
                 const _EditableWidget(
                   widget: HomeEditableWidget.quickPairing,
                   shouldShow: true,
@@ -238,13 +240,13 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                 ),
               _EditableWidget(
                 widget: HomeEditableWidget.featuredTournaments,
-                shouldShow: status.isOnline,
+                shouldShow: isOnline,
                 child: FeaturedTournamentsWidget(featured: featuredTournaments),
               ),
-              if (_worker != null)
+              if (_worker != null && !isKidMode)
                 _EditableWidget(
                   widget: HomeEditableWidget.blogCarousel,
-                  shouldShow: status.isOnline,
+                  shouldShow: isOnline,
                   child: _BlogCarouselWidget(blogPosts, _worker!),
                 ),
             ],
@@ -260,7 +262,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
               const _HomeCustomizationTip(),
               const _NNUEFilesOutdatedTip(),
             ],
-            if (status.isOnline)
+            if (isOnline)
               _EditableWidget(
                 widget: HomeEditableWidget.perfCards,
                 shouldShow: authUser != null,
@@ -274,7 +276,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                     children: [
                       const SizedBox(height: 8.0),
                       const _TabletCreateAGameSection(),
-                      if (status.isOnline)
+                      if (isOnline)
                         _OngoingGamesPreview(ongoingGames, maxGamesToShow: 5)
                       else
                         _OfflineCorrespondencePreview(offlineCorresGames, maxGamesToShow: 5),
@@ -288,10 +290,10 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                     children: [
                       const SizedBox(height: 8.0),
                       FeaturedTournamentsWidget(featured: featuredTournaments),
-                      if (_worker != null)
+                      if (_worker != null && !isKidMode)
                         _EditableWidget(
                           widget: HomeEditableWidget.blogCarousel,
-                          shouldShow: status.isOnline,
+                          shouldShow: isOnline,
                           child: _BlogCarouselWidget(blogPosts, _worker!),
                         ),
                       RecentGamesWidget(recentGames: recentGames, nbOfGames: nbOfGames, user: null),
@@ -303,9 +305,9 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
           ];
         } else {
           final hasOngoingGames =
-              (status.isOnline &&
+              (isOnline &&
                   ongoingGames.maybeWhen(data: (data) => data.isNotEmpty, orElse: () => false)) ||
-              (!status.isOnline &&
+              (!isOnline &&
                   offlineCorresGames.maybeWhen(
                     data: (data) => data.isNotEmpty,
                     orElse: () => false,
@@ -322,32 +324,32 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
             ],
             _EditableWidget(
               widget: HomeEditableWidget.perfCards,
-              shouldShow: authUser != null && status.isOnline,
+              shouldShow: authUser != null && isOnline,
               child: AccountPerfCards(
                 padding: Styles.horizontalBodyPadding.add(Styles.sectionBottomPadding),
               ),
             ),
             _EditableWidget(
               widget: HomeEditableWidget.quickPairing,
-              shouldShow: status.isOnline,
+              shouldShow: isOnline,
               child: const Padding(padding: Styles.bodySectionPadding, child: QuickGameMatrix()),
             ),
             _EditableWidget(
               widget: HomeEditableWidget.ongoingGames,
               shouldShow: hasOngoingGames,
-              child: status.isOnline
+              child: isOnline
                   ? _OngoingGamesCarousel(ongoingGames, maxGamesToShow: 20)
                   : _OfflineCorrespondenceCarousel(offlineCorresGames, maxGamesToShow: 20),
             ),
             _EditableWidget(
               widget: HomeEditableWidget.featuredTournaments,
-              shouldShow: status.isOnline,
+              shouldShow: isOnline,
               child: FeaturedTournamentsWidget(featured: featuredTournaments),
             ),
-            if (_worker != null)
+            if (_worker != null && !isKidMode)
               _EditableWidget(
                 widget: HomeEditableWidget.blogCarousel,
-                shouldShow: status.isOnline,
+                shouldShow: isOnline,
                 child: _BlogCarouselWidget(blogPosts, _worker!),
               ),
             _EditableWidget(
@@ -373,7 +375,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
               if (duration.inSeconds < 10) {
                 return;
               }
-              _refreshData(isOnline: status.isOnline);
+              _refreshData(isOnline: isOnline);
             }
           },
           child: _IsEditingHome(
@@ -399,7 +401,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                           ? MediaQuery.paddingOf(context).top + kToolbarHeight
                           : 0.0,
                       key: _refreshKey,
-                      onRefresh: () => _refreshData(isOnline: status.isOnline),
+                      onRefresh: () => _refreshData(isOnline: isOnline),
                       child: content,
                     ),
               bottomNavigationBar: widget.editModeEnabled
@@ -559,6 +561,11 @@ class _EditableWidget extends ConsumerWidget {
               Expanded(
                 child: IgnorePointer(ignoring: isEditing, child: child),
               ),
+              if (widget == HomeEditableWidget.quickPairing)
+                IconButton(
+                  icon: const Icon(Icons.settings),
+                  onPressed: () => showTimeControlPicker(context, ref),
+                ),
             ],
           )
         : widget.alwaysEnabled || isEnabled
@@ -885,13 +892,13 @@ class _PlayerScreenButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final connectivity = ref.watch(connectivityChangesProvider);
+    final isOnlineAsync = ref.watch(onlineStatusProvider);
 
-    return connectivity.maybeWhen(
-      data: (connectivity) => SemanticIconButton(
+    return isOnlineAsync.maybeWhen(
+      data: (isOnline) => SemanticIconButton(
         icon: const Icon(Icons.group_outlined),
         semanticsLabel: context.l10n.players,
-        onPressed: !connectivity.isOnline
+        onPressed: !isOnline
             ? null
             : () {
                 Navigator.of(context).push(PlayerScreen.buildRoute(context));
@@ -915,7 +922,7 @@ class _ChallengeScreenButton extends ConsumerWidget {
     if (authUser == null) {
       return const SizedBox.shrink();
     }
-    final connectivity = ref.watch(connectivityChangesProvider);
+    final isOnlineAsync = ref.watch(onlineStatusProvider);
     final challenges = ref.watch(challengesProvider);
 
     final inwardCount = challenges.value?.inward.length ?? 0;
@@ -925,15 +932,15 @@ class _ChallengeScreenButton extends ConsumerWidget {
       return const SizedBox.shrink();
     }
 
-    return switch (connectivity) {
-      AsyncData(:final value) => SemanticIconButton(
+    return switch (isOnlineAsync) {
+      AsyncData(value: final isOnline) => SemanticIconButton(
         icon: Badge.count(
           count: inwardCount,
           isLabelVisible: inwardCount > 0,
           child: const Icon(LichessIcons.crossed_swords, size: 18.0),
         ),
         semanticsLabel: context.l10n.preferencesNotifyChallenge,
-        onPressed: !value.isOnline
+        onPressed: !isOnline
             ? null
             : () {
                 ref.invalidate(challengesProvider);
@@ -1018,6 +1025,13 @@ class _NNUEFilesOutdatedTip extends ConsumerStatefulWidget {
 
 class _NNUEFilesOutdatedTipState extends ConsumerState<_NNUEFilesOutdatedTip> {
   bool _openedSettings = false;
+  late Future<bool> _checkNNUEFilesFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkNNUEFilesFuture = ref.read(nnueServiceProvider).hasOutdatedNNUEFiles();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -1035,11 +1049,14 @@ class _NNUEFilesOutdatedTipState extends ConsumerState<_NNUEFilesOutdatedTip> {
       // If we come back from the settings, trigger rebuild to hide the widget if the user has updated the NNUE files
       onFocusRegained: () {
         if (_openedSettings) {
-          setState(() {});
+          setState(() {
+            _checkNNUEFilesFuture = nnueService.hasOutdatedNNUEFiles();
+            _openedSettings = false;
+          });
         }
       },
       child: FutureBuilder(
-        future: nnueService.hasOutdatedNNUEFiles(),
+        future: _checkNNUEFilesFuture,
         builder: (context, snapshot) {
           final hasOutdatedNNUEFiles = snapshot.data ?? false;
           if (!hasOutdatedNNUEFiles) {

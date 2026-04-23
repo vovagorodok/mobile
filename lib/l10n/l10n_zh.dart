@@ -275,13 +275,43 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => '离线状态下无法使用开局探索器';
 
   @override
-  String get mobileChallengeCreated => '挑战已创建：对局开始时您将收到通知。\\n您可以在首页选项卡中访问它。';
+  String get mobileChallengeCreated => '挑战已创建：对局开始时您将收到通知。\n您可以在首页选项卡中访问它。';
 
   @override
   String get mobilePreviousPage => '上一页';
 
   @override
   String get mobileOrImportPgnFile => '或者导入 PGN 文件';
+
+  @override
+  String get variantStandardTitle => '国际象棋标准规则（国际棋联）';
+
+  @override
+  String get variantChess960Title => '底线棋子的起始位置随机生成';
+
+  @override
+  String get variantKingOfTheHillTitle => '将您的王移至中心区域即可获胜';
+
+  @override
+  String get variantThreeCheckTitle => '将军对手 3 次即可获胜';
+
+  @override
+  String get variantAntichessTitle => '输掉所有棋子（或被逼和）即可获胜';
+
+  @override
+  String get variantAtomicTitle => '“核爆”对手的王即可获胜';
+
+  @override
+  String get variantHordeTitle => '一方拥有大量兵，另一方拥有常规军队';
+
+  @override
+  String get variantRacingKingsTitle => '将您的王移动至棋盘另一侧即可获胜';
+
+  @override
+  String get variantCrazyhouseTitle => '被吃掉的棋子可以放回棋盘上，代替走子';
+
+  @override
+  String get variantFromPositionTitle => '来自自定义局面的标准国际象棋';
 
   @override
   String get activityActivity => '动态';
@@ -1006,6 +1036,16 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get broadcastKnockouts => '淘汰赛';
+
+  @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'U$param';
+  }
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -3709,6 +3749,15 @@ class AppLocalizationsZh extends AppLocalizations {
   String get invalidAuthenticationCode => '无效的验证码';
 
   @override
+  String get clearField => '清除字段';
+
+  @override
+  String get orSeparator => '或';
+
+  @override
+  String get logInByEmail => '通过邮件登录';
+
+  @override
   String get emailMeALink => '将链接发送到我的邮箱';
 
   @override
@@ -4631,9 +4680,6 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => '我同意我将遵守所有 Lichess 规范。';
-
-  @override
   String get searchOrStartNewDiscussion => '搜索或开始新对话';
 
   @override
@@ -4673,7 +4719,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get correspondenceDesc => '通讯棋对局：每步棋一天或数天';
 
   @override
-  String get puzzleDesc => '国际象棋战术训练器';
+  String get puzzleDesc => '战术训练';
 
   @override
   String get important => '重要提示';
@@ -4991,6 +5037,11 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get clearSearch => '清除搜索';
+
+  @override
+  String thereAreNoResultsForX(String param) {
+    return '未找到“$param”的结果';
+  }
 
   @override
   String get tags => '标签';
@@ -6416,6 +6467,14 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => '双重认证';
+
+  @override
+  String get ublogCommunity => '社区';
+
+  @override
+  String ublogXBlog(String param) {
+    return '$param 的博客';
+  }
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -6481,10 +6540,16 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get mobileMustBeLoggedIn => '您必須登入才能查看此頁面。';
 
   @override
+  String get mobileNewGame => '開始新局';
+
+  @override
   String get mobileNoSearchResults => '沒有任何搜尋結果';
 
   @override
   String get mobileNotAllFeaturesAreAvailable => '請注意，目前尚未提供舊版 App 或網站的所有功能，但我們會持續新增。';
+
+  @override
+  String get mobileNotFollowingAnyUser => '您尚未追蹤任何使用者。';
 
   @override
   String get mobileOkButton => '確認';
@@ -6651,6 +6716,12 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get mobileWelcomeToLichessApp => '歡迎使用 Lichess 應用程式！';
+
+  @override
+  String get mobileViewGame => '查看對局';
+
+  @override
+  String get variantStandardTitle => '標準西洋棋規則';
 
   @override
   String get activityActivity => '活動';
@@ -10718,9 +10789,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   }
 
   @override
-  String get agreementPolicy => '我同意我將會遵守Lichess的規則';
-
-  @override
   String get searchOrStartNewDiscussion => '尋找或開始聊天';
 
   @override
@@ -12381,4 +12449,12 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get tfaTwoFactorAuth => '兩步驟驗證';
+
+  @override
+  String get ublogCommunity => '社群';
+
+  @override
+  String ublogXBlog(String param) {
+    return '$param的部落格';
+  }
 }

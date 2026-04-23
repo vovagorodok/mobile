@@ -67,7 +67,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Tem de iniciar sessão para visualizar esta página.';
 
   @override
-  String get mobileNewGame => 'New game';
+  String get mobileNewGame => 'Novo jogo';
 
   @override
   String get mobileNoSearchResults => 'Sem resultados';
@@ -245,7 +245,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mobileWelcomeToLichessApp => 'Bem-vindo(a) à aplicação do Lichess!';
 
   @override
-  String get mobileViewGame => 'View Game';
+  String get mobileViewGame => 'Ver Jogo';
 
   @override
   String get mobileCustomizeHomeTip => 'Tip: You can add more widgets to the Home Screen or remove those you don\'t need!';
@@ -275,13 +275,43 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'Opening Explorer is not available offline.';
 
   @override
-  String get mobileChallengeCreated => 'Challenge created: You will be notified when the game starts.\\nYou can access it from the home tab.';
+  String get mobileChallengeCreated => 'Challenge created: You will be notified when the game starts.\nYou can access it from the home tab.';
 
   @override
   String get mobilePreviousPage => 'Previous';
 
   @override
   String get mobileOrImportPgnFile => 'Or import a PGN file';
+
+  @override
+  String get variantStandardTitle => 'Regras padrão do xadrez (FIDE)';
+
+  @override
+  String get variantChess960Title => 'A posição inicial das peças da primeira fila é aleatória.';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Leve o teu Rei para o centro para ganhar o jogo.';
+
+  @override
+  String get variantThreeCheckTitle => 'Xeque o teu adversário 3 vezes para ganhar o jogo.';
+
+  @override
+  String get variantAntichessTitle => 'Perde todas as tuas peças (ou fica em impedido) para ganhar o jogo.';
+
+  @override
+  String get variantAtomicTitle => 'Explode o rei do adversário para vencer.';
+
+  @override
+  String get variantHordeTitle => 'Um lado tem um grande número de peões, o outro tem um exército normal.';
+
+  @override
+  String get variantRacingKingsTitle => 'Leve o seu rei para o outro lado do tabuleiro para ganhar.';
+
+  @override
+  String get variantCrazyhouseTitle => 'As peças capturadas podem ser colocadas de volta no tabuleiro em vez de mover uma peça.';
+
+  @override
+  String get variantFromPositionTitle => 'Standard chess from a custom position';
 
   @override
   String get activityActivity => 'Atividade';
@@ -1026,6 +1056,16 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get broadcastKnockouts => 'Eliminatórias';
+
+  @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'Sub$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'Sub$param';
+  }
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -3737,6 +3777,15 @@ class AppLocalizationsPt extends AppLocalizations {
   String get invalidAuthenticationCode => 'Código de autenticação inválido';
 
   @override
+  String get clearField => 'Clear field';
+
+  @override
+  String get orSeparator => 'Or';
+
+  @override
+  String get logInByEmail => 'Log in by email';
+
+  @override
   String get emailMeALink => 'Envie-me um link por e-mail';
 
   @override
@@ -4659,9 +4708,6 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'Concordo que seguirei todas as políticas do Lichess.';
-
-  @override
   String get searchOrStartNewDiscussion => 'Pesquisa ou começa uma nova conversa';
 
   @override
@@ -5019,6 +5065,11 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get clearSearch => 'Limpar pesquisa';
+
+  @override
+  String thereAreNoResultsForX(String param) {
+    return 'No results for \"$param\"';
+  }
 
   @override
   String get tags => 'Etiquetas';
@@ -6511,6 +6562,14 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Autenticação de dois fatores';
+
+  @override
+  String get ublogCommunity => 'Comunidade';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'Blog de $param';
+  }
 }
 
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).
@@ -6784,13 +6843,43 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get mobileOpeningExplorerNotAvailableOffline => 'O explorador de aberturas não está disponível offline.';
 
   @override
-  String get mobileChallengeCreated => 'Desafio criado: Você será notificado quando a partida começar.\\nVocê pode acessá-lo pela aba de início.';
+  String get mobileChallengeCreated => 'Desafio criado: Você será notificado quando a partida começar.\nVocê pode acessá-lo pela aba de início.';
 
   @override
   String get mobilePreviousPage => 'Anterior';
 
   @override
   String get mobileOrImportPgnFile => 'Ou importe um arquivo PGN';
+
+  @override
+  String get variantStandardTitle => 'Regras padrão de xadrez (FIDE)';
+
+  @override
+  String get variantChess960Title => 'A posição inicial das peças da primeira fila é aleatória.';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Traga seu Rei para o centro para ganhar a partida.';
+
+  @override
+  String get variantThreeCheckTitle => 'Coloque seu oponente em xeque 3 vezes para ganhar a partida.';
+
+  @override
+  String get variantAntichessTitle => 'Perca todas as suas peças (ou fique em afogamento) para ganhar o jogo.';
+
+  @override
+  String get variantAtomicTitle => 'Detone o rei do seu oponente para ganhar.';
+
+  @override
+  String get variantHordeTitle => 'Um lado tem um grande número de peões; o outro tem um exército normal.';
+
+  @override
+  String get variantRacingKingsTitle => 'Leve seu rei para o outro lado do tabuleiro para vencer.';
+
+  @override
+  String get variantCrazyhouseTitle => 'As peças capturadas podem ser devolvidas ao tabuleiro ao invés de mover uma peça.';
+
+  @override
+  String get variantFromPositionTitle => 'Xadrez padrão a partir de uma posição personalizada';
 
   @override
   String get activityActivity => 'Atividade';
@@ -7535,6 +7624,16 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get broadcastKnockouts => 'Mata-matas';
+
+  @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'Sub-$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'Sub $param';
+  }
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -10246,6 +10345,15 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get invalidAuthenticationCode => 'Código de verificação inválido';
 
   @override
+  String get clearField => 'Limpar campo';
+
+  @override
+  String get orSeparator => 'Ou';
+
+  @override
+  String get logInByEmail => 'Faça login por email';
+
+  @override
   String get emailMeALink => 'Me envie um link';
 
   @override
@@ -11168,9 +11276,6 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   }
 
   @override
-  String get agreementPolicy => 'Eu concordo que seguirei todas as normas do Lichess.';
-
-  @override
   String get searchOrStartNewDiscussion => 'Procurar ou iniciar nova conversa';
 
   @override
@@ -11528,6 +11633,11 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get clearSearch => 'Limpar busca';
+
+  @override
+  String thereAreNoResultsForX(String param) {
+    return 'Nenhum resultado para \"$param\"';
+  }
 
   @override
   String get tags => 'Etiquetas';
@@ -13020,4 +13130,12 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get tfaTwoFactorAuth => 'Autenticação de dois fatores';
+
+  @override
+  String get ublogCommunity => 'Comunidade';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'Blog do(a) $param';
+  }
 }

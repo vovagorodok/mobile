@@ -275,13 +275,43 @@ class AppLocalizationsSv extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'Opening Explorer is not available offline.';
 
   @override
-  String get mobileChallengeCreated => 'Challenge created: You will be notified when the game starts.\\nYou can access it from the home tab.';
+  String get mobileChallengeCreated => 'Challenge created: You will be notified when the game starts.\nYou can access it from the home tab.';
 
   @override
   String get mobilePreviousPage => 'Previous';
 
   @override
   String get mobileOrImportPgnFile => 'Or import a PGN file';
+
+  @override
+  String get variantStandardTitle => 'Standardregler för schack (FIDE)';
+
+  @override
+  String get variantChess960Title => 'Pjäspositioner på bakre raden är slumpade.';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Ta din kung till centrum för att vinna spelet.';
+
+  @override
+  String get variantThreeCheckTitle => 'Schacka din motståndare 3 gånger för att vinna.';
+
+  @override
+  String get variantAntichessTitle => 'Förlora alla pjäser (eller hamna i patt) för att vinna spelet.';
+
+  @override
+  String get variantAtomicTitle => 'Spräng din motståndares kung för att vinna spelet.';
+
+  @override
+  String get variantHordeTitle => 'Ena sidan har ett stort antal bönder, den andra har normal pjäsuppställning.';
+
+  @override
+  String get variantRacingKingsTitle => 'Få din kung till andra sidan av brädet för att vinna.';
+
+  @override
+  String get variantCrazyhouseTitle => 'Fångade pjäser kan återplaceras på brädet istället för att flytta en pjäs.';
+
+  @override
+  String get variantFromPositionTitle => 'Standard chess from a custom position';
 
   @override
   String get activityActivity => 'Aktivitet';
@@ -1026,6 +1056,16 @@ class AppLocalizationsSv extends AppLocalizations {
 
   @override
   String get broadcastKnockouts => 'Knockouts';
+
+  @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'U$param';
+  }
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -3737,6 +3777,15 @@ class AppLocalizationsSv extends AppLocalizations {
   String get invalidAuthenticationCode => 'Ogiltig bekräftelsekod';
 
   @override
+  String get clearField => 'Clear field';
+
+  @override
+  String get orSeparator => 'Or';
+
+  @override
+  String get logInByEmail => 'Log in by email';
+
+  @override
   String get emailMeALink => 'Skicka en länk till min e-post';
 
   @override
@@ -4659,9 +4708,6 @@ class AppLocalizationsSv extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'Jag instämmer med att jag kommer att följa alla Lichess-regler.';
-
-  @override
   String get searchOrStartNewDiscussion => 'Sök eller starta ny konversation';
 
   @override
@@ -5019,6 +5065,11 @@ class AppLocalizationsSv extends AppLocalizations {
 
   @override
   String get clearSearch => 'Rensa sökning';
+
+  @override
+  String thereAreNoResultsForX(String param) {
+    return 'No results for \"$param\"';
+  }
 
   @override
   String get tags => 'Taggar';
@@ -6511,4 +6562,12 @@ class AppLocalizationsSv extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Tvåfaktorsautentisering';
+
+  @override
+  String get ublogCommunity => 'Community';
+
+  @override
+  String ublogXBlog(String param) {
+    return '${param}s blogg';
+  }
 }

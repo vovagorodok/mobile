@@ -230,6 +230,24 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                 )
               : body,
         );
+      case AsyncData(value: OpenChallengeCreatedState(:final challenge)):
+        return Scaffold(
+          resizeToAvoidBottomInset: false,
+          appBar: AppBar(
+            leading: const SocketPingRatingIcon(),
+            title: _ChallengeGameTitle(
+              challenge: (widget.source as UserChallengeSource).challengeRequest,
+            ),
+          ),
+          body: PopScope(
+            canPop: false,
+            child: OpenChallengeLoadingContent(
+              id: challenge.id,
+              challengeRequest: (widget.source as UserChallengeSource).challengeRequest,
+              cancelChallenge: ref.read(createGameServiceProvider).cancelChallenge,
+            ),
+          ),
+        );
       case AsyncError(error: final e, stackTrace: final s):
         debugPrint('SEVERE: [GameScreen] could not create game; $e\n$s');
 
@@ -258,7 +276,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
             seek,
             () => ref.read(createGameServiceProvider).cancelSeek(),
           ),
-          UserChallengeSource(:final challengeRequest) => ChallengeLoadingContent(
+          UserChallengeSource(:final challengeRequest) => UserChallengeLoadingContent(
             challengeRequest,
             () => ref.read(createGameServiceProvider).cancelChallenge(),
           ),
@@ -274,9 +292,8 @@ class _GameScreenState extends ConsumerState<GameScreen> {
             leading: const SocketPingRatingIcon(),
             title: switch (widget.source) {
               LobbySource(:final seek) => _LobbyGameTitle(seek: seek),
-              UserChallengeSource(:final challengeRequest) => _ChallengeGameTitle(
-                challenge: challengeRequest,
-              ),
+              UserChallengeSource(:final challengeRequest) when challengeRequest.destUser != null =>
+                _ChallengeGameTitle(challenge: challengeRequest),
               _ => const SizedBox.shrink(),
             },
           ),

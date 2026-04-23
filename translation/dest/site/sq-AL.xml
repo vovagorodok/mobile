@@ -604,6 +604,9 @@ loje dhe URL për ta ndarë me të tjerë.</string>
   <string name="invalidUsernameOrPassword">Emër përdorues ose fjalëkalim i pavlefshëm</string>
   <string name="incorrectPassword">Fjalëkalim i pasaktë</string>
   <string name="invalidAuthenticationCode">Kod i pavlefshëm mirëfilltësimi</string>
+  <string name="clearField">Spatroje fushën</string>
+  <string name="orSeparator">Ose</string>
+  <string name="logInByEmail">Hyni me email</string>
   <string name="emailMeALink">Dërgomëni lidhjen me email</string>
   <string name="currentPassword">Fjalëkalimi i tanishëm</string>
   <string name="newPassword">Fjalëkalimi i ri</string>
@@ -913,7 +916,6 @@ loje dhe URL për ta ndarë me të tjerë.</string>
   <string name="agreementAssistance">Pranoj se s’do të marr kurrë asistencë gjatë lojërave të mia (nga një kompjuter, libër apo bazë të dhënash shahu, ose nga persona tjetër).</string>
   <string name="agreementNice">Pranoj se do të tregoj përherë respekt për lojtarët e tjerë.</string>
   <string name="agreementMultipleAccounts" comment="%s will be replaced with the translation of 'termsOfService'">Pranoj se nuk do të krijoj disa llogari (hiq për arsyet e deklaruara te %s).</string>
-  <string name="agreementPolicy">Jam dakord se do të ndjek krejt rregullat e Lichess-it.</string>
   <string name="searchOrStartNewDiscussion">Kërkoni ose filloni bisedë të re</string>
   <string name="edit">Përpunojeni</string>
   <string name="rapid">E shpejtë</string>
@@ -1023,5 +1025,6 @@ Krejt kostot operative, zhvillimi dhe lënda financohen vetëm me dhurime nga p�
   <string name="offline" comment="status of a user">jashtë linje</string>
   <string name="search">Kërko</string>
   <string name="clearSearch">Spastro kërkimin</string>
+  <string name="thereAreNoResultsForX">S’ka përfundime për “%s”</string>
   <string name="tags">Etiketa</string>
 </resources>

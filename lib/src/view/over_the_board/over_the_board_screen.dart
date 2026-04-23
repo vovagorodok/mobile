@@ -6,6 +6,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/bluetooth/bluetooth_service.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -363,14 +364,24 @@ class _BodyState extends ConsumerState<_Body> {
                           : gameState.turn == Side.white
                           ? PlayerSide.white
                           : PlayerSide.black,
-                      onPromotionSelection: ref
-                          .read(overTheBoardGameControllerProvider.notifier)
-                          .onPromotionSelection,
+                      onPromotionSelection: (role) {
+                        ref
+                            .read(overTheBoardGameControllerProvider.notifier)
+                            .onPromotionSelection(role);
+                        if (role != null) {
+                          ref
+                              .read(overTheBoardClockProvider.notifier)
+                              .onMove(newSideToMove: gameState.turn.opposite);
+                        }
+                      },
                       promotionMove: gameState.promotionMove,
                       onMove: (move, {viaDragAndDrop}) {
-                        ref
-                            .read(overTheBoardClockProvider.notifier)
-                            .onMove(newSideToMove: gameState.turn.opposite);
+                        if (move is! NormalMove ||
+                            !isPromotionPawnMove(gameState.currentPosition, move)) {
+                          ref
+                              .read(overTheBoardClockProvider.notifier)
+                              .onMove(newSideToMove: gameState.turn.opposite);
+                        }
                         ref.read(overTheBoardGameControllerProvider.notifier).makeMove(move);
                       },
                       premovable: null,
@@ -578,6 +589,9 @@ class _Player extends ConsumerWidget {
     final gameState = ref.watch(overTheBoardGameControllerProvider);
     final boardPreferences = ref.watch(boardPreferencesProvider);
     final clock = ref.watch(overTheBoardClockProvider);
+    final clockTenths = ref.watch(
+      accountPreferencesProvider.select((prefs) => prefs.value?.clockTenths),
+    );
 
     return GamePlayer(
       game: gameState.game,
@@ -596,6 +610,7 @@ class _Player extends ConsumerWidget {
               emergencyThreshold: Duration(
                 seconds: (clock.timeIncrement.time * 0.125).clamp(10, 60).toInt(),
               ),
+              clockTenths: clockTenths,
             ),
     );
   }

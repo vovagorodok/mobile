@@ -674,6 +674,9 @@
   <string name="invalidUsernameOrPassword">Недійсне ім\'я користувача або пароль</string>
   <string name="incorrectPassword">Невірний пароль</string>
   <string name="invalidAuthenticationCode">Недійсний код автентифікації</string>
+  <string name="clearField">Очистити поле</string>
+  <string name="orSeparator">або</string>
+  <string name="logInByEmail">Увійти через електронну пошту</string>
   <string name="emailMeALink">Надішліть мені посилання</string>
   <string name="currentPassword">Поточний пароль</string>
   <string name="newPassword">Новий пароль</string>
@@ -1004,7 +1007,6 @@
   <string name="agreementAssistance">Я погоджуюся, що не буду отримувати допомогу під час моїх ігор (від шахового комп\'ютера, книги, бази даних або іншої особи).</string>
   <string name="agreementNice">Я погоджуюся, що я завжди буду ставитись чемно до інших гравців.</string>
   <string name="agreementMultipleAccounts" comment="%s will be replaced with the translation of 'termsOfService'">Я погоджуюсь с тим, що не буду створювати декілька облікових записів (крім причин, описаних у %s).</string>
-  <string name="agreementPolicy">Я погоджуюся, що я буду слідувати усім правилам Lichess.</string>
   <string name="searchOrStartNewDiscussion">Шукати або розпочати бесіду</string>
   <string name="edit">Змінити</string>
   <string name="ultraBullet" comment="Probably best left untranslated. Leave it as 'UltraBullet' unless your language has a better word for it.">Ультракуля</string>
@@ -1116,6 +1118,7 @@
   <string name="offline" comment="status of a user">не в мережі</string>
   <string name="search">Пошук</string>
   <string name="clearSearch">Очистити пошук</string>
+  <string name="thereAreNoResultsForX">Нічого не знайдено для «%s»</string>
   <string name="tags">Теги</string>
   <string name="enPassant">Взяття на проході</string>
 </resources>

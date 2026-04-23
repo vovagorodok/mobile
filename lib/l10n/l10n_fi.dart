@@ -275,13 +275,43 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'Avausselain ei ole käytettävissä offline-tilassa.';
 
   @override
-  String get mobileChallengeCreated => 'Haaste esitetty. Saat ilmoituksen, kun peli alkaa.\\nNäet sen etusivulla.';
+  String get mobileChallengeCreated => 'Haaste esitetty. Saat ilmoituksen, kun peli alkaa.\nNäet sen etusivulla.';
 
   @override
   String get mobilePreviousPage => 'Edellinen';
 
   @override
   String get mobileOrImportPgnFile => 'Tai tuo PGN-tiedosto';
+
+  @override
+  String get variantStandardTitle => 'Shakin perussäännöt (FIDE)';
+
+  @override
+  String get variantChess960Title => 'Takarivin nappuloiden järjestys pelin alussa on satunnainen.';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Voita peli tuomalla kuninkaasi keskustaan.';
+
+  @override
+  String get variantThreeCheckTitle => 'Voita peli shakkaamalla vastustajaa kolmesti.';
+
+  @override
+  String get variantAntichessTitle => 'Voita peli menettämällä kaikki nappulasi (tai pääsemällä pattiin).';
+
+  @override
+  String get variantAtomicTitle => 'Voita peli räjäyttämällä vastustajasi kuningas.';
+
+  @override
+  String get variantHordeTitle => 'Yhdellä pelaajalla on suuri määrä sotilaita, toisella on normaali armeija.';
+
+  @override
+  String get variantRacingKingsTitle => 'Voita peli viemällä kuninkaasi laudan toiseen päähän.';
+
+  @override
+  String get variantCrazyhouseTitle => 'Lyödyn nappulan pudottaminen takaisin laudalle on siirto yhtä lailla kuin nappulan siirtäminenkin.';
+
+  @override
+  String get variantFromPositionTitle => 'Normaalia shakkia itse määriteltävän aseman pohjalta';
 
   @override
   String get activityActivity => 'Toiminta';
@@ -1026,6 +1056,16 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get broadcastKnockouts => 'Pudotuspelit';
+
+  @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'Alle $param';
+  }
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -2678,13 +2718,13 @@ class AppLocalizationsFi extends AppLocalizations {
   String get searchTimeDescription => 'Aseta uusien asemien arvioimisaika';
 
   @override
-  String get threads => 'Threads';
+  String get threads => 'Säikeitä';
 
   @override
-  String get threadsDescription => 'Set this below your CPU\'s thread count, the ticks mark a good safe choice';
+  String get threadsDescription => 'Aseta tähän prosessorisi säikeiden määrää pienempi luku, rastit osoittavat hyvän ja turvallisen valinnan';
 
   @override
-  String get threadsDescriptionMobile => 'More threads will use more battery for better analysis';
+  String get threadsDescriptionMobile => 'Mitä enemmän säikeitä, sitä enemmän akku kuluu analyysin parantamiseksi';
 
   @override
   String get cpus => 'Suorittimia';
@@ -2693,7 +2733,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get memory => 'Muistia';
 
   @override
-  String get memoryDescription => 'Higher values may improve performance';
+  String get memoryDescription => 'Korkeammat arvot saattavat parantaa suorituskykyä';
 
   @override
   String get infiniteAnalysis => 'Loputon analyysi';
@@ -3737,6 +3777,15 @@ class AppLocalizationsFi extends AppLocalizations {
   String get invalidAuthenticationCode => 'Tunnistautumiskoodi ei kelpaa';
 
   @override
+  String get clearField => 'Tyhjennä kenttä';
+
+  @override
+  String get orSeparator => 'Tai';
+
+  @override
+  String get logInByEmail => 'Kirjaudu sisään sähköpostilla';
+
+  @override
   String get emailMeALink => 'Lähetä minulle linkki';
 
   @override
@@ -4659,9 +4708,6 @@ class AppLocalizationsFi extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'Vakuutan että noudatan Lichessin sääntöjä.';
-
-  @override
   String get searchOrStartNewDiscussion => 'Hae tai aloita uusi keskustelu';
 
   @override
@@ -5019,6 +5065,11 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get clearSearch => 'Tyhjennä haku';
+
+  @override
+  String thereAreNoResultsForX(String param) {
+    return 'No results for \"$param\"';
+  }
 
   @override
   String get tags => 'Tunnisteet';
@@ -6511,4 +6562,12 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Kaksivaiheinen tunnistautuminen';
+
+  @override
+  String get ublogCommunity => 'Yhteisön blogit';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'Käyttäjän $param blogi';
+  }
 }

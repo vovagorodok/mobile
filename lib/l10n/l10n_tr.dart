@@ -275,13 +275,43 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'Açılış Kaşifi çevrimdışı kullanılamaz.';
 
   @override
-  String get mobileChallengeCreated => 'Meydan okuma oluşturuldu: Oyun başladığında size bildirim gönderilecektir.\\nOyuna ana sekmeden erişebilirsiniz.';
+  String get mobileChallengeCreated => 'Meydan okuma oluşturuldu: Oyun başladığında size bildirim gönderilecektir.\nOyuna ana sekmeden erişebilirsiniz.';
 
   @override
   String get mobilePreviousPage => 'Önceki';
 
   @override
   String get mobileOrImportPgnFile => 'Veya bir PGN dosyası aktar';
+
+  @override
+  String get variantStandardTitle => 'Satrancın standart kuralları (FIDE)';
+
+  @override
+  String get variantChess960Title => 'Kendi sıranızdaki taşlarınızın başlangıç ​​pozisyonu rastgele belirlenir.';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Oyunu kazanmak için şahınızı merkeze getirin.';
+
+  @override
+  String get variantThreeCheckTitle => 'Oyunu kazanmak için rakibinize 3 kez şah çekin.';
+
+  @override
+  String get variantAntichessTitle => 'Oyunu kazanmak için tüm taşlarınızı kaybedin (veya pat olun).';
+
+  @override
+  String get variantAtomicTitle => 'Kazanmak için rakibinizin şahını patlatın.';
+
+  @override
+  String get variantHordeTitle => 'Bir tarafta çok sayıda piyon varken, öbür tarafta normal ordu vardır.';
+
+  @override
+  String get variantRacingKingsTitle => 'Kazanmak için şahınızı tahtanın öbür tarafına geçirin.';
+
+  @override
+  String get variantCrazyhouseTitle => 'Hamle yapmak yerine yediğiniz taşları tahtaya koyabilirsiniz.';
+
+  @override
+  String get variantFromPositionTitle => 'Özel pozisyondan standart satranç';
 
   @override
   String get activityActivity => 'Son Etkinlikler';
@@ -1026,6 +1056,16 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get broadcastKnockouts => 'Eleme';
+
+  @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'U$param';
+  }
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -3737,6 +3777,15 @@ class AppLocalizationsTr extends AppLocalizations {
   String get invalidAuthenticationCode => 'Geçersiz kimlik doğrulama kodu';
 
   @override
+  String get clearField => 'Alanı temizle';
+
+  @override
+  String get orSeparator => 'Veya';
+
+  @override
+  String get logInByEmail => 'E-posta ile giriş yap';
+
+  @override
   String get emailMeALink => 'E-Posta ile giriş linki yolla';
 
   @override
@@ -4659,9 +4708,6 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'Lichess kurallarını takip edeceğim.';
-
-  @override
   String get searchOrStartNewDiscussion => 'Tartışma ara veya yenisini başlat';
 
   @override
@@ -5019,6 +5065,11 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get clearSearch => 'Aramayı temizle';
+
+  @override
+  String thereAreNoResultsForX(String param) {
+    return '\"$param\" için sonuç bulunamadı';
+  }
 
   @override
   String get tags => 'Etiketler';
@@ -5720,7 +5771,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String studyStudiesCreatedByX(String param) {
-    return 'Çalışmalar $param tarafından oluşturulmuştur';
+    return '$param tarafından oluşturulan çalışmalar';
   }
 
   @override
@@ -6055,7 +6106,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get studyMistake => 'Hata';
 
   @override
-  String get studyBrilliantMove => 'Muhteşem hamle';
+  String get studyBrilliantMove => 'Göz alıcı hamle';
 
   @override
   String get studyBlunder => 'Vahim hata';
@@ -6511,4 +6562,12 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'İki faktörlü kimlik doğrulama';
+
+  @override
+  String get ublogCommunity => 'Topluluk';
+
+  @override
+  String ublogXBlog(String param) {
+    return '$param Bloğu';
+  }
 }

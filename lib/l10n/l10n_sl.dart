@@ -284,6 +284,36 @@ class AppLocalizationsSl extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Ali uvozite datoteko PGN';
 
   @override
+  String get variantStandardTitle => 'Standardna pravila šaha (FIDE)';
+
+  @override
+  String get variantChess960Title => 'Začetni položaj figur v prvi vrstici je naključen.';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Pripelji svojega kralja v sredino, da zmagaš v igri.';
+
+  @override
+  String get variantThreeCheckTitle => 'Za zmago v igri trikrat napadite nasprotnikovega kralja.';
+
+  @override
+  String get variantAntichessTitle => 'Izgubite vse svoje figure (ali se znajdete v pat poziciji), da zmagate v igri.';
+
+  @override
+  String get variantAtomicTitle => 'Za zmago uniči nasprotnikovega kralja.';
+
+  @override
+  String get variantHordeTitle => 'Ena stran ima veliko število kmetov, druga pa normalno vojsko.';
+
+  @override
+  String get variantRacingKingsTitle => 'Premakni svojega kralja na drugo stran plošče, da zmagaš.';
+
+  @override
+  String get variantCrazyhouseTitle => 'Zajete figure lahko namesto premikanja figure spustite nazaj na šahovnico.';
+
+  @override
+  String get variantFromPositionTitle => 'Standard chess from a custom position';
+
+  @override
   String get activityActivity => 'Aktivnost';
 
   @override
@@ -1066,6 +1096,16 @@ class AppLocalizationsSl extends AppLocalizations {
 
   @override
   String get broadcastKnockouts => 'Nokauti';
+
+  @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'U$param';
+  }
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -3793,6 +3833,15 @@ class AppLocalizationsSl extends AppLocalizations {
   String get invalidAuthenticationCode => 'Nepravilna avtentikacijska koda';
 
   @override
+  String get clearField => 'Počisti polje';
+
+  @override
+  String get orSeparator => 'Ali';
+
+  @override
+  String get logInByEmail => 'Prijava po e-pošti';
+
+  @override
   String get emailMeALink => 'Pošlji mi povezavo po elektronski pošti';
 
   @override
@@ -4715,9 +4764,6 @@ class AppLocalizationsSl extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'Strinjam se, da bom spoštoval vsa pravila Lichess strani.';
-
-  @override
   String get searchOrStartNewDiscussion => 'Poišči ali prični nov pogovor';
 
   @override
@@ -5075,6 +5121,11 @@ class AppLocalizationsSl extends AppLocalizations {
 
   @override
   String get clearSearch => 'Počisti iskanje';
+
+  @override
+  String thereAreNoResultsForX(String param) {
+    return 'No results for \"$param\"';
+  }
 
   @override
   String get tags => 'Oznake';
@@ -6701,4 +6752,12 @@ class AppLocalizationsSl extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Dvojna avtentikacija';
+
+  @override
+  String get ublogCommunity => 'Skupnost';
+
+  @override
+  String ublogXBlog(String param) {
+    return '$param blog';
+  }
 }

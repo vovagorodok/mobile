@@ -67,7 +67,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Debes iniciar sesión para ver esta página.';
 
   @override
-  String get mobileNewGame => 'Partida nueva';
+  String get mobileNewGame => 'Nueva Partida';
 
   @override
   String get mobileNoSearchResults => 'Sin resultados';
@@ -275,13 +275,43 @@ class AppLocalizationsEs extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'El explorador de aperturas no está disponible sin conexión.';
 
   @override
-  String get mobileChallengeCreated => 'Desafío creado: Se te notificará cuando comience la partida.\\nPuedes acceder a ella desde la pestaña de inicio.';
+  String get mobileChallengeCreated => 'Desafío creado: Se te notificará cuando comience la partida.\nPuedes acceder a ella desde la pestaña de inicio.';
 
   @override
   String get mobilePreviousPage => 'Anterior';
 
   @override
   String get mobileOrImportPgnFile => 'O importa un archivo PGN';
+
+  @override
+  String get variantStandardTitle => 'Reglas de ajedrez estándar (FIDE)';
+
+  @override
+  String get variantChess960Title => 'La posición inicial de las piezas es aleatoria.';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Lleva a tu rey al centro para ganar la partida.';
+
+  @override
+  String get variantThreeCheckTitle => 'Poner en jaque a tu oponente 3 veces para ganar la partida.';
+
+  @override
+  String get variantAntichessTitle => 'Pierde todas tus piezas (o una posición de ahogado) para ganar la partida.';
+
+  @override
+  String get variantAtomicTitle => 'Haz explotar al rey de tu oponente para ganar.';
+
+  @override
+  String get variantHordeTitle => 'Un jugador tiene un gran número de peones, el otro posee un ejército normal.';
+
+  @override
+  String get variantRacingKingsTitle => 'Lleva a tu rey al otro lado del tablero para ganar.';
+
+  @override
+  String get variantCrazyhouseTitle => 'Las piezas capturadas pueden volver a colocarse en el tablero en lugar de hacer un movimiento.';
+
+  @override
+  String get variantFromPositionTitle => 'Ajedrez estándar desde una posición personalizada';
 
   @override
   String get activityActivity => 'Actividad';
@@ -1026,6 +1056,16 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get broadcastKnockouts => 'Eliminatorias';
+
+  @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'Sub$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'Sub$param';
+  }
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -3737,6 +3777,15 @@ class AppLocalizationsEs extends AppLocalizations {
   String get invalidAuthenticationCode => 'Código de autenticación inválido';
 
   @override
+  String get clearField => 'Borrar campo';
+
+  @override
+  String get orSeparator => 'o';
+
+  @override
+  String get logInByEmail => 'Iniciar sesión con el correo electrónico';
+
+  @override
   String get emailMeALink => 'Envíame un enlace por correo electrónico';
 
   @override
@@ -4659,9 +4708,6 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'Me comprometo a seguir las normas de Lichess.';
-
-  @override
   String get searchOrStartNewDiscussion => 'Buscar o empezar una nueva conversación';
 
   @override
@@ -5019,6 +5065,11 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get clearSearch => 'Borrar búsqueda';
+
+  @override
+  String thereAreNoResultsForX(String param) {
+    return 'Sin resultados para \"$param\"';
+  }
 
   @override
   String get tags => 'Etiquetas';
@@ -6511,4 +6562,12 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Autenticación en dos pasos';
+
+  @override
+  String get ublogCommunity => 'Comunidad';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'Blog de $param';
+  }
 }

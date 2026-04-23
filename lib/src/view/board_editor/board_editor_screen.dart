@@ -23,7 +23,7 @@ import 'package:lichess_mobile/src/view/board_editor/board_editor_positions.dart
 import 'package:lichess_mobile/src/view/offline_computer/offline_computer_game_screen.dart';
 import 'package:lichess_mobile/src/view/over_the_board/over_the_board_screen.dart';
 import 'package:lichess_mobile/src/view/play/create_challenge_bottom_sheet.dart';
-import 'package:lichess_mobile/src/view/user/search_screen.dart';
+import 'package:lichess_mobile/src/view/user/pick_player_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
@@ -343,7 +343,7 @@ class _BottomBar extends ConsumerWidget {
                       return;
                     }
                     Navigator.of(context).push(
-                      SearchScreen.buildRoute(
+                      PickPlayerScreen.buildRoute(
                         context,
                         onUserTap: (user) {
                           if (user.id == authUser.user.id) {
@@ -358,7 +358,10 @@ class _BottomBar extends ConsumerWidget {
                             isScrollControlled: true,
                             useRootNavigator: true,
                             builder: (context) {
-                              return CreateChallengeBottomSheet(user, positionFen: editorState.fen);
+                              return CreateChallengeBottomSheet(
+                                user: user,
+                                positionFen: editorState.fen,
+                              );
                             },
                           );
                         },
@@ -379,18 +382,7 @@ class _BottomBar extends ConsumerWidget {
                       )
                       .toList(),
                   selectedItem: editorState.variant,
-                  labelBuilder: (Variant variant) => Text.rich(
-                    TextSpan(
-                      children: [
-                        WidgetSpan(
-                          child: Icon(variant.icon),
-                          alignment: PlaceholderAlignment.middle,
-                        ),
-                        const WidgetSpan(child: SizedBox(width: 8)),
-                        TextSpan(text: variant.label),
-                      ],
-                    ),
-                  ),
+                  labelBuilder: (variant) => VariantLabel(variant),
                   onSelectedItemChanged: (Variant variant) {
                     if (variant != editorState.variant) {
                       ref.read(editorController.notifier).setVariant(variant);

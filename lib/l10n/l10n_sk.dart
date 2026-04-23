@@ -275,13 +275,43 @@ class AppLocalizationsSk extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'Opening Explorer is not available offline.';
 
   @override
-  String get mobileChallengeCreated => 'Challenge created: You will be notified when the game starts.\\nYou can access it from the home tab.';
+  String get mobileChallengeCreated => 'Challenge created: You will be notified when the game starts.\nYou can access it from the home tab.';
 
   @override
   String get mobilePreviousPage => 'Previous';
 
   @override
   String get mobileOrImportPgnFile => 'Or import a PGN file';
+
+  @override
+  String get variantStandardTitle => 'Štandardné pravidlá šachu (FIDE)';
+
+  @override
+  String get variantChess960Title => 'Počiatočná pozícia figúrok v prvom rade je náhodná.';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Pre výhru partie priveďte svojho kráľa do stredu šachovnice.';
+
+  @override
+  String get variantThreeCheckTitle => 'Pre výhru partie dajte svojmu súperovi 3-krát šach.';
+
+  @override
+  String get variantAntichessTitle => 'Ak chcete vyhrať partiu, musíte prísť o všetky svoje figúrky (alebo dosiahnuť pat).';
+
+  @override
+  String get variantAtomicTitle => 'Pre výhru nechajte súperovho kráľa vybuchnúť.';
+
+  @override
+  String get variantHordeTitle => 'Jedna strana má veľký počet pešiakov, druhá má klasickú sadu figúrok.';
+
+  @override
+  String get variantRacingKingsTitle => 'Pre výhru sa so svojim kráľom dostaňte na druhú stranu šachovnice ako prvý.';
+
+  @override
+  String get variantCrazyhouseTitle => 'Namiesto ťahu Vašou figúrkou môžete figúrku, ktorú ste vzali súperovi použiť ako vlastnú a vrátiť ju späť do hry.';
+
+  @override
+  String get variantFromPositionTitle => 'Štandardný šach z vlastnej pozície';
 
   @override
   String get activityActivity => 'Aktivita';
@@ -1066,6 +1096,16 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get broadcastKnockouts => 'Knockouts';
+
+  @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'U$param';
+  }
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -3793,6 +3833,15 @@ class AppLocalizationsSk extends AppLocalizations {
   String get invalidAuthenticationCode => 'Neplatný overovací kód';
 
   @override
+  String get clearField => 'Clear field';
+
+  @override
+  String get orSeparator => 'Or';
+
+  @override
+  String get logInByEmail => 'Log in by email';
+
+  @override
   String get emailMeALink => 'Pošlite link emailom';
 
   @override
@@ -4715,9 +4764,6 @@ class AppLocalizationsSk extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'Súhlasím, že budem dodržiavať všetky pravidlá Lichessu.';
-
-  @override
   String get searchOrStartNewDiscussion => 'Prehľadávať alebo začať novú konverzáciu';
 
   @override
@@ -5075,6 +5121,11 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get clearSearch => 'Vymazať vyhľadávanie';
+
+  @override
+  String thereAreNoResultsForX(String param) {
+    return 'No results for \"$param\"';
+  }
 
   @override
   String get tags => 'Značky';
@@ -6701,4 +6752,12 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Dvojstupňové overenie';
+
+  @override
+  String get ublogCommunity => 'Komunita';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'Blog užívateľa $param';
+  }
 }

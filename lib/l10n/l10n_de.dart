@@ -275,13 +275,43 @@ class AppLocalizationsDe extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'Der Eröffnungs-Explorer ist offline nicht verfügbar.';
 
   @override
-  String get mobileChallengeCreated => 'Herausforderung erstellt: Du wirst benachrichtigt, wenn die Partie beginnt.\\n Du kannst über den Home-Tab darauf zugreifen.';
+  String get mobileChallengeCreated => 'Herausforderung erstellt: Du wirst benachrichtigt, wenn die Partie beginnt.\n Du kannst über den Home-Tab darauf zugreifen.';
 
   @override
   String get mobilePreviousPage => 'Zurück';
 
   @override
   String get mobileOrImportPgnFile => 'Oder importiere eine PGN-Datei';
+
+  @override
+  String get variantStandardTitle => 'Standardschachregeln (FIDE)';
+
+  @override
+  String get variantChess960Title => 'Die Startposition der Figuren auf der Grundreihe wird zufällig ermittelt.';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Bring deinen König in die Mitte, um die Partie zu gewinnen.';
+
+  @override
+  String get variantThreeCheckTitle => 'Biete deinem Gegner dreimal Schach, um diese Partie zu gewinnen.';
+
+  @override
+  String get variantAntichessTitle => 'Verliere alle deine Figuren (oder werde Patt gesetzt), um diese Partie zu gewinnen.';
+
+  @override
+  String get variantAtomicTitle => 'Jage den gegnerischen König in die Luft, um zu gewinnen.';
+
+  @override
+  String get variantHordeTitle => 'Die eine Seite besitzt eine große Anzahl an Bauern, die andere eine normale Armee.';
+
+  @override
+  String get variantRacingKingsTitle => 'Bringe deinen König auf die andere Seite des Bretts, um zu gewinnen.';
+
+  @override
+  String get variantCrazyhouseTitle => 'Geschlagene Figuren können, statt eines regulären Zuges, auf das Brett zurückgebracht werden.';
+
+  @override
+  String get variantFromPositionTitle => 'Standardschach mit einer selbstgewählten Stellung';
 
   @override
   String get activityActivity => 'Verlauf';
@@ -1026,6 +1056,16 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get broadcastKnockouts => 'K.O.-Runde';
+
+  @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'U$param';
+  }
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -3737,6 +3777,15 @@ class AppLocalizationsDe extends AppLocalizations {
   String get invalidAuthenticationCode => 'Ungültiger Authentifizierungscode';
 
   @override
+  String get clearField => 'Feld leeren';
+
+  @override
+  String get orSeparator => 'Oder';
+
+  @override
+  String get logInByEmail => 'Per E-Mail anmelden';
+
+  @override
   String get emailMeALink => 'Schicke mir einen Link per E-Mail';
 
   @override
@@ -4659,9 +4708,6 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'Ich stimme zu, dass ich allen Lichess-Richtlinien folgen werde.';
-
-  @override
   String get searchOrStartNewDiscussion => 'Suche oder beginne eine neue Konversation';
 
   @override
@@ -5019,6 +5065,11 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get clearSearch => 'Neue Suche';
+
+  @override
+  String thereAreNoResultsForX(String param) {
+    return 'Keine Ergebnisse für \"$param\"';
+  }
 
   @override
   String get tags => 'Schlagwörter';
@@ -6511,4 +6562,12 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Zwei-Faktor-Authentifizierung';
+
+  @override
+  String get ublogCommunity => 'Gemeinschaft';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'Blog von $param';
+  }
 }

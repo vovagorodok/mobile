@@ -67,6 +67,9 @@ class GameController extends AsyncNotifier<GameState> {
 
   final _onFlagThrottler = Throttler(const Duration(milliseconds: 500));
 
+  /// Whether the app was put in background since the previous move was sent.
+  bool _wasInBackground = false;
+
   static Uri socketUri(GameFullId gameFullId) => Uri(path: '/play/$gameFullId/v6');
 
   SocketPool get _socketPool => ref.read(socketPoolProvider);
@@ -147,6 +150,9 @@ class GameController extends AsyncNotifier<GameState> {
     if (!state.hasValue || !state.requireValue.game.playable) {
       return;
     }
+
+    _wasInBackground = true;
+
     // real time games need the socket to stay connected otherwise lichess will think the player leaved
     // correspondence games can and should close the socket when the app is in background (because lichess won't send the push notification update when the player is still connected to the socket)
     if (state.requireValue.game.meta.speed == Speed.correspondence) {
@@ -531,11 +537,20 @@ class GameController extends AsyncNotifier<GameState> {
               ? Duration.zero
               : thinkTime
         : null;
+
+    final (topic, data) = switch (move) {
+      NormalMove() => ('move', {'u': move.uci}),
+      DropMove(:final role, :final to) => ('drop', {'role': role.name, 'pos': to.name}),
+    };
+
+    final withBlur = _wasInBackground;
+    _wasInBackground = false;
     _socketClient.send(
-      'move',
+      topic,
       {
-        'u': move.uci,
+        ...data,
         if (moveTime != null) 's': (moveTime.inMilliseconds * 0.1).round().toRadixString(36),
+        if (withBlur) 'b': 1,
       },
       ackable: true,
       withLag: _clock != null && (moveTime == null || withLag),
@@ -705,7 +720,7 @@ class GameController extends AsyncNotifier<GameState> {
 
       // Move event, received after sending a move or receiving a move from the
       // opponent
-      case 'move':
+      case 'move' || 'drop':
         final curState = state.requireValue;
         final data = MoveEvent.fromJson(event.data as Map<String, dynamic>);
         final playedSide = data.ply.isOdd ? Side.white : Side.black;

@@ -275,13 +275,43 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'پویشگرِ گشایش، برون‌خط امکان‌پذیر نیست.';
 
   @override
-  String get mobileChallengeCreated => 'چالش ایجاد شد: وقتی بازی شروع شود شما آگاهنده می‌شوید.\\nمی‌توانید از زبانهٔ خانه به آن دسترسی داشته باشید.';
+  String get mobileChallengeCreated => 'چالش ایجاد شد: وقتی بازی شروع شود شما آگاهنده می‌شوید.\nمی‌توانید از زبانهٔ خانه به آن دسترسی داشته باشید.';
 
   @override
   String get mobilePreviousPage => 'پیشین';
 
   @override
   String get mobileOrImportPgnFile => 'یا یک فایل PGN را بارگذاری کنید';
+
+  @override
+  String get variantStandardTitle => 'قانون‌های اِستاندهٔ شطرنج (فیده)';
+
+  @override
+  String get variantChess960Title => 'وضعیتِ آغازشِ مُهره‌های عرضِ سواران تصادفی است.';
+
+  @override
+  String get variantKingOfTheHillTitle => 'برای پیروزی در بازی، شاه‌تان را به تپه بَرید.';
+
+  @override
+  String get variantThreeCheckTitle => 'برای پیروزی در بازی، ۳ بار به حریف‌تان کیش دهید.';
+
+  @override
+  String get variantAntichessTitle => 'برای پیروزی در بازی، همهٔ مُهره‌های‌تان را ببازید (یا پات شوید).';
+
+  @override
+  String get variantAtomicTitle => 'برای پیروزی، شاهِ حریف را بِپُکانید.';
+
+  @override
+  String get variantHordeTitle => 'یک طرف پیاده‌های زیادی دارد و دیگری یک ارتشِ عادی دارد.';
+
+  @override
+  String get variantRacingKingsTitle => 'برای پیروزی، شاه‌تان را به طرفِ دیگر بَرید.';
+
+  @override
+  String get variantCrazyhouseTitle => 'می‌توان جای حرکتِ یک مهره، مهره‌های گرفته را روی تخته گذاشت.';
+
+  @override
+  String get variantFromPositionTitle => 'شطرنج اِستانده از وضعیتِ دلخواه';
 
   @override
   String get activityActivity => 'فعالیت';
@@ -1028,6 +1058,16 @@ class AppLocalizationsFa extends AppLocalizations {
   String get broadcastKnockouts => 'ناک اوت';
 
   @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1381,7 +1421,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get preferencesTenthsOfSeconds => 'دهم ثانیه';
 
   @override
-  String get preferencesWhenTimeRemainingLessThanTenSeconds => 'وقتی زمان باقی مانده کمتر از ده ثانیه می باشد';
+  String get preferencesWhenTimeRemainingLessThanTenSeconds => 'وقتی زمان باقی < 10 ثانیه می باشد';
 
   @override
   String get preferencesHorizontalGreenProgressBars => 'نمودار زمان سبز رنگ افقی';
@@ -1498,7 +1538,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'مسابقات به‌زودی می‌آغازد';
 
   @override
-  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
+  String get preferencesNotifyBroadcasts => 'پخش‌هایی که مشترک آن‌ها شده‌اید';
 
   @override
   String get preferencesNotifyTimeAlarm => 'هشدار تنگی زمان';
@@ -1522,7 +1562,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get preferencesBlindfold => 'چشم‌بسته';
 
   @override
-  String get preferencesShowClockOnTheLeft => 'Show on the left on mobile devices';
+  String get preferencesShowClockOnTheLeft => 'در دستگاه‌های موبایل، در سمت چپ نمایش بده';
 
   @override
   String get puzzlePuzzles => 'معماها';
@@ -1889,10 +1929,10 @@ class AppLocalizationsFa extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'گرفتن یک مهره که برای دفاع از یک مهره دیگر حیاتی است، اجازه می دهد مهره ای که اکنون بدون دفاع است در حرکت بعدی گرفته شود.';
 
   @override
-  String get puzzleThemeCollinearMove => 'Collinear move';
+  String get puzzleThemeCollinearMove => 'حرکت هم‌خط';
 
   @override
-  String get puzzleThemeCollinearMoveDescription => 'Two opposing pieces face each other, and one slides along the line of attack without capturing the enemy piece.';
+  String get puzzleThemeCollinearMoveDescription => 'دو مهره مقابل هم قرار گرفته‌اند و یکی بدون گرفتن مهره حریف، روی خط حمله حرکت می‌کند.';
 
   @override
   String get puzzleThemeCornerMate => 'ماتِ کُنج';
@@ -1976,10 +2016,10 @@ class AppLocalizationsFa extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'گرفتن پیاده در حال عبور با پیاده دیگر.';
 
   @override
-  String get puzzleThemeEpauletteMate => 'Epaulette mate';
+  String get puzzleThemeEpauletteMate => 'مات اِپولِت';
 
   @override
-  String get puzzleThemeEpauletteMateDescription => 'Two adjacent escape squares for a checked king are occupied by other pieces.';
+  String get puzzleThemeEpauletteMateDescription => 'دو خانهٔ فرار مجاور برای شاه تحت کیش، توسط مهره‌های دیگر اشغال شده‌اند.';
 
   @override
   String get puzzleThemeExposedKing => 'شاه در معرض خطر';
@@ -2036,10 +2076,10 @@ class AppLocalizationsFa extends AppLocalizations {
   String get puzzleThemeMorphysMateDescription => 'رُخ به محدود کردنِ شاه کمک می‌کند، فیل مات می‌کند.';
 
   @override
-  String get puzzleThemeSwallowstailMate => 'Swallow\'s tail mate';
+  String get puzzleThemeSwallowstailMate => 'مات دم‌چلچله‌ای';
 
   @override
-  String get puzzleThemeSwallowstailMateDescription => 'A checkmate pattern that visually resembles the appearance of a swallow’s tail, similar to a V shape.';
+  String get puzzleThemeSwallowstailMateDescription => 'الگوی مات که از نظر ظاهری شبیه دم چلچله است، مشابه شکل V.';
 
   @override
   String get puzzleThemeTriangleMate => 'ماتِ مثلث';
@@ -2669,19 +2709,19 @@ class AppLocalizationsFa extends AppLocalizations {
   String get multipleLines => 'شاخه های متعدد';
 
   @override
-  String get multipleLinesDescription => 'Set number of evaluation lines and move arrows on the board';
+  String get multipleLinesDescription => 'تعداد خطوط ارزیابی را تعیین کن و فلش‌ها را روی تخته جابه‌جا کن';
 
   @override
-  String get searchTime => 'Search time';
+  String get searchTime => 'زمان جستجو';
 
   @override
-  String get searchTimeDescription => 'Set time to evaluate fresh positions';
+  String get searchTimeDescription => 'زمان ارزیابی موقعیت‌های تازه را تنظیم کن';
 
   @override
-  String get threads => 'Threads';
+  String get threads => 'رشته‌های CPU';
 
   @override
-  String get threadsDescription => 'Set this below your CPU\'s thread count, the ticks mark a good safe choice';
+  String get threadsDescription => 'این را زیر تعداد رشته‌های CPU خود تنظیم کنید، تیک‌ها انتخابی خوب و ایمن را نشان می‌دهند.';
 
   @override
   String get threadsDescriptionMobile => 'More threads will use more battery for better analysis';
@@ -3737,6 +3777,15 @@ class AppLocalizationsFa extends AppLocalizations {
   String get invalidAuthenticationCode => 'کد راستین‌آزمایی نامعتبر';
 
   @override
+  String get clearField => 'Clear field';
+
+  @override
+  String get orSeparator => 'Or';
+
+  @override
+  String get logInByEmail => 'Log in by email';
+
+  @override
   String get emailMeALink => 'پیوندی به رایانامه‌ام بفرست';
 
   @override
@@ -4659,9 +4708,6 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'با پیروی از همهٔ خط‌مشی‌های لیچس، موافقم.';
-
-  @override
   String get searchOrStartNewDiscussion => 'جستجو یا شروع کردن مکالمه جدید';
 
   @override
@@ -5019,6 +5065,11 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get clearSearch => 'پاکیدنِ جستجو';
+
+  @override
+  String thereAreNoResultsForX(String param) {
+    return 'No results for \"$param\"';
+  }
 
   @override
   String get tags => 'برچسب‌ها';
@@ -6511,4 +6562,12 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'راستین‌آزمایی دوعاملی';
+
+  @override
+  String get ublogCommunity => 'همدارگان';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'وبنوشتِ $param';
+  }
 }

@@ -249,8 +249,7 @@ class _PuzzleMenu extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final connectivity = ref.watch(connectivityChangesProvider);
-    final bool isOnline = connectivity.value?.isOnline ?? false;
+    final isOnline = ref.watch(onlineStatusProvider).value ?? false;
 
     return ListSection(
       hasLeading: true,
@@ -424,7 +423,7 @@ class DailyPuzzle extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isOnline = ref.watch(connectivityChangesProvider).value?.isOnline ?? false;
+    final isOnline = ref.watch(onlineStatusProvider).value ?? false;
     final puzzle = ref.watch(dailyPuzzleProvider);
 
     return puzzle.when(
@@ -448,11 +447,24 @@ class DailyPuzzle extends ConsumerWidget {
                   ),
                 ],
               ),
-              Icon(Icons.today, size: 32, color: context.lichessColors.brag.withValues(alpha: 0.7)),
-              Text(
-                data.puzzle.sideToMove == Side.white
-                    ? context.l10n.whitePlays
-                    : context.l10n.blackPlays,
+              Row(
+                children: [
+                  Icon(
+                    Icons.today,
+                    size: 32,
+                    color: context.lichessColors.brag.withValues(alpha: 0.7),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      data.puzzle.sideToMove == Side.white
+                          ? context.l10n.whitePlays
+                          : context.l10n.blackPlays,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(color: textShade(context, 0.8)),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -581,22 +593,33 @@ class PuzzleAnglePreview extends ConsumerWidget {
                         ],
                       },
                     ),
-                    Icon(
-                      switch (angle) {
-                        PuzzleTheme(themeKey: final themeKey) => themeKey.icon,
-                        PuzzleOpening() => PuzzleIcons.opening,
-                      },
-                      size: 32,
-                      color: DefaultTextStyle.of(context).style.color?.withValues(alpha: 0.6),
+                    Row(
+                      children: [
+                        Icon(
+                          switch (angle) {
+                            PuzzleTheme(themeKey: final themeKey) => themeKey.icon,
+                            PuzzleOpening() => PuzzleIcons.opening,
+                          },
+                          size: 32,
+                          color: DefaultTextStyle.of(context).style.color?.withValues(alpha: 0.6),
+                        ),
+                        const SizedBox(width: 8),
+                        if (puzzle != null)
+                          Flexible(
+                            child: Text(
+                              puzzle.puzzle.sideToMove == Side.white
+                                  ? context.l10n.whitePlays
+                                  : context.l10n.blackPlays,
+                              style: TextStyle(color: textShade(context, 0.8)),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          )
+                        else
+                          const Flexible(
+                            child: Text('No puzzles available, please go online to fetch them.'),
+                          ),
+                      ],
                     ),
-                    if (puzzle != null)
-                      Text(
-                        puzzle.puzzle.sideToMove == Side.white
-                            ? context.l10n.whitePlays
-                            : context.l10n.blackPlays,
-                      )
-                    else
-                      const Text('No puzzles available, please go online to fetch them.'),
                   ],
                 ),
                 onTap: puzzle != null ? onTap : null,

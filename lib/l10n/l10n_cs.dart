@@ -275,13 +275,43 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'Opening Explorer is not available offline.';
 
   @override
-  String get mobileChallengeCreated => 'Challenge created: You will be notified when the game starts.\\nYou can access it from the home tab.';
+  String get mobileChallengeCreated => 'Challenge created: You will be notified when the game starts.\nYou can access it from the home tab.';
 
   @override
   String get mobilePreviousPage => 'Předchozí';
 
   @override
   String get mobileOrImportPgnFile => 'Or import a PGN file';
+
+  @override
+  String get variantStandardTitle => 'Standardní pravidla šachů (FIDE)';
+
+  @override
+  String get variantChess960Title => 'Počáteční pozice je zadních figur náhodná.';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Přines svého krále do středu a vyhraj hru.';
+
+  @override
+  String get variantThreeCheckTitle => 'Dej soupeři tříkrát šach a vyhraj hru.';
+
+  @override
+  String get variantAntichessTitle => 'Ztrať všechny své figury (nebo se dostaň do patu) a vyhraj hru.';
+
+  @override
+  String get variantAtomicTitle => 'Nuke your opponent\'s king to win.';
+
+  @override
+  String get variantHordeTitle => 'One side has a large number of pawns, the other has a normal army.';
+
+  @override
+  String get variantRacingKingsTitle => 'Dostaň svého krále na druhou stranu šachovnice, abys vyhrál.';
+
+  @override
+  String get variantCrazyhouseTitle => 'Captured pieces can be dropped back on the board instead of moving a piece.';
+
+  @override
+  String get variantFromPositionTitle => 'Standard chess from a custom position';
 
   @override
   String get activityActivity => 'Aktivita';
@@ -1066,6 +1096,16 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get broadcastKnockouts => 'Knockouts';
+
+  @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'U$param';
+  }
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -3791,6 +3831,15 @@ class AppLocalizationsCs extends AppLocalizations {
   String get invalidAuthenticationCode => 'Neplatný ověřovací kód';
 
   @override
+  String get clearField => 'Clear field';
+
+  @override
+  String get orSeparator => 'Or';
+
+  @override
+  String get logInByEmail => 'Log in by email';
+
+  @override
   String get emailMeALink => 'Pošlete mi odkaz e-mailem';
 
   @override
@@ -4713,9 +4762,6 @@ class AppLocalizationsCs extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'Souhlasím, že se budu řídit všemi pravidly Lichessu.';
-
-  @override
   String get searchOrStartNewDiscussion => 'Začněte nebo vyhledejte konverzaci';
 
   @override
@@ -5073,6 +5119,11 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get clearSearch => 'Vymazat vyhledávání';
+
+  @override
+  String thereAreNoResultsForX(String param) {
+    return 'No results for \"$param\"';
+  }
 
   @override
   String get tags => 'Štítky';
@@ -6699,4 +6750,12 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Dvoufázové ověření';
+
+  @override
+  String get ublogCommunity => 'Komunita';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'Blog hráče $param';
+  }
 }

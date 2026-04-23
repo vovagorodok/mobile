@@ -275,13 +275,43 @@ class AppLocalizationsFr extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'L\'explorateur d\'ouvertures n\'est pas accessible hors ligne.';
 
   @override
-  String get mobileChallengeCreated => 'Défi créé : Vous recevrez une notification lorsque la partie commencera.\\nVous pouvez y accéder depuis l’onglet Accueil.';
+  String get mobileChallengeCreated => 'Défi créé : Vous recevrez une notification lorsque la partie commencera.\nVous pouvez y accéder depuis l’onglet Accueil.';
 
   @override
   String get mobilePreviousPage => 'Précédent';
 
   @override
   String get mobileOrImportPgnFile => 'Importer un fichier PGN';
+
+  @override
+  String get variantStandardTitle => 'Règles standard des échecs (FIDE)';
+
+  @override
+  String get variantChess960Title => 'La position de départ des pièces de la première rangée est randomisée.';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Amenez votre roi au centre pour gagner la partie.';
+
+  @override
+  String get variantThreeCheckTitle => 'Mettez votre adversaire en échec trois fois pour gagner la partie.';
+
+  @override
+  String get variantAntichessTitle => 'Si vous perdez toutes vos pièces (ou êtes en pat), vous gagnez la partie.';
+
+  @override
+  String get variantAtomicTitle => 'Faites exploser le roi adverse pour gagner la partie.';
+
+  @override
+  String get variantHordeTitle => 'Un camp a un grand nombre de pions, l\'autre a un nombre de pièces normales.';
+
+  @override
+  String get variantRacingKingsTitle => 'Amenez votre roi de l\'autre côté de l\'échiquer pour gagner la partie.';
+
+  @override
+  String get variantCrazyhouseTitle => 'Au lieu de bouger une pièce, vous pouvez replacer sur l\'échiquier une pièce capturée.';
+
+  @override
+  String get variantFromPositionTitle => 'Échecs standard à partir d\'une position personnalisée';
 
   @override
   String get activityActivity => 'Activité';
@@ -1026,6 +1056,16 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get broadcastKnockouts => 'Éliminatoires';
+
+  @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'Moins de $param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'Moins de $param';
+  }
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -3737,6 +3777,15 @@ class AppLocalizationsFr extends AppLocalizations {
   String get invalidAuthenticationCode => 'Code d\'authentification non valide';
 
   @override
+  String get clearField => 'Vider le champ';
+
+  @override
+  String get orSeparator => 'OU';
+
+  @override
+  String get logInByEmail => 'Se connecter par courriel';
+
+  @override
   String get emailMeALink => 'Envoyez-moi un lien';
 
   @override
@@ -4659,9 +4708,6 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'Je m\'engage à respecter toutes les règles de Lichess.';
-
-  @override
   String get searchOrStartNewDiscussion => 'Rechercher ou démarrer une nouvelle conversation';
 
   @override
@@ -5019,6 +5065,11 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get clearSearch => 'Réinitialiser la recherche';
+
+  @override
+  String thereAreNoResultsForX(String param) {
+    return 'Aucun résultat pour \"$param\"';
+  }
 
   @override
   String get tags => 'Étiquettes';
@@ -6511,4 +6562,12 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Authentification à deux facteurs';
+
+  @override
+  String get ublogCommunity => 'Communauté';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'Blogue de $param';
+  }
 }
