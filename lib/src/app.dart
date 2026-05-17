@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/account/account_service.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
 import 'package:lichess_mobile/src/model/announce/announce_service.dart';
+import 'package:lichess_mobile/src/model/bluetooth/bluetooth_service.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_service.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_service.dart';
@@ -90,6 +91,7 @@ class _AppState extends ConsumerState<Application> {
     ref.read(accountServiceProvider).start();
     ref.read(correspondenceServiceProvider).start();
     ref.read(quickActionServiceProvider).start();
+    ref.read(bluetoothServiceProvider).start();
     ref.read(announceServiceProvider).start();
     ref.read(appLinksServiceProvider).start();
 
